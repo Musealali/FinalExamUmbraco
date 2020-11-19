@@ -10,7 +10,7 @@ namespace web_platform.Models
         public string Version { get; set; }
         public string Name { get; set; }
 
-        CMSComponent(string version, string name)
+        public CMSComponent(string version, string name)
         {
             Version = version;
             Name = name;

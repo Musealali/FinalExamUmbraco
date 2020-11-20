@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using web_platform.Data;
+using Microsoft.EntityFrameworkCore.SqlServer;
+using Microsoft.EntityFrameworkCore;
 
 namespace web_platform
 {
@@ -24,6 +27,8 @@ namespace web_platform
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            //services.AddDbContext<UmbracoDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("connectionString")));
+            services.AddDbContext<UmbracoDbContext>(options => options.UseInMemoryDatabase("localDB"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using web_platform.Data;
 
+
 namespace web_platform.Controllers
 {
     public class SecurityIssuePostController : Controller
@@ -20,8 +21,8 @@ namespace web_platform.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateSecurityIssuePost()
+        //[HttpPost]
+        public async Task<IActionResult> Create()
         {
             //TODO
             return View();

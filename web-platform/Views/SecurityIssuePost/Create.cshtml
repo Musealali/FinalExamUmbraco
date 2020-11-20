@@ -1,33 +1,17 @@
-﻿
+﻿@model web_platform.Models.SecurityIssuePost
 @{
     ViewData["Title"] = "Create";
 }
-
 <h1>Create Security issue post</h1>
 <body>
-    <input style="float: left; width: 50%;" placeholder="Title">
-    <textarea style="float: left; width: 100%; height: 100px" placeholder="Description"></textarea>
-    <textarea style="float: left; width: 100%; height: 100px" placeholder="steps to reproduce"></textarea>
-    <select style="float: left; width: 20%;" name="component">
-        <option value="" disabled selected>Select your option</option>
-        <option value="cms">CMS</option>
-        <option value="package">Package</option>
-    </select>
-    <select style="float: left; width: 20%;" name="cms">
-        <option value="" disabled selected>Select your option</option>
-        <option value="umbracoUNO">Umbraco UNO</option>
-        <option value="umbracoCloud">Umcrabo Cloud</option>
-        <option value="UmbracoHeartbeat">Umbraco Hearthbeat</option>
-        <option value="UmbracoCMS">Umbraco CMS</option>
-    </select>
-    <select style="float: left; width: 20%;" name="package">
-        <option value="" disabled selected>Select your option</option>
-        <option value="">Package</option>
-        <option value="forms">Forms</option>
-        <option value="uSync">uSync</option>
-    </select>
-    <input style="float: left; width: 50%" placeholder="Version">
-    <input style="float: left; clear: left; display:inline" type="button" value="Create" onclick="">
-
+    <form action="/SecurityIssuePost/CreateSecurityIssuePost" method="post">
+        <label style="float: left" for="Title">title</label>
+        <input style="float: left; width: 100%" placeholder="Title" type="text" name="Title" />
+        <label style="float: left" for="IssueDescription">Description</label>
+        <textarea style="float: left; width: 100%; height: 100px" name="IssueDescription"></textarea>
+        <label style="float: left" for="IssueReproduction">Steps to reproduce</label>
+        <textarea style="float: left; width: 100%; height: 100px" name="IssueReproduction"></textarea>
+        <input style="float:left" type="submit" name="submit" />
+    </form>
 </body>
 

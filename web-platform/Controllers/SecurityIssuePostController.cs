@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using web_platform.Data;
-
+using web_platform.Models;
+using System.Dynamic;
 
 namespace web_platform.Controllers
 {
@@ -20,12 +21,16 @@ namespace web_platform.Controllers
         {
             return View();
         }
-
-        //[HttpPost]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            //TODO
-            return View();
+            SecurityIssuePost model = new SecurityIssuePost();
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult CreateSecurityIssuePost(SecurityIssuePost securityIssuePost)
+        {
+            Console.WriteLine(securityIssuePost.Title + securityIssuePost.IssueDescription + securityIssuePost.IssueReproduction);
+            return Redirect("../home/index");
         }
     }
 }

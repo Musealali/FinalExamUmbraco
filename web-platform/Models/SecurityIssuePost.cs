@@ -19,9 +19,8 @@ namespace web_platform.Models
         {
 
         }
-        public SecurityIssuePost(int id, string title, User user, CMSComponent component, string issueDescription, string issueReproduction)
+        public SecurityIssuePost(string title, User user, CMSComponent component, string issueDescription, string issueReproduction)
         {
-            Id = id;
             Title = title;
             User = user;
             Component = component;

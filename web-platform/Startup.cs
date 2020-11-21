@@ -16,19 +16,26 @@ namespace web_platform
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IConfiguration Configuration { get; }
+        public IWebHostEnvironment WebHostEnvironment { get; set; }
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
+            WebHostEnvironment = webHostEnvironment;
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            //services.AddDbContext<UmbracoDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("connectionString")));
-            services.AddDbContext<UmbracoDbContext>(options => options.UseInMemoryDatabase("localDB"));
+            
+            if(WebHostEnvironment.IsDevelopment())
+                services.AddDbContext<UmbracoDbContext>(options => options.UseInMemoryDatabase("localDB"));
+
+            if(WebHostEnvironment.IsProduction())
+                services.AddDbContext<UmbracoDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ConnectionString")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -21,10 +21,11 @@ namespace web_platform.Controllers
         {
             return View();
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create(SecurityIssuePost securityIssuePost)
         {
-            SecurityIssuePost model = new SecurityIssuePost();
-            return View(model);
+            var resultForSubmission = _umbracoDbContext.AddAsync(securityIssuePost);
+            await _umbracoDbContext.SaveChangesAsync();
+            return View("Index", securityIssuePost);
         }
         [HttpPost]
         public ActionResult CreateSecurityIssuePost(SecurityIssuePost securityIssuePost, string name, string version, string componentType)

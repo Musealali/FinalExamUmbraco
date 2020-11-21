@@ -16,11 +16,12 @@ namespace web_platform.Data
         }
 
         public DbSet<SecurityIssuePost> SecurityIssuePosts {get; set;}
+        public DbSet<CMS> CMS { get; set; }
+        public DbSet<Package> Package { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SecurityIssuePost>()
-                .Property(s => s.IssueDescription);
+            modelBuilder.Entity<SecurityIssuePost>().ToTable("SecurityIssuePost");
         }
     }
 }

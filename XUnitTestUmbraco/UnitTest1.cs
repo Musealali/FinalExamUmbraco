@@ -46,10 +46,10 @@ namespace XUnitTestUmbraco
             SecurityIssuePost securityIssuePost = new SecurityIssuePost(Title, user, cmsComponent, IssueDescription, IssueReproduction);
 
             //ACT
-            var result = await _controller.Create(securityIssuePost);
+            //var result = await _controller.Create(securityIssuePost);
 
             //Assert
-            var objectResult = Assert.IsType<ViewResult>(result);
+            //var objectResult = Assert.IsType<ViewResult>(result);
             Assert.NotNull(objectResult.Model);
 
             var model = Assert.IsType<SecurityIssuePost>(objectResult.Model);

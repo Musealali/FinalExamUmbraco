@@ -27,9 +27,23 @@ namespace web_platform.Controllers
             return View(model);
         }
         [HttpPost]
-        public ActionResult CreateSecurityIssuePost(SecurityIssuePost securityIssuePost)
+        public ActionResult CreateSecurityIssuePost(SecurityIssuePost securityIssuePost, string name, string version, string componentType)
         {
-            Console.WriteLine(securityIssuePost.Title + securityIssuePost.IssueDescription + securityIssuePost.IssueReproduction);
+            Console.WriteLine(securityIssuePost.Title);
+            Console.WriteLine(securityIssuePost.IssueDescription);
+            Console.WriteLine(securityIssuePost.IssueReproduction);
+            if (componentType.Equals("package"))
+            {
+                Package package = new Package(version, name);
+                securityIssuePost.Component = package;
+            }
+            if (componentType.Equals("cms"))
+            {
+                CMS cms = new CMS(version, name);
+                securityIssuePost.Component = cms;
+            }
+            Console.WriteLine(securityIssuePost.Component.Name);
+            Console.WriteLine(securityIssuePost.Component.Version);
             return Redirect("../home/index");
         }
     }

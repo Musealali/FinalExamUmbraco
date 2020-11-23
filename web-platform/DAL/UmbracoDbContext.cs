@@ -25,12 +25,7 @@ namespace web_platform.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<SecurityIssuePost>().ToTable("SecurityIssuePost");
-            modelBuilder.Entity<SecurityIssuePost>().ToTable("CMS");
-            modelBuilder.Entity<SecurityIssuePost>().ToTable("Package");
-            modelBuilder.Entity<SecurityIssuePost>().ToTable("Version");
-            modelBuilder.Entity<SecurityIssuePost>().ToTable("CMSComponentVersion");
-            // Seeding database
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

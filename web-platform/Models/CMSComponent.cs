@@ -11,16 +11,14 @@ namespace web_platform.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Version { get; set; }
-
+        public ICollection<CMSComponentVersion> CMSComponentVersions { get; set; }
         public CMSComponent()
         {
-
+            
         }
-        public CMSComponent(string name, string version)
+        public CMSComponent(string name)
         {
             Name = name;
-            Version = version;
         }
     }
 }

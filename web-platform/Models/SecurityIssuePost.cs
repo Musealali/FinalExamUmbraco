@@ -14,7 +14,7 @@ namespace web_platform.Models
         public string IssueReproduction { get; set; }
 
         // Navigation Properties - Used by DBContext when 'GETTING' entities
-        public CMSComponent CMSComponent { get; set; }
+        public CMSComponentVersion CMSComponentVersion { get; set; }
 
 
         public SecurityIssuePost()

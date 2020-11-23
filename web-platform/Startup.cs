@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using web_platform.Data;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
+using web_platform.DAL;
 
 namespace web_platform
 {

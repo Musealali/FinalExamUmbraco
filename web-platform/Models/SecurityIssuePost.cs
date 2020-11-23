@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,21 +10,20 @@ namespace web_platform.Models
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public User User { get; set; }
-        public CMSComponent Component { get; set; }
         public string IssueDescription { get; set; }
         public string IssueReproduction { get; set; }
-        //TODO public HttpPostedFileBase AttachedFiles { get; set; }
+
+        // Navigation Properties - Used by DBContext when 'GETTING' entities
+        public CMSComponent CMSComponent { get; set; }
+
 
         public SecurityIssuePost()
         {
 
         }
-        public SecurityIssuePost(string title, User user, CMSComponent component, string issueDescription, string issueReproduction)
+        public SecurityIssuePost(string title, string issueDescription, string issueReproduction)
         {
             Title = title;
-            User = user;
-            Component = component;
             IssueDescription = issueDescription;
             IssueReproduction = issueReproduction;
         }

@@ -4,7 +4,7 @@
 }
 <h1>Create Security issue post</h1>
 <body>
-    <form action="/SecurityIssuePost/CreateSecurityIssuePost" method="post">
+    <form asp-action="Create" asp-controller="SecurityIssuePost" method="post">
         <label style="float: left" for="Title">title</label>
         <input style="float: left; width: 100%" placeholder="Title" type="text" name="Title">
         <label style="float: left" for="IssueDescription">Description</label>

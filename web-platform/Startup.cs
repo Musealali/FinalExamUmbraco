@@ -32,10 +32,10 @@ namespace web_platform
             services.AddControllersWithViews();
             
             if(WebHostEnvironment.IsDevelopment())
-                services.AddDbContext<UmbracoDbContext>(options => options.UseInMemoryDatabase("localDB"));
+                services.AddDbContext<UmbracoDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("dev")));
 
-            if(WebHostEnvironment.IsProduction())
-                services.AddDbContext<UmbracoDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ConnectionString")));
+            if (WebHostEnvironment.IsProduction())
+                services.AddDbContext<UmbracoDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("prod")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

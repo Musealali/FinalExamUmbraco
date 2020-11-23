@@ -21,31 +21,38 @@ namespace web_platform.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> Create(SecurityIssuePost securityIssuePost)
+
+        [HttpGet]
+        public IActionResult Create(SecurityIssuePost securityIssuePost) // Responsible for returning the correct View, whenever a user WANTS to create a securityIssuePost
         {
-            var resultForSubmission = _umbracoDbContext.AddAsync(securityIssuePost);
-            await _umbracoDbContext.SaveChangesAsync();
-            return View("Index", securityIssuePost);
+            return View();
         }
+
         [HttpPost]
-        public ActionResult CreateSecurityIssuePost(SecurityIssuePost securityIssuePost, string name, string version, string componentType)
+        public ActionResult Create(SecurityIssuePost securityIssuePost, CMSComponent cmsComponent, string componentType) // Responsible for getting the user input and storing the securityIssuePost
         {
-            Console.WriteLine(securityIssuePost.Title);
-            Console.WriteLine(securityIssuePost.IssueDescription);
-            Console.WriteLine(securityIssuePost.IssueReproduction);
-            if (componentType.Equals("package"))
+            // Vi burde altså bare debugge vores actions i stedet for at lave en masse writelines XDXDXDXD
+            CMSComponent componentToFind = null;
+
+            switch(componentType)
             {
-                Package package = new Package(version, name);
-                securityIssuePost.Component = package;
+                case "package":
+                    componentToFind = _umbracoDbContext.Package.Where(p => p.Name == cmsComponent.Name && p.Version == cmsComponent.Version).FirstOrDefault();
+                    break;
+
+                case "cms":
+                    componentToFind = _umbracoDbContext.CMS.Where(c => c.Name == cmsComponent.Name && c.Version == cmsComponent.Version).FirstOrDefault();
+                    break;
             }
-            if (componentType.Equals("cms"))
-            {
-                CMS cms = new CMS(version, name);
-                securityIssuePost.Component = cms;
-            }
-            Console.WriteLine(securityIssuePost.Component.Name);
-            Console.WriteLine(securityIssuePost.Component.Version);
-            return Redirect("../home/index");
+
+            if(componentToFind == null) { return NotFound(); }
+
+            securityIssuePost.CMSComponent = componentToFind;
+
+            _umbracoDbContext.Add(securityIssuePost);
+            _umbracoDbContext.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

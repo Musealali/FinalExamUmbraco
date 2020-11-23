@@ -7,7 +7,12 @@ namespace web_platform.Models
 {
     public class Package : CMSComponent
     {
-        public Package(string version, string name) : base(version, name)
+        public Package()
+        {
+
+        }
+
+        public Package(string name, string version) : base(name, version)
         {
 
         }

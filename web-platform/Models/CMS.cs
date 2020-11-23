@@ -7,7 +7,12 @@ namespace web_platform.Models
 {
     public class CMS : CMSComponent
     {
-        public CMS(string version, string name) : base(version, name)
+        public CMS()
+        {
+
+        }
+
+        public CMS(string name, string version) : base(name, version)
         {
 
         }

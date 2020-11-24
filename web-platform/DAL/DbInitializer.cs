@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using web_platform.Data;
 using web_platform.Models;
-using ComponenetVersion = web_platform.Models.ComponenetVersion;
+using Version = web_platform.Models.ComponenetVersion;
 
 namespace web_platform.DAL
 {
@@ -13,18 +13,18 @@ namespace web_platform.DAL
         public static void Initialize(UmbracoDbContext context)
         {
             context.Database.EnsureCreated();
-            ComponenetVersion version11 = new ComponenetVersion() { VersionNumber = "1.1" };
-            ComponenetVersion version12 = new ComponenetVersion() { VersionNumber = "1.2" };
-            ComponenetVersion version13 = new ComponenetVersion() { VersionNumber = "1.3" };
-            ComponenetVersion version14 = new ComponenetVersion() { VersionNumber = "1.4" };
-            ComponenetVersion version21 = new ComponenetVersion() { VersionNumber = "2.1" };
-            ComponenetVersion version22 = new ComponenetVersion() { VersionNumber = "2.2" };
-            ComponenetVersion version23 = new ComponenetVersion() { VersionNumber = "2.3" };
-            ComponenetVersion version24 = new ComponenetVersion() { VersionNumber = "2.4" };
-            ComponenetVersion version31 = new ComponenetVersion() { VersionNumber = "3.1" };
-            ComponenetVersion version32 = new ComponenetVersion() { VersionNumber = "3.2" };
-            ComponenetVersion version33 = new ComponenetVersion() { VersionNumber = "3.3" };
-            ComponenetVersion version34 = new ComponenetVersion() { VersionNumber = "3.4" };
+            Version version11 = new Version() { VersionNumber = "1.1" };
+            Version version12 = new Version() { VersionNumber = "1.2" };
+            Version version13 = new Version() { VersionNumber = "1.3" };
+            Version version14 = new Version() { VersionNumber = "1.4" };
+            Version version21 = new Version() { VersionNumber = "2.1" };
+            Version version22 = new Version() { VersionNumber = "2.2" };
+            Version version23 = new Version() { VersionNumber = "2.3" };
+            Version version24 = new Version() { VersionNumber = "2.4" };
+            Version version31 = new Version() { VersionNumber = "3.1" };
+            Version version32 = new Version() { VersionNumber = "3.2" };
+            Version version33 = new Version() { VersionNumber = "3.3" };
+            Version version34 = new Version() { VersionNumber = "3.4" };
             Package forms = new Package("Forms");
             Package uSync = new Package("uSync");
             CMS umbracoUNO = new CMS() { Name = "Umbraco UNO" };
@@ -68,20 +68,20 @@ namespace web_platform.DAL
                 context.Package.Add(uSync);
             }
             
-            if (!context.Version.Any())
+            if (!context.ComponentVersion.Any())
             {
-                context.Version.Add(version11);
-                context.Version.Add(version12);
-                context.Version.Add(version13);
-                context.Version.Add(version14);
-                context.Version.Add(version21);
-                context.Version.Add(version22);
-                context.Version.Add(version23);
-                context.Version.Add(version24);
-                context.Version.Add(version31);
-                context.Version.Add(version32);
-                context.Version.Add(version33);
-                context.Version.Add(version34);
+                context.ComponentVersion.Add(version11);
+                context.ComponentVersion.Add(version12);
+                context.ComponentVersion.Add(version13);
+                context.ComponentVersion.Add(version14);
+                context.ComponentVersion.Add(version21);
+                context.ComponentVersion.Add(version22);
+                context.ComponentVersion.Add(version23);
+                context.ComponentVersion.Add(version24);
+                context.ComponentVersion.Add(version31);
+                context.ComponentVersion.Add(version32);
+                context.ComponentVersion.Add(version33);
+                context.ComponentVersion.Add(version34);
             }
 
             context.SaveChanges();

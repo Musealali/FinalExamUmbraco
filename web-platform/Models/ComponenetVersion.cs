@@ -8,7 +8,7 @@ namespace web_platform.Models
 {
     public class ComponenetVersion
     {
-        [Key]
+        public int Id { get; set; }
         public string VersionNumber { get; set; }
 
        public ComponenetVersion()

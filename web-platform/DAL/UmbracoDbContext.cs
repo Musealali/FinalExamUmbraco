@@ -20,12 +20,11 @@ namespace web_platform.Data
         public DbSet<SecurityIssuePost> SecurityIssuePosts {get; set;}
         public DbSet<CMS> CMS { get; set; }
         public DbSet<Package> Package { get; set; }
-        public DbSet<ComponenetVersion> Version { get; set; }
+        public DbSet<ComponenetVersion> ComponentVersion { get; set; }
         public DbSet<CMSComponentVersion> CMSComponentVersion { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
         }
     }
 }

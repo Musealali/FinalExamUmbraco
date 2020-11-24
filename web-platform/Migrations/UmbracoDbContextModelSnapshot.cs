@@ -33,14 +33,48 @@ namespace web_platform.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Version")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("CMSComponent");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("CMSComponent");
+                });
+
+            modelBuilder.Entity("web_platform.Models.CMSComponentVersion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("CMSComponentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("VersionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CMSComponentId");
+
+                    b.HasIndex("VersionId");
+
+                    b.ToTable("CMSComponentVersion");
+                });
+
+            modelBuilder.Entity("web_platform.Models.ComponenetVersion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("VersionNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ComponentVersion");
                 });
 
             modelBuilder.Entity("web_platform.Models.SecurityIssuePost", b =>
@@ -50,7 +84,7 @@ namespace web_platform.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("CMSComponentId")
+                    b.Property<int?>("CMSComponentVersionId")
                         .HasColumnType("int");
 
                     b.Property<string>("IssueDescription")
@@ -64,9 +98,9 @@ namespace web_platform.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CMSComponentId");
+                    b.HasIndex("CMSComponentVersionId");
 
-                    b.ToTable("SecurityIssuePost");
+                    b.ToTable("SecurityIssuePosts");
                 });
 
             modelBuilder.Entity("web_platform.Models.CMS", b =>
@@ -74,14 +108,6 @@ namespace web_platform.Migrations
                     b.HasBaseType("web_platform.Models.CMSComponent");
 
                     b.HasDiscriminator().HasValue("CMS");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "CMS",
-                            Version = "8.9.1"
-                        });
                 });
 
             modelBuilder.Entity("web_platform.Models.Package", b =>
@@ -89,29 +115,30 @@ namespace web_platform.Migrations
                     b.HasBaseType("web_platform.Models.CMSComponent");
 
                     b.HasDiscriminator().HasValue("Package");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 2,
-                            Name = "Forms",
-                            Version = "8.6.9"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "uSync",
-                            Version = "6.2.1"
-                        });
                 });
 
-            modelBuilder.Entity("web_platform.Models.SecurityIssuePost", b =>
+            modelBuilder.Entity("web_platform.Models.CMSComponentVersion", b =>
                 {
                     b.HasOne("web_platform.Models.CMSComponent", "CMSComponent")
                         .WithMany()
                         .HasForeignKey("CMSComponentId");
 
+                    b.HasOne("web_platform.Models.ComponenetVersion", "Version")
+                        .WithMany()
+                        .HasForeignKey("VersionId");
+
                     b.Navigation("CMSComponent");
+
+                    b.Navigation("Version");
+                });
+
+            modelBuilder.Entity("web_platform.Models.SecurityIssuePost", b =>
+                {
+                    b.HasOne("web_platform.Models.CMSComponentVersion", "CMSComponentVersion")
+                        .WithMany()
+                        .HasForeignKey("CMSComponentVersionId");
+
+                    b.Navigation("CMSComponentVersion");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,8 +10,8 @@ using web_platform.Data;
 namespace web_platform.Migrations
 {
     [DbContext(typeof(UmbracoDbContext))]
-    [Migration("20201122185826_Initial-03")]
-    partial class Initial03
+    [Migration("20201124195748_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,14 +35,48 @@ namespace web_platform.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Version")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("CMSComponent");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("CMSComponent");
+                });
+
+            modelBuilder.Entity("web_platform.Models.CMSComponentVersion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int?>("CMSComponentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("VersionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CMSComponentId");
+
+                    b.HasIndex("VersionId");
+
+                    b.ToTable("CMSComponentVersion");
+                });
+
+            modelBuilder.Entity("web_platform.Models.ComponenetVersion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("VersionNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ComponentVersion");
                 });
 
             modelBuilder.Entity("web_platform.Models.SecurityIssuePost", b =>
@@ -52,10 +86,7 @@ namespace web_platform.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("CMSComponentId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CMSComponentId1")
+                    b.Property<int?>("CMSComponentVersionId")
                         .HasColumnType("int");
 
                     b.Property<string>("IssueDescription")
@@ -69,9 +100,9 @@ namespace web_platform.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CMSComponentId1");
+                    b.HasIndex("CMSComponentVersionId");
 
-                    b.ToTable("SecurityIssuePost");
+                    b.ToTable("SecurityIssuePosts");
                 });
 
             modelBuilder.Entity("web_platform.Models.CMS", b =>
@@ -88,13 +119,28 @@ namespace web_platform.Migrations
                     b.HasDiscriminator().HasValue("Package");
                 });
 
-            modelBuilder.Entity("web_platform.Models.SecurityIssuePost", b =>
+            modelBuilder.Entity("web_platform.Models.CMSComponentVersion", b =>
                 {
                     b.HasOne("web_platform.Models.CMSComponent", "CMSComponent")
                         .WithMany()
-                        .HasForeignKey("CMSComponentId1");
+                        .HasForeignKey("CMSComponentId");
+
+                    b.HasOne("web_platform.Models.ComponenetVersion", "Version")
+                        .WithMany()
+                        .HasForeignKey("VersionId");
 
                     b.Navigation("CMSComponent");
+
+                    b.Navigation("Version");
+                });
+
+            modelBuilder.Entity("web_platform.Models.SecurityIssuePost", b =>
+                {
+                    b.HasOne("web_platform.Models.CMSComponentVersion", "CMSComponentVersion")
+                        .WithMany()
+                        .HasForeignKey("CMSComponentVersionId");
+
+                    b.Navigation("CMSComponentVersion");
                 });
 #pragma warning restore 612, 618
         }

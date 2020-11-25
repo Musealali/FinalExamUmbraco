@@ -3,24 +3,41 @@
     ViewData["Title"] = "Create";
 }
 <h1>Create Security issue post</h1>
-<body>
-    <form asp-action="Create" asp-controller="SecurityIssuePost" method="post">
-        <label style="float: left" for="Title">title</label>
-        <input style="float: left; width: 100%" placeholder="Title" type="text" name="Title">
-        <label style="float: left" for="IssueDescription">Description</label>
-        <textarea style="float: left; width: 100%; height: 100px" name="IssueDescription"></textarea>
-        <label style="float: left" for="IssueReproduction">Steps to reproduce</label>
-        <textarea style="float: left; width: 100%; height: 100px" name="IssueReproduction"></textarea>
-        <select class="form-control" name="componentType" onchange="javascript: dynamicdropdown(this.options[this.selectedIndex].value);">
-            <option disabled selected>Select your option</option>
-            <option value="package">Package</option>
-            <option value="cms">CMS</option>
-        </select>
-        <script type="text/javascript" language="JavaScript">
-            document.write('<select class="form-control" name="name" id="name"><option disabled selected>Select status</option></select>')
-        </script>
-        <input style="float: left; width: 100%" placeholder="Version" type="text" name="version">
-        <input style="float:left" type="submit" name="submit" />
-    </form>
-</body>
+
+<form asp-controller="SecurityIssuePost" asp-action="Create" method="POST">
+
+    <div class="form-group">
+        <label asp-for="Title">Title</label>
+        <input asp-for="Title" name="Title" class="form-control" id="InputTitle" placeholder="Enter a descriptive title">
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="IssueDescription">Description</label>
+        <input asp-for="IssueDescription" name="IssueDescription" class="form-control" id="InputIssueDescription" placeholder="Insert a description of the issue">
+        <span asp-validation-for="IssueDescription" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="IssueReproduction">Reproduction steps</label>
+        <input asp-for="IssueReproduction" name="IssueReproduction" class="form-control" id="InputIssueReproduction" placeholder="Insert a description on how to reproduce the error">
+        <span asp-validation-for="IssueReproduction" class="text-danger"></span>
+    </div>
+
+
+    <select class="form-control"  name="componentType" onchange="javascript: dynamicdropdown(this.options[this.selectedIndex].value);">
+        <option disabled selected>Select your option</option>
+        <option value="package">Package</option>
+        <option value="cms">CMS</option>
+    </select>
+    <script type="text/javascript" language="JavaScript">
+        document.write('<select class="form-control" name="name" id="name"><option disabled selected>Select status</option></select>')
+    </script>
+    <input style="float: left; width: 100%" placeholder="Version" type="text" name="version">
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
 

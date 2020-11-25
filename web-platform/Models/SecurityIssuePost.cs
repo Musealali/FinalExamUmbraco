@@ -12,6 +12,7 @@ namespace web_platform.Models
         public string Title { get; set; }
         public string IssueDescription { get; set; }
         public string IssueReproduction { get; set; }
+        public DateTime Created { get; set; }
 
         // Navigation Properties - Used by DBContext when 'GETTING' entities
         public CMSComponentVersion CMSComponentVersion { get; set; }
@@ -26,6 +27,7 @@ namespace web_platform.Models
             Title = title;
             IssueDescription = issueDescription;
             IssueReproduction = issueReproduction;
+            Created = DateTime.Now;
         }
     }
 }

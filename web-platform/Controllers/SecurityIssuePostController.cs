@@ -18,11 +18,36 @@ namespace web_platform.Controllers
         {
             _umbracoDbContext = umbracoDbContext;
         }
-        public IActionResult Index()
+        
+        [HttpGet]
+        public async Task<IActionResult> Index(int id)
         {
-            return View();
+            var securityIssuePostToFind = await _umbracoDbContext.SecurityIssuePosts
+                    .Include(s => s.CMSComponentVersion)
+                        .ThenInclude(c => c.CMSComponent)
+                    .Include(s => s.CMSComponentVersion)
+                        .ThenInclude(c => c.Version)
+                    .Where(s => s.Id == id).FirstOrDefaultAsync();
+            
+            if(securityIssuePostToFind == null) { return NotFound(); }
+            
+            return View(securityIssuePostToFind);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> ViewAllPosts()
+        {
+            var posts = await _umbracoDbContext.SecurityIssuePosts
+                    .Include(s => s.CMSComponentVersion)
+                        .ThenInclude(c => c.CMSComponent)
+                    .Include(s => s.CMSComponentVersion)
+                        .ThenInclude(c => c.Version)
+                    .ToListAsync();
+
+            return View(posts);
         }
 
+        
         [HttpGet]
         public IActionResult Create(SecurityIssuePost securityIssuePost) // Responsible for returning the correct View, whenever a user WANTS to create a securityIssuePost
         {
@@ -48,12 +73,14 @@ namespace web_platform.Controllers
 
             if (cMSComponentVersion == null) { return NotFound(); }
 
+
             securityIssuePost.CMSComponentVersion = cMSComponentVersion;
+            securityIssuePost.Created = DateTime.Now;
 
             _umbracoDbContext.Add(securityIssuePost);
             _umbracoDbContext.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
     }
 }

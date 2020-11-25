@@ -1,0 +1,16 @@
+﻿@model SecurityIssuePost
+
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Title</h5>
+        <h6 class="card-subtitle mb-2 text-muted">@Model.CMSComponentVersion.Version.VersionNumber - @Model.CMSComponentVersion.CMSComponent.Name</h6>
+        <p class="card-text">
+            @Model.IssueDescription 
+            <br/> 
+            @Model.IssueReproduction
+        </p>
+        <a href="#" class="card-link">Card link</a>
+        <a href="#" class="card-link">Another link</a>
+    </div>
+</div>

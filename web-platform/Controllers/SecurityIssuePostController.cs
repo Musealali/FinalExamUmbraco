@@ -29,7 +29,7 @@ namespace web_platform.Controllers
                         .ThenInclude(c => c.Version)
                     .Where(s => s.Id == id).FirstOrDefaultAsync();
             
-            if(securityIssuePostToFind == null) { return NotFound(); }
+            if(securityIssuePostToFind == null) { return View(NotFound()); }
             
             return View(securityIssuePostToFind);
         }

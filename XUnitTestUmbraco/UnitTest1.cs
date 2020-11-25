@@ -33,16 +33,19 @@ namespace XUnitTestUmbraco
         }
 
         [Fact]
-        public void TestReturnIndex()
+        public async Task TestReturnIndex()
         {
             //Arrange
             SecurityIssuePostController controller = new SecurityIssuePostController(_context);
 
             //Act
-            ViewResult result = controller.Index() as ViewResult;
+            SecurityIssuePost securityIssuePost = new SecurityIssuePost("UnitTest-Test", "Testing from unit", "Rerun this test to reproduce, xd");
+            var result = await _controller.Create(securityIssuePost, "Umbraco UNO", "1.1", "cms");
+
+            ViewResult viewResult = await controller.Index(securityIssuePost.Id) as ViewResult;
 
             //Assert
-            Assert.NotNull(result);
+            Assert.False(viewResult.StatusCode == 404);
         }
 
         [Fact]

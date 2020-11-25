@@ -3,6 +3,7 @@
     ViewData["Title"] = "Create";
 }
 <h1>Create Security issue post</h1>
+
 <body>
     <form asp-action="Create" asp-controller="SecurityIssuePost" method="post">
         <label style="float: left" for="Title">title</label>
@@ -11,15 +12,21 @@
         <textarea style="float: left; width: 100%; height: 100px" name="IssueDescription"></textarea>
         <label style="float: left" for="IssueReproduction">Steps to reproduce</label>
         <textarea style="float: left; width: 100%; height: 100px" name="IssueReproduction"></textarea>
-        <select class="form-control" name="componentType" onchange="javascript: dynamicdropdown(this.options[this.selectedIndex].value);">
+        <<select class="form-control" name="componentType" onchange="javascript: dynamicdropdowncomponenttype(this.options[this.selectedIndex].value);">
             <option disabled selected>Select your option</option>
             <option value="package">Package</option>
             <option value="cms">CMS</option>
         </select>
         <script type="text/javascript" language="JavaScript">
-            document.write('<select class="form-control" name="name" id="name"><option disabled selected>Select status</option></select>')
+            document.write('<select class="form-control" name="name" id="name");"><option disabled selected>Select status</option></select>')
         </script>
-        <input style="float: left; width: 100%" placeholder="Version" type="text" name="version">
+        <select class="form-control" name="version">
+            <option disabled selected>Only contains versions connected to forms</option>
+            @foreach (ComponentVersion cv in ViewBag.formsVersions)
+            {
+                <option value="@cv.VersionNumber">@cv.VersionNumber</option>
+            }
+        </select>
         <input style="float:left" type="submit" name="submit" />
     </form>
 </body>

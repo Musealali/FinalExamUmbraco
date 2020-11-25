@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using web_platform.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using ComponenetVersion = web_platform.Models.ComponenetVersion;
 
 namespace XUnitTestUmbraco
 {

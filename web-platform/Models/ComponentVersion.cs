@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace web_platform.Models
 {
-    public class ComponenetVersion
+    public class ComponentVersion
     {
         public int Id { get; set; }
         public string VersionNumber { get; set; }
 
-       public ComponenetVersion()
+       public ComponentVersion()
         {
 
         }
-        public ComponenetVersion(string versionNumber)
+        public ComponentVersion(string versionNumber)
         {
             VersionNumber = versionNumber; 
         }

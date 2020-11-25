@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using web_platform.DAL;
 using web_platform.Models;
-using ComponenetVersion = web_platform.Models.ComponenetVersion;
+using ComponentVersion = web_platform.Models.ComponentVersion;
 
 namespace web_platform.Data
 {
@@ -20,7 +20,7 @@ namespace web_platform.Data
         public DbSet<SecurityIssuePost> SecurityIssuePosts {get; set;}
         public DbSet<CMS> CMS { get; set; }
         public DbSet<Package> Package { get; set; }
-        public DbSet<ComponenetVersion> ComponentVersion { get; set; }
+        public DbSet<ComponentVersion> ComponentVersion { get; set; }
         public DbSet<CMSComponentVersion> CMSComponentVersion { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -57,9 +57,10 @@ namespace web_platform.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(SecurityIssuePost securityIssuePost, string name, string version, string componentType) // Responsible for getting the user input and storing the securityIssuePost
         {
-            // Vi burde altså bare debugge vores actions i stedet for at lave en masse writelines XDXDXDXD
-            CMSComponentVersion cMSComponentVersion = null;
+            if (!ModelState.IsValid) { return RedirectToAction("Index", securityIssuePost); }
 
+
+            CMSComponentVersion cMSComponentVersion = null;
             switch (componentType)
             {
                 case "package":
@@ -75,7 +76,6 @@ namespace web_platform.Controllers
 
 
             securityIssuePost.CMSComponentVersion = cMSComponentVersion;
-            securityIssuePost.Created = DateTime.Now;
 
             _umbracoDbContext.Add(securityIssuePost);
             _umbracoDbContext.SaveChanges();

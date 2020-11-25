@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using web_platform.Data;
 using web_platform.Models;
 using System.Dynamic;
+using Microsoft.EntityFrameworkCore;
 
 namespace web_platform.Controllers
 {
@@ -29,25 +30,25 @@ namespace web_platform.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(SecurityIssuePost securityIssuePost, CMSComponent cmsComponent, string componentType) // Responsible for getting the user input and storing the securityIssuePost
+        public async Task<ActionResult> Create(SecurityIssuePost securityIssuePost, string name, string version, string componentType) // Responsible for getting the user input and storing the securityIssuePost
         {
             // Vi burde altså bare debugge vores actions i stedet for at lave en masse writelines XDXDXDXD
-            CMSComponent componentToFind = null;
+            CMSComponentVersion cMSComponentVersion = null;
 
-            switch(componentType)
+            switch (componentType)
             {
                 case "package":
-                    componentToFind = _umbracoDbContext.Package.Where(p => p.Name == cmsComponent.Name && p.Version == cmsComponent.Version).FirstOrDefault();
+                    cMSComponentVersion = await _umbracoDbContext.CMSComponentVersion.Where(c => c.CMSComponent.Name == name && c.Version.VersionNumber == version).FirstOrDefaultAsync();
                     break;
 
                 case "cms":
-                    componentToFind = _umbracoDbContext.CMS.Where(c => c.Name == cmsComponent.Name && c.Version == cmsComponent.Version).FirstOrDefault();
+                    cMSComponentVersion = await _umbracoDbContext.CMSComponentVersion.Where(c => c.CMSComponent.Name == name && c.Version.VersionNumber == version).FirstOrDefaultAsync();
                     break;
             }
 
-            if(componentToFind == null) { return NotFound(); }
+            if (cMSComponentVersion == null) { return NotFound(); }
 
-            securityIssuePost.CMSComponent = componentToFind;
+            securityIssuePost.CMSComponentVersion = cMSComponentVersion;
 
             _umbracoDbContext.Add(securityIssuePost);
             _umbracoDbContext.SaveChanges();

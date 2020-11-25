@@ -12,7 +12,7 @@ namespace web_platform.Models
 
         }
 
-        public Package(string name, string version) : base(name, version)
+        public Package(string name) : base(name)
         {
 
         }

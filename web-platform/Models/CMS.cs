@@ -12,7 +12,7 @@ namespace web_platform.Models
 
         }
 
-        public CMS(string name, string version) : base(name, version)
+        public CMS(string name) : base(name)
         {
 
         }

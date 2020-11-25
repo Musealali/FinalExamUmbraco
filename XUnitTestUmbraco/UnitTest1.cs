@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using web_platform.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using ComponenetVersion = web_platform.Models.ComponenetVersion;
 
 namespace XUnitTestUmbraco
 {
@@ -32,30 +33,69 @@ namespace XUnitTestUmbraco
         }
 
         [Fact]
+        public void TestReturnIndex()
+        {
+            //Arrange
+            SecurityIssuePostController controller = new SecurityIssuePostController(_context);
+
+            //Act
+            ViewResult result = controller.Index() as ViewResult;
+
+            //Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public void TestReturnCreateView()
+        {
+            //Arrange
+            SecurityIssuePostController controller = new SecurityIssuePostController(_context);
+            SecurityIssuePost securityIssuePost = new SecurityIssuePost();
+
+            //Act
+            ViewResult result = controller.Create(securityIssuePost) as ViewResult;
+
+            //Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
         public async Task ControllerActionMethodCanCreateSecurityIssuePostWithCMS()
         {
             //Arrange
             string Title = "This is a security issue";
-            User user = new User();
-            CMS cms = new CMS("CMS", "V8.5.3");
-            CMSComponent cmsComponent = cms;
             string IssueDescription = "This is a description of the issue";
             string IssueReproduction = "This is how to reproduce the issue";
+            string componentType = "cms";
+            string name = "Umbraco CMS";
+            string version = "1.1";
+            SecurityIssuePost securityIssuePost = new SecurityIssuePost(Title, IssueDescription, IssueReproduction);
 
-
-            SecurityIssuePost securityIssuePost = new SecurityIssuePost(Title, user, cmsComponent, IssueDescription, IssueReproduction);
-
-            //ACT
-            //var result = await _controller.Create(securityIssuePost);
+            //Act
+            var result = await _controller.Create(securityIssuePost, name, version, componentType);
 
             //Assert
-            //var objectResult = Assert.IsType<ViewResult>(result);
-            //Assert.NotNull(objectResult.Model);
-
-            //var model = Assert.IsType<SecurityIssuePost>(objectResult.Model);
-
-
+            var objectResult = Assert.IsAssignableFrom<ActionResult>(result);          
         }
-        
+
+        [Fact]
+        public async Task ControllerActionMethodCanCreateSecurityIssuePostWithPackage()
+        {
+            //Arrange
+            string Title = "This is a security issue";
+            string IssueDescription = "This is a description of the issue";
+            string IssueReproduction = "This is how to reproduce the issue";
+            string componentType = "package";
+            string name = "Forms";
+            string version = "1.2";
+            SecurityIssuePost securityIssuePost = new SecurityIssuePost(Title, IssueDescription, IssueReproduction);
+
+            //Act
+            var result = await _controller.Create(securityIssuePost, name, version, componentType);
+
+            //Assert
+            var objectResult = Assert.IsAssignableFrom<ActionResult>(result);
+        }
+
     }
 }

@@ -9,15 +9,20 @@ namespace web_platform.Models
 {
     public class CMSComponent
     {
+        public enum ComponentType { CMS, Package }
         public int Id { get; set; }
         public string Name { get; set; }
+        public ComponentType CType { get; set; } 
+        public ICollection<ComponentVersion> Versions { get; set; }
+        public ICollection<CMSComponentVersion> CMSComponentVersions { get; set; }
         public CMSComponent()
         {
             
         }
-        public CMSComponent(string name)
+        public CMSComponent(string name, ComponentType cType)
         {
             Name = name;
+            CType = cType;
         }
     }
 }

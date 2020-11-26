@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using web_platform.Data;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
-using web_platform.DAL;
+
 
 namespace web_platform
 {
@@ -37,9 +37,6 @@ namespace web_platform
 
             if (WebHostEnvironment.IsProduction())
                 services.AddDbContext<UmbracoDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("prod")));
-
-            var context = services.BuildServiceProvider().GetService<UmbracoDbContext>();
-            DbInitializer.Initialize(context);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

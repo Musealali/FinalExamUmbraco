@@ -1,7 +1,6 @@
 using System;
 using Xunit;
 using web_platform.Controllers;
-using web_platform.DAL;
 using web_platform.Data;
 using Microsoft.EntityFrameworkCore;
 using web_platform.Models;
@@ -24,7 +23,6 @@ namespace XUnitTestUmbraco
             _context = new UmbracoDbContext(options);
             _context.Database.EnsureCreated();
             _controller = new SecurityIssuePostController(_context);
-            DbInitializer.Initialize(_context);
         }
 
         public void Dispose()

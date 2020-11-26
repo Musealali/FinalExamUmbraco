@@ -10,8 +10,9 @@ namespace web_platform.Models
     {
         public int Id { get; set; }
         public string VersionNumber { get; set; }
-
-       public ComponentVersion()
+        public ICollection<CMSComponent> CMSComponents { get; set; }
+        public ICollection<CMSComponentVersion> CMSComponentVersions { get; set; }
+        public ComponentVersion()
         {
 
         }

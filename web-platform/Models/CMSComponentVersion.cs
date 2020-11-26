@@ -9,6 +9,8 @@ namespace web_platform.Models
     {
         public int Id { get; set; }
         public CMSComponent CMSComponent { get; set; }
+        public int CMSComponentId { get; set; }
         public ComponentVersion Version { get; set; }
+        public int ComponentVersionId { get; set; }
     }
 }

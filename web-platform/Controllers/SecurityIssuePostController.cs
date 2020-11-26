@@ -29,11 +29,11 @@ namespace web_platform.Controllers
         {
             using (_umbracoDbContext)
             {
-                var fromDatabaseEF = new SelectList(_umbracoDbContext.CMS.ToList(), "Id", "Name");
-                ViewData["CMS"] = fromDatabaseEF;
+                List<CMS> cms = _umbracoDbContext.CMS.ToList();
+                ViewBag.CMS = cms;
 
-                fromDatabaseEF = new SelectList(_umbracoDbContext.Package.ToList(), "Id", "Name");
-                ViewData["Package"] = fromDatabaseEF;
+                List<Package> packages = _umbracoDbContext.Package.ToList();
+                ViewBag.Packages = packages;
 
                 List<ComponentVersion> formsVersions = new List<ComponentVersion>();
                 List<ComponentVersion> uSyncVersions = new List<ComponentVersion>();
@@ -45,6 +45,9 @@ namespace web_platform.Controllers
                 var cmsComponentVersions = _umbracoDbContext.CMSComponentVersion;
                 foreach (CMSComponentVersion ccv in cmsComponentVersions)
                 {
+                    /*var umbracoCMSVersion = new SelectList(_umbracoDbContext.ComponentVersion
+                        .Where(x => x.CMSComponents.any(y => y.name == "Umbraco CMS"))).Tolist();*/
+
                     List<ComponentVersion> umbracoCMSVersion = _umbracoDbContext.ComponentVersion
                         .Where(x => ccv.CMSComponent.Name.Equals("Umbraco CMS") && x.Id == ccv.Version.Id).ToList();
 

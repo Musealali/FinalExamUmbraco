@@ -80,6 +80,7 @@ namespace web_platform.Data
                     new CMSComponentVersion() { Id = 21, CMSComponentId = 2, ComponentVersionId = 6 },
                     new CMSComponentVersion() { Id = 22, CMSComponentId = 2, ComponentVersionId = 11 }
                 );
+
         }
     }
 }

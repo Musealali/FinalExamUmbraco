@@ -54,65 +54,29 @@ namespace web_platform.Controllers
         {
             using (_umbracoDbContext)
             {
-                List<CMSComponent> cms = _umbracoDbContext.CMSComponents.Where(c => c.CType == CMSComponent.ComponentType.CMS).ToList();
+                List<CMSComponent> cms = GetCMSComponents(CMSComponent.ComponentType.CMS);
                 ViewBag.CMS = cms;
-                List<CMSComponent> packages = _umbracoDbContext.CMSComponents.Where(p => p.CType == CMSComponent.ComponentType.Package).ToList();
+                List<CMSComponent> packages = GetCMSComponents(CMSComponent.ComponentType.Package);
                 ViewBag.Packages = packages;
-                List<ComponentVersion> formsVersions = _umbracoDbContext.ComponentVersions.Where(cv => cv.CMSComponents.Any(c => c.Name == "Forms")).ToList();
+                List<ComponentVersion> formsVersions = GetVersions("Forms");
                 ViewBag.FormsVersions = formsVersions;
-                List<ComponentVersion> uSyncVersions = _umbracoDbContext.ComponentVersions.Where(cv => cv.CMSComponents.Any(c => c.Name == "uSync")).ToList();
+                List<ComponentVersion> uSyncVersions = GetVersions("uSync");
                 ViewBag.uSyncVersions = uSyncVersions;
-                List<ComponentVersion> umbracoCMSVersions = _umbracoDbContext.ComponentVersions.Where(cv => cv.CMSComponents.Any(c => c.Name == "Umbraco CMS")).ToList();
+                List<ComponentVersion> umbracoCMSVersions = GetVersions("Umbraco CMS");
                 ViewBag.UmbracoCMSVersions = umbracoCMSVersions;
-                List<ComponentVersion> umbracoUNOVersions = _umbracoDbContext.ComponentVersions.Where(cv => cv.CMSComponents.Any(c => c.Name == "Umbraco UNO")).ToList();
+                List<ComponentVersion> umbracoUNOVersions = GetVersions("Umbraco UNO");
                 ViewBag.UmbracoUNOVersions = umbracoUNOVersions;
-                List<ComponentVersion> umbracoHearthbreakVersions = _umbracoDbContext.ComponentVersions.Where(cv => cv.CMSComponents.Any(c => c.Name == "Umbraco Hearthbreak")).ToList();
+                List<ComponentVersion> umbracoHearthbreakVersions = GetVersions("Umbraco Hearthbreak");
                 ViewBag.UmbracoHearthbreakVersions = umbracoHearthbreakVersions;
-                List<ComponentVersion> umbracoCloudVersions = _umbracoDbContext.ComponentVersions.Where(cv => cv.CMSComponents.Any(c => c.Name == "Umbraco Cloud")).ToList();
+                List<ComponentVersion> umbracoCloudVersions = GetVersions("Umbraco Cloud");
                 ViewBag.UmbracoCloudVersions = umbracoCloudVersions;
-                formsVersions.Sort(delegate (ComponentVersion x, ComponentVersion y)
-                {
-                    if (x.VersionNumber == null && y.VersionNumber == null) return 0;
-                    else if (x.VersionNumber == null) return -1;
-                    else if (y.VersionNumber == null) return 1;
-                    else return x.VersionNumber.CompareTo(y.VersionNumber);
-                });
-                uSyncVersions.Sort(delegate (ComponentVersion x, ComponentVersion y)
-                {
-                    if (x.VersionNumber == null && y.VersionNumber == null) return 0;
-                    else if (x.VersionNumber == null) return -1;
-                    else if (y.VersionNumber == null) return 1;
-                    else return x.VersionNumber.CompareTo(y.VersionNumber);
-                });
-                umbracoCMSVersions.Sort(delegate (ComponentVersion x, ComponentVersion y)
-                {
-                    if (x.VersionNumber == null && y.VersionNumber == null) return 0;
-                    else if (x.VersionNumber == null) return -1;
-                    else if (y.VersionNumber == null) return 1;
-                    else return x.VersionNumber.CompareTo(y.VersionNumber);
-                });
-                umbracoUNOVersions.Sort(delegate (ComponentVersion x, ComponentVersion y)
-                {
-                    if (x.VersionNumber == null && y.VersionNumber == null) return 0;
-                    else if (x.VersionNumber == null) return -1;
-                    else if (y.VersionNumber == null) return 1;
-                    else return x.VersionNumber.CompareTo(y.VersionNumber);
-                });
-                umbracoHearthbreakVersions.Sort(delegate (ComponentVersion x, ComponentVersion y)
-                {
-                    if (x.VersionNumber == null && y.VersionNumber == null) return 0;
-                    else if (x.VersionNumber == null) return -1;
-                    else if (y.VersionNumber == null) return 1;
-                    else return x.VersionNumber.CompareTo(y.VersionNumber);
-                });
-                umbracoCloudVersions.Sort(delegate (ComponentVersion x, ComponentVersion y)
-                {
-                    if (x.VersionNumber == null && y.VersionNumber == null) return 0;
-                    else if (x.VersionNumber == null) return -1;
-                    else if (y.VersionNumber == null) return 1;
-                    else return x.VersionNumber.CompareTo(y.VersionNumber);
-                });
-                
+
+                formsVersions.Sort(SortVersions);
+                uSyncVersions.Sort(SortVersions);
+                umbracoCMSVersions.Sort(SortVersions);
+                umbracoUNOVersions.Sort(SortVersions);
+                umbracoHearthbreakVersions.Sort(SortVersions);
+                umbracoCloudVersions.Sort(SortVersions);
             }
             return View();
         }
@@ -145,7 +109,24 @@ namespace web_platform.Controllers
 
             return RedirectToAction("Index", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
-    }
+
+        public List<ComponentVersion> GetVersions (string ComponentName)
+        {
+            return _umbracoDbContext.ComponentVersions.Where(cv => cv.CMSComponents.Any(c => c.Name == ComponentName)).ToList();
+        }
+        public List<CMSComponent> GetCMSComponents(CMSComponent.ComponentType componentType)
+        {
+            return _umbracoDbContext.CMSComponents.Where(c => c.CType == componentType).ToList();
+        }
+
+        public int SortVersions (ComponentVersion x, ComponentVersion y)
+        {
+            if (x.VersionNumber == null && y.VersionNumber == null) return 0;
+            else if (x.VersionNumber == null) return -1;
+            else if (y.VersionNumber == null) return 1;
+            else return x.VersionNumber.CompareTo(y.VersionNumber);
+        }
+}
 
     
 }

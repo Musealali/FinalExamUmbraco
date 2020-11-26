@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using web_platform.Data;
 
 namespace web_platform.Migrations
 {
     [DbContext(typeof(UmbracoDbContext))]
-    partial class UmbracoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201123194309_blablaa")]
+    partial class blablaa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,31 +52,26 @@ namespace web_platform.Migrations
                     b.Property<int?>("CMSComponentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("VersionId")
-                        .HasColumnType("int");
+                    b.Property<string>("VersionNumber")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CMSComponentId");
 
-                    b.HasIndex("VersionId");
+                    b.HasIndex("VersionNumber");
 
                     b.ToTable("CMSComponentVersion");
                 });
 
             modelBuilder.Entity("web_platform.Models.ComponenetVersion", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
                     b.Property<string>("VersionNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("VersionNumber");
 
-                    b.ToTable("ComponentVersion");
+                    b.ToTable("Version");
                 });
 
             modelBuilder.Entity("web_platform.Models.SecurityIssuePost", b =>
@@ -86,9 +83,6 @@ namespace web_platform.Migrations
 
                     b.Property<int?>("CMSComponentVersionId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("IssueDescription")
                         .HasColumnType("nvarchar(max)");
@@ -128,7 +122,7 @@ namespace web_platform.Migrations
 
                     b.HasOne("web_platform.Models.ComponenetVersion", "Version")
                         .WithMany()
-                        .HasForeignKey("VersionId");
+                        .HasForeignKey("VersionNumber");
 
                     b.Navigation("CMSComponent");
 

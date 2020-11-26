@@ -89,7 +89,10 @@
     }
 </script>
 <h1>Create Security issue post</h1>
+
 <form asp-controller="SecurityIssuePost" asp-action="Create" method="POST">
+
+
     <div class="form-group">
         <label asp-for="Title">Title</label>
         <input asp-for="Title" name="Title" class="form-control" id="InputTitle" placeholder="Enter a descriptive title">
@@ -126,10 +129,8 @@
         document.write('<select class="form-control" name="version" id="version"><option disabled selected>Select status</option></select>')
     </script>
 
-
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -25,6 +25,7 @@ namespace web_platform.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
         }
     }
 }

@@ -19,11 +19,36 @@ namespace web_platform.Controllers
         {
             _umbracoDbContext = umbracoDbContext;
         }
-        public IActionResult Index()
+        
+        [HttpGet]
+        public async Task<IActionResult> Index(int id)
         {
-            return View();
+            var securityIssuePostToFind = await _umbracoDbContext.SecurityIssuePosts
+                    .Include(s => s.CMSComponentVersion)
+                        .ThenInclude(c => c.CMSComponent)
+                    .Include(s => s.CMSComponentVersion)
+                        .ThenInclude(c => c.Version)
+                    .Where(s => s.Id == id).FirstOrDefaultAsync();
+            
+            if(securityIssuePostToFind == null) { return View(NotFound()); }
+            
+            return View(securityIssuePostToFind);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> ViewAllPosts()
+        {
+            var posts = await _umbracoDbContext.SecurityIssuePosts
+                    .Include(s => s.CMSComponentVersion)
+                        .ThenInclude(c => c.CMSComponent)
+                    .Include(s => s.CMSComponentVersion)
+                        .ThenInclude(c => c.Version)
+                    .ToListAsync();
+
+            return View(posts);
         }
 
+        
         [HttpGet]
         public IActionResult Create(SecurityIssuePost securityIssuePost) // Responsible for returning the correct View, whenever a user WANTS to create a securityIssuePost
         {
@@ -147,9 +172,10 @@ namespace web_platform.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(SecurityIssuePost securityIssuePost, string name, string version, string componentType) // Responsible for getting the user input and storing the securityIssuePost
         {
-            // Vi burde altså bare debugge vores actions i stedet for at lave en masse writelines XDXDXDXD
-            CMSComponentVersion cMSComponentVersion = null;
+            if (!ModelState.IsValid) { return RedirectToAction("Index", securityIssuePost); }
 
+
+            CMSComponentVersion cMSComponentVersion = null;
             switch (componentType)
             {
                 case "package":
@@ -163,12 +189,13 @@ namespace web_platform.Controllers
 
             if (cMSComponentVersion == null) { return NotFound(); }
 
+
             securityIssuePost.CMSComponentVersion = cMSComponentVersion;
 
             _umbracoDbContext.Add(securityIssuePost);
             _umbracoDbContext.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
     }
 

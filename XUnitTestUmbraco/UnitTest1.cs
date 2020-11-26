@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using web_platform.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.Net;
 
 namespace XUnitTestUmbraco
 {
@@ -32,27 +33,48 @@ namespace XUnitTestUmbraco
         }
 
         [Fact]
-        public void TestReturnIndex()
+        public async Task TestReturnIndex()
         {
             //Arrange
-            SecurityIssuePostController controller = new SecurityIssuePostController(_context);
+            SecurityIssuePost securityIssuePost = new SecurityIssuePost("UnitTest-Test", "Testing from unit", "Rerun this test to reproduce, xd");
+
 
             //Act
-            ViewResult result = controller.Index() as ViewResult;
+            var result = await _controller.Create(securityIssuePost, "Umbraco UNO", "1.1", "cms");
+
+            ViewResult viewResult = await _controller.Index(securityIssuePost.Id) as ViewResult;
 
             //Assert
-            Assert.NotNull(result);
+            Assert.NotNull(viewResult);
+            Assert.NotEqual("Microsoft.AspNetCore.Mvc.NotFoundResult", viewResult.Model.ToString());
+        }
+
+        [Fact]
+        public async Task TestReturnIndexNotFound()
+        {
+            //Arrange
+            int id = 5000;
+
+            //Act
+            
+
+            ViewResult viewResult = await _controller.Index(id) as ViewResult;
+            string response = viewResult.Model.ToString();
+            
+
+            //Assert
+            Assert.Equal("Microsoft.AspNetCore.Mvc.NotFoundResult", response);
+          
         }
 
         [Fact]
         public void TestReturnCreateView()
         {
             //Arrange
-            SecurityIssuePostController controller = new SecurityIssuePostController(_context);
             SecurityIssuePost securityIssuePost = new SecurityIssuePost();
 
             //Act
-            ViewResult result = controller.Create(securityIssuePost) as ViewResult;
+            ViewResult result = _controller.Create(securityIssuePost) as ViewResult;
 
             //Assert
             Assert.NotNull(result);

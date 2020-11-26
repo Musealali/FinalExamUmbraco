@@ -2,9 +2,96 @@
 @{
     ViewData["Title"] = "Create";
 }
+<script>
+    function dynamicdropdowncomponent(listindex) {
+        const nameSelect = document.getElementById("name")
+        while (nameSelect.options.length > 0) {
+        nameSelect.remove(0);
+        }
+        switch (listindex) {
+            case "cms":
+                nameSelect.options[0] = new Option("Select CMS", "");
+                nameSelect.options[0].disabled = true;
+                @foreach (CMS cms in ViewBag.CMS)
+                {
+                    <text>nameSelect.add(new Option("@cms.Name", "@cms.Name"));</text>
+                }
+                break;
+            case "package":
+                nameSelect.options[0] = new Option("Select Package", "");
+                nameSelect.options[0].disabled = true;
+                @foreach (Package package in ViewBag.Packages)
+                {
+                    <text>nameSelect.add(new Option("@package.Name", "@package.Name"));</text>
+                }
+                break;
+        }
+        return true;
+    }
+</script>
+<script>
+    function dynamicdropdownversion(listindex) {
+        const nameSelect = document.getElementById("version")
+        while (nameSelect.options.length > 0) {
+        nameSelect.remove(0);
+        }
+        switch (listindex) {
+            case "Forms":
+                nameSelect.options[0] = new Option("Select Version", "");
+                nameSelect.options[0].disabled = true;
+                @foreach (ComponentVersion formsVersion in ViewBag.formsVersions)
+                {
+                    <text>nameSelect.add(new Option("@formsVersion.VersionNumber", "@formsVersion.VersionNumber"));</text>
+                }
+                break;
+            case "uSync":
+                nameSelect.options[0] = new Option("Select Version", "");
+                nameSelect.options[0].disabled = true;
+                @foreach (ComponentVersion uSyncVersion in ViewBag.uSyncVersions)
+                {
+                    <text>nameSelect.add(new Option("@uSyncVersion.VersionNumber", "@uSyncVersion.VersionNumber"));</text>
+                }
+                break;
+            case "Umbraco CMS":
+                nameSelect.options[0] = new Option("Select Version", "");
+                nameSelect.options[0].disabled = true;
+                @foreach (ComponentVersion umbracoCMSVersion in ViewBag.umbracoCMSVersions)
+                {
+                    <text>nameSelect.add(new Option("@umbracoCMSVersion.VersionNumber", "@umbracoCMSVersion.VersionNumber"));</text>
+                }
+                break;
+            case "Umbraco Cloud":
+                nameSelect.options[0] = new Option("Select Version", "");
+                nameSelect.options[0].disabled = true;
+                @foreach (ComponentVersion umbracoCloudVersion in ViewBag.umbracoCloudVersions)
+                {
+                    <text>nameSelect.add(new Option("@umbracoCloudVersion.VersionNumber", "@umbracoCloudVersion.VersionNumber"));</text>
+                }
+                break;
+            case "Umbraco Hearthbreak":
+                nameSelect.options[0] = new Option("Select Version", "");
+                nameSelect.options[0].disabled = true;
+                @foreach (ComponentVersion umbracoHearthbreakVersion in ViewBag.umbracoHearthbreakVersions)
+                {
+                    <text>nameSelect.add(new Option("@umbracoHearthbreakVersion.VersionNumber", "@umbracoHearthbreakVersion.VersionNumber"));</text>
+                }
+                break;
+            case "Umbraco UNO":
+                nameSelect.options[0] = new Option("Select Version", "");
+                nameSelect.options[0].disabled = true;
+                @foreach (ComponentVersion umbracoUNOVersion in ViewBag.umbracoUNOVersions)
+                {
+                    <text>nameSelect.add(new Option("@umbracoUNOVersion.VersionNumber", "@umbracoUNOVersion.VersionNumber"));</text>
+                }
+                break;
+        }
+        return true;
+    }
+</script>
 <h1>Create Security issue post</h1>
 
 <form asp-controller="SecurityIssuePost" asp-action="Create" method="POST">
+
 
     <div class="form-group">
         <label asp-for="Title">Title</label>
@@ -30,23 +117,20 @@
         <span asp-validation-for="CMSComponentVersion.CMSComponent.Name" class="text-danger"></span>
     </div>
 
-
-
-    <select class="form-control" name="componentType" onchange="javascript: dynamicdropdown(this.options[this.selectedIndex].value);">
+    <select class="form-control" name="componentType" id="componentType" onchange="dynamicdropdowncomponent(this.options[this.selectedIndex].value);">
         <option disabled selected>Select your option</option>
         <option value="package">Package</option>
         <option value="cms">CMS</option>
     </select>
     <script type="text/javascript" language="JavaScript">
-        document.write('<select class="form-control" name="name" id="name"><option disabled selected>Select status</option></select>')
+        document.write('<select class="form-control" name="name" id="name" onchange="dynamicdropdownversion(this.options[this.selectedIndex].value);"><option disabled selected>Select status</option></select>')
     </script>
-    <input style="float: left; width: 100%" placeholder="Version" type="text" name="version">
-
+    <script type="text/javascript" language="JavaScript">
+        document.write('<select class="form-control" name="version" id="version"><option disabled selected>Select status</option></select>')
+    </script>
 
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

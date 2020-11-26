@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using web_platform.Data;
 using web_platform.Models;
-using Version = web_platform.Models.ComponenetVersion;
+using Version = web_platform.Models.ComponentVersion;
 
 namespace web_platform.DAL
 {

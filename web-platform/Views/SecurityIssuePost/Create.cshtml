@@ -99,29 +99,29 @@
 
     <div class="form-group">
         <label asp-for="IssueDescription">Description</label>
-        <input asp-for="IssueDescription" name="IssueDescription" class="form-control" id="InputIssueDescription" placeholder="Insert a description of the issue">
+        <textarea  asp-for="IssueDescription" name="IssueDescription" class="form-control" id="InputIssueDescription" placeholder="Insert a description of the issue" rows="4"></textarea>
         <span asp-validation-for="IssueDescription" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="IssueReproduction">Reproduction steps</label>
-        <input asp-for="IssueReproduction" name="IssueReproduction" class="form-control" id="InputIssueReproduction" placeholder="Insert a description on how to reproduce the error">
+        <textarea asp-for="IssueReproduction" name="IssueReproduction" class="form-control" id="InputIssueReproduction" placeholder="Insert a description on how to reproduce the error" rows="4"></textarea>
         <span asp-validation-for="IssueReproduction" class="text-danger"></span>
     </div>
 
-    <select class="form-control" name="componentType" id="componentType" onchange="dynamicdropdowncomponent(this.options[this.selectedIndex].value);">
+    <select class="form-control mt-2" name="componentType" id="componentType" onchange="dynamicdropdowncomponent(this.options[this.selectedIndex].value);">
         <option disabled selected>Select your option</option>
         <option value="package">Package</option>
         <option value="cms">CMS</option>
     </select>
     <script type="text/javascript" language="JavaScript">
-        document.write('<select class="form-control" name="name" id="name" onchange="dynamicdropdownversion(this.options[this.selectedIndex].value);"><option disabled selected>Select status</option></select>')
+        document.write('<select class="form-control mt-2" name="name" id="name" onchange="dynamicdropdownversion(this.options[this.selectedIndex].value);"><option disabled selected>Select status</option></select>')
     </script>
     <script type="text/javascript" language="JavaScript">
-        document.write('<select class="form-control" name="version" id="version"><option disabled selected>Select status</option></select>')
+        document.write('<select class="form-control mt-2" name="version" id="version"><option disabled selected>Select status</option></select>')
     </script>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary mt-2">Submit</button>
 </form>
 
 @section Scripts {

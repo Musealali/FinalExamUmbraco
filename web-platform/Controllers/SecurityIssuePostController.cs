@@ -50,7 +50,7 @@ namespace web_platform.Controllers
 
         
         [HttpGet]
-        public IActionResult Create(SecurityIssuePost securityIssuePost) // Responsible for returning the correct View, whenever a user WANTS to create a securityIssuePost
+        public async Task<IActionResult> Create(SecurityIssuePost securityIssuePost) // Responsible for returning the correct View, whenever a user WANTS to create a securityIssuePost
         {
             using (_umbracoDbContext)
             {

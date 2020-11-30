@@ -66,13 +66,13 @@ namespace XUnitTestUmbraco
         }
 
         [Fact]
-        public void TestReturnCreateView()
+        public async Task TestReturnCreateView()
         {
             //Arrange
             SecurityIssuePost securityIssuePost = new SecurityIssuePost();
 
             //Act
-            ViewResult result = _controller.Create(securityIssuePost) as ViewResult;
+            ViewResult result = await _controller.Create(securityIssuePost) as ViewResult;
 
             //Assert
             Assert.NotNull(result);

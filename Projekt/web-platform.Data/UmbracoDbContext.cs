@@ -3,8 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using web_platform.Models;
-using ComponentVersion = web_platform.Models.ComponentVersion;
+using web_platform.Data.Models;
 
 namespace web_platform.Data
 {

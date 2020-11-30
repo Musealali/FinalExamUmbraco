@@ -38,7 +38,8 @@ namespace web_platform.Controllers
                 Title = securityIssuePostToFind.Title,
                 IssueDescription = securityIssuePostToFind.IssueDescription,
                 CMSComponentName = securityIssuePostToFind.CMSComponentVersion.CMSComponent.Name,
-                CMSVersionNumber = securityIssuePostToFind.CMSComponentVersion.Version.VersionNumber
+                CMSVersionNumber = securityIssuePostToFind.CMSComponentVersion.Version.VersionNumber,
+                State = securityIssuePostToFind.State
             };
 
             if (model == null) { return View(NotFound()); }
@@ -58,7 +59,7 @@ namespace web_platform.Controllers
             var uSyncVersions = await _IComponentVersionService.GetComponentVersionByComponentName("uSync");
             var umbracoCMSVersions = await _IComponentVersionService.GetComponentVersionByComponentName("Umbraco CMS");
             var umbracoUNOVersions = await _IComponentVersionService.GetComponentVersionByComponentName("Umbraco UNO");
-            var umbracoHeartcoreVersions = await _IComponentVersionService.GetComponentVersionByComponentName("Umbraco Hearthbreak");
+            var umbracoHeartcoreVersions = await _IComponentVersionService.GetComponentVersionByComponentName("Umbraco Heartcore");
 
             ViewBag.MultipleCMS = cms;
             ViewBag.Packages = packages;
@@ -80,7 +81,7 @@ namespace web_platform.Controllers
 
             if (cmsComponentVersion == null) { return NotFound(); }
 
-            var securityIssuePost = await _ISecurityIssuePostService.Create(securityIssuePostView.Title, securityIssuePostView.IssueDescription, cmsComponentVersion);
+            var securityIssuePost = await _ISecurityIssuePostService.CreateSecurityIssuePost(securityIssuePostView.Title, securityIssuePostView.IssueDescription, cmsComponentVersion);
             return RedirectToAction("Index", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
 

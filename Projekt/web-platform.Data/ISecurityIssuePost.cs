@@ -12,6 +12,6 @@ namespace web_platform.Data
         Task<SecurityIssuePost> GetById(int id);
         IEnumerable<SecurityIssuePost> GetAll();
 
-        Task<SecurityIssuePost> Create(string title, string issueDescription, CMSComponentVersion cmsComponentVersion);
+        Task<SecurityIssuePost> CreateSecurityIssuePost(string title, string issueDescription, CMSComponentVersion cmsComponentVersion);
     }
 }

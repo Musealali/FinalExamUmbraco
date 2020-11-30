@@ -1,4 +1,4 @@
-﻿@model SecurityIssuePost
+﻿@model SecurityIssuePostViewModel
 
 
 
@@ -14,7 +14,7 @@
         <div class="input-group-prepend">
             <span class="input-group-text">Component</span>
         </div>
-        <input type="text" class="form-control" aria-label="Component" value="@Model.CMSComponentVersion.Version.VersionNumber - @Model.CMSComponentVersion.CMSComponent.Name" disabled="disabled" />
+        <input type="text" class="form-control" aria-label="Component" value="@Model.CMSVersionNumber - @Model.CMSComponentName" disabled="disabled" />
     </div>
 
     <div class="input-group mt-3">
@@ -22,12 +22,5 @@
             <span class="input-group-text">Description</span>
         </div>
         <textarea class="form-control" disabled="disabled" rows="4">@Model.IssueDescription</textarea>
-    </div>
-
-    <div class="input-group mt-2">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Reproduction steps</span>
-        </div>
-        <textarea class="form-control" disabled="disabled" rows="4">@Model.IssueReproduction</textarea>
     </div>
 </div>

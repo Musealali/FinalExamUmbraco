@@ -60,7 +60,7 @@
                     <text>nameSelect.add(new Option("@umbracoCMSVersion.VersionNumber", "@umbracoCMSVersion.VersionNumber"));</text>
                 }
                 break;
-            case "Umbraco Hearthbreak":
+            case "Umbraco Heartcore":
                 nameSelect.options[0] = new Option("Select Version", "");
                 nameSelect.options[0].disabled = true;
                 @foreach (web_platform.Data.Models.ComponentVersion umbracoHeartcoreVersion in ViewBag.UmbracoHeartcoreVersions)
@@ -80,6 +80,7 @@
         return true;
     }
 </script>
+
 <h1>Create Security issue post</h1>
 
 <form asp-controller="SecurityIssuePost" asp-action="Create" method="POST">

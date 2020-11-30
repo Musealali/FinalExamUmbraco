@@ -14,6 +14,7 @@ namespace web_platform.Models
         public string CMSComponentName { get; set; }
         public string CMSVersionNumber { get; set; }
         public string ComponentType { get; set; }
+        public State State { get; set; }
        
     }
 }

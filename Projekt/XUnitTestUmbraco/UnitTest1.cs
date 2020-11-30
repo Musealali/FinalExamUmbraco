@@ -12,7 +12,7 @@ using web_platform.Models;
 
 namespace XUnitTestUmbraco
 {
-    public class Umbraco_FinalExam_UniTest : IDisposable
+    /*public class Umbraco_FinalExam_UniTest : IDisposable
     {
         protected readonly UmbracoDbContext _context;
         private SecurityIssuePostController _controller;
@@ -24,7 +24,7 @@ namespace XUnitTestUmbraco
                     .Options;
             _context = new UmbracoDbContext(options);
             _context.Database.EnsureCreated();
-            /_controller = new SecurityIssuePostController(_context);
+            _controller = new SecurityIssuePostController(_context);
         }
 
         public void Dispose()
@@ -118,5 +118,5 @@ namespace XUnitTestUmbraco
             var objectResult = Assert.IsAssignableFrom<ActionResult>(result);
         }
 
-    }
+    }*/
 }

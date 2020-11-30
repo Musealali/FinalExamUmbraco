@@ -18,7 +18,7 @@ namespace web_platform.Service
         }
 
 
-        public async Task<SecurityIssuePost> Create(string title, string issueDescription, CMSComponentVersion cmsComponentVersion)
+        public async Task<SecurityIssuePost> CreateSecurityIssuePost(string title, string issueDescription, CMSComponentVersion cmsComponentVersion)
         {
 
             SecurityIssuePost securityIssuePost = new SecurityIssuePost()

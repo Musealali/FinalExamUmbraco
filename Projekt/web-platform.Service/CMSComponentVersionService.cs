@@ -9,7 +9,7 @@ using web_platform.Data.Models;
 
 namespace web_platform.Service
 {
-    class CMSComponentVersionService
+    public class CMSComponentVersionService : ICMSComponentVersion
     {
         private readonly UmbracoDbContext _umbracoDbContext;
 

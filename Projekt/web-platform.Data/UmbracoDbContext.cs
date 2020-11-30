@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using web_platform.Data.Models;
 
 namespace web_platform.Data
 {
-    public class UmbracoDbContext : DbContext
+    public class UmbracoDbContext : IdentityDbContext<ApplicationUser>
     {
         public UmbracoDbContext(DbContextOptions<UmbracoDbContext> options)
             : base(options)
@@ -22,6 +23,9 @@ namespace web_platform.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+
             modelBuilder.Entity<CMSComponent>()
                 .HasMany(c => c.Versions)
                 .WithMany(v => v.CMSComponents)

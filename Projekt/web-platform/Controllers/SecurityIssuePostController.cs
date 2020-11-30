@@ -29,7 +29,7 @@ namespace web_platform.Controllers
 
             var model = new SecurityIssuePostViewModel
             {
-                securityIssuePost = securityIssuePostToFind
+                SecurityIssuePost = securityIssuePostToFind
             };
 
 

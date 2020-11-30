@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\web-platform.Data\web-platform.Data.csproj" />
+    <ProjectReference Include="..\web-platform.Service\web-platform.Service.csproj" />
   </ItemGroup>
 
 </Project>

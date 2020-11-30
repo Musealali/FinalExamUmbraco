@@ -5,4 +5,8 @@
     <RootNamespace>web_platform.Service</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\web-platform.Data\web-platform.Data.csproj" />
+  </ItemGroup>
+
 </Project>

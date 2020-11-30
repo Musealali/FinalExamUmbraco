@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace web_platform.Models
+namespace web_platform.Data.Models
 {
     public class CMSComponent
     {

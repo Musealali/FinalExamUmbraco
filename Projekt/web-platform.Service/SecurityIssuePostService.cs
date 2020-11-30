@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,9 +28,9 @@ namespace web_platform.Service
             throw new NotImplementedException();
         }
 
-        public async Task<IActionResult> SecurityIssuePost GetById(int id)
+        public async Task<SecurityIssuePost> GetById(int id)
         {
-            var securityIssuePostToFind =  _umbracoDbContext.SecurityIssuePosts.Where(s => s.Id == id)
+            var securityIssuePostToFind = await _umbracoDbContext.SecurityIssuePosts.Where(s => s.Id == id)
                 .Include(s => s.CMSComponentVersion)
                         .ThenInclude(c => c.CMSComponent)
                     .Include(s => s.CMSComponentVersion)

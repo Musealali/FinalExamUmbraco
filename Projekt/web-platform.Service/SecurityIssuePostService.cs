@@ -40,5 +40,17 @@ namespace web_platform.Service
             return securityIssuePostToFind;
 
         }
+
+        public async Task<List<SecurityIssuePost>> GetNotVerifiedPosts(SecurityIssuePost.State state)
+        {
+            var securityIssuePostToFind = await _umbracoDbContext.SecurityIssuePosts.Where(s => s.State == state)
+                .Include(s => s.CMSComponentVersion)
+                        .ThenInclude(c => c.CMSComponent)
+                    .Include(s => s.CMSComponentVersion)
+                        .ThenInclude(c => c.Version)
+
+            return securityIssuePostToFind;
+
+        }
     }
 }

@@ -12,6 +12,11 @@ using web_platform.Data;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using web_platform.Service;
+<<<<<<< Updated upstream
+=======
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+>>>>>>> Stashed changes
 
 namespace web_platform
 {
@@ -40,6 +45,12 @@ namespace web_platform
 
             //Add application services.
             services.AddScoped<ISecurityIssuePost, SecurityIssuePostService>();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                {
+                    options.LoginPath = new PathString("/Authentication/LoginView");
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

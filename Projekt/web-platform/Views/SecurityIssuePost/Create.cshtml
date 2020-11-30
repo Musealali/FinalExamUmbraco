@@ -1,10 +1,12 @@
-﻿@model web_platform.Models.SecurityIssuePost
+﻿@model SecurityIssuePostViewModel
+
 @{
     ViewData["Title"] = "Create";
+
 }
 <script>
     function dynamicdropdowncomponent(listindex) {
-        const nameSelect = document.getElementById("name")
+        const nameSelect = document.getElementById("CMSComponentName")
         while (nameSelect.options.length > 0) {
         nameSelect.remove(0);
         }
@@ -12,7 +14,7 @@
             case "cms":
                 nameSelect.options[0] = new Option("Select CMS", "");
                 nameSelect.options[0].disabled = true;
-                @foreach (CMSComponent cms in ViewBag.CMS)
+                @foreach (web_platform.Data.Models.CMSComponent cms in ViewBag.MultipleCMS)
                 {
                     <text>nameSelect.add(new Option("@cms.Name", "@cms.Name"));</text>
                 }
@@ -20,7 +22,7 @@
             case "package":
                 nameSelect.options[0] = new Option("Select Package", "");
                 nameSelect.options[0].disabled = true;
-                @foreach (CMSComponent package in ViewBag.Packages)
+                @foreach (web_platform.Data.Models.CMSComponent package in ViewBag.Packages)
                 {
                     <text>nameSelect.add(new Option("@package.Name", "@package.Name"));</text>
                 }
@@ -29,7 +31,7 @@
         return true;
     }
     function dynamicdropdownversion(listindex) {
-        const nameSelect = document.getElementById("version")
+        const nameSelect = document.getElementById("CMSVersionNumber")
         while (nameSelect.options.length > 0) {
         nameSelect.remove(0);
         }
@@ -37,7 +39,7 @@
             case "Forms":
                 nameSelect.options[0] = new Option("Select Version", "");
                 nameSelect.options[0].disabled = true;
-                @foreach (ComponentVersion formsVersion in ViewBag.formsVersions)
+                @foreach (web_platform.Data.Models.ComponentVersion formsVersion in ViewBag.FormsVersions)
                 {
                     <text>nameSelect.add(new Option("@formsVersion.VersionNumber", "@formsVersion.VersionNumber"));</text>
                 }
@@ -45,7 +47,7 @@
             case "uSync":
                 nameSelect.options[0] = new Option("Select Version", "");
                 nameSelect.options[0].disabled = true;
-                @foreach (ComponentVersion uSyncVersion in ViewBag.uSyncVersions)
+                @foreach (web_platform.Data.Models.ComponentVersion uSyncVersion in ViewBag.USyncVersions)
                 {
                     <text>nameSelect.add(new Option("@uSyncVersion.VersionNumber", "@uSyncVersion.VersionNumber"));</text>
                 }
@@ -53,31 +55,23 @@
             case "Umbraco CMS":
                 nameSelect.options[0] = new Option("Select Version", "");
                 nameSelect.options[0].disabled = true;
-                @foreach (ComponentVersion umbracoCMSVersion in ViewBag.umbracoCMSVersions)
+                @foreach (web_platform.Data.Models.ComponentVersion umbracoCMSVersion in ViewBag.UmbracoCMSVersions)
                 {
                     <text>nameSelect.add(new Option("@umbracoCMSVersion.VersionNumber", "@umbracoCMSVersion.VersionNumber"));</text>
                 }
                 break;
-            case "Umbraco Cloud":
+            case "Umbraco Heartcore":
                 nameSelect.options[0] = new Option("Select Version", "");
                 nameSelect.options[0].disabled = true;
-                @foreach (ComponentVersion umbracoCloudVersion in ViewBag.umbracoCloudVersions)
+                @foreach (web_platform.Data.Models.ComponentVersion umbracoHeartcoreVersion in ViewBag.UmbracoHeartcoreVersions)
                 {
-                    <text>nameSelect.add(new Option("@umbracoCloudVersion.VersionNumber", "@umbracoCloudVersion.VersionNumber"));</text>
-                }
-                break;
-            case "Umbraco Hearthbreak":
-                nameSelect.options[0] = new Option("Select Version", "");
-                nameSelect.options[0].disabled = true;
-                @foreach (ComponentVersion umbracoHearthbreakVersion in ViewBag.umbracoHearthbreakVersions)
-                {
-                    <text>nameSelect.add(new Option("@umbracoHearthbreakVersion.VersionNumber", "@umbracoHearthbreakVersion.VersionNumber"));</text>
+                    <text>nameSelect.add(new Option("@umbracoHeartcoreVersion.VersionNumber", "@umbracoHeartcoreVersion.VersionNumber"));</text>
                 }
                 break;
             case "Umbraco UNO":
                 nameSelect.options[0] = new Option("Select Version", "");
                 nameSelect.options[0].disabled = true;
-                @foreach (ComponentVersion umbracoUNOVersion in ViewBag.umbracoUNOVersions)
+                @foreach (web_platform.Data.Models.ComponentVersion umbracoUNOVersion in ViewBag.UmbracoUNOVersions)
                 {
                     <text>nameSelect.add(new Option("@umbracoUNOVersion.VersionNumber", "@umbracoUNOVersion.VersionNumber"));</text>
                 }
@@ -86,6 +80,7 @@
         return true;
     }
 </script>
+
 <h1>Create Security issue post</h1>
 
 <form asp-controller="SecurityIssuePost" asp-action="Create" method="POST">
@@ -103,22 +98,16 @@
         <span asp-validation-for="IssueDescription" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="IssueReproduction">Reproduction steps</label>
-        <textarea asp-for="IssueReproduction" name="IssueReproduction" class="form-control" id="InputIssueReproduction" placeholder="Insert a description on how to reproduce the error" rows="4"></textarea>
-        <span asp-validation-for="IssueReproduction" class="text-danger"></span>
-    </div>
-
-    <select class="form-control mt-2" name="componentType" id="componentType" onchange="dynamicdropdowncomponent(this.options[this.selectedIndex].value);">
+    <select class="form-control mt-2" name="ComponentType" id="ComponentType" onchange="dynamicdropdowncomponent(this.options[this.selectedIndex].value);">
         <option disabled selected>Select your option</option>
         <option value="package">Package</option>
         <option value="cms">CMS</option>
     </select>
     <script type="text/javascript" language="JavaScript">
-        document.write('<select class="form-control mt-2" name="name" id="name" onchange="dynamicdropdownversion(this.options[this.selectedIndex].value);"><option disabled selected>Select status</option></select>')
+        document.write('<select class="form-control mt-2" name="CMSComponentName" id="CMSComponentName" onchange="dynamicdropdownversion(this.options[this.selectedIndex].value);"><option disabled selected>Select status</option></select>')
     </script>
     <script type="text/javascript" language="JavaScript">
-        document.write('<select class="form-control mt-2" name="version" id="version"><option disabled selected>Select status</option></select>')
+        document.write('<select class="form-control mt-2" name="CMSVersionNumber" id="CMSVersionNumber"><option disabled selected>Select status</option></select>')
     </script>
 
     <button type="submit" class="btn btn-primary mt-2">Submit</button>

@@ -51,12 +51,11 @@ namespace web_platform.Data
             
             modelBuilder.Entity<CMSComponent>()
                 .HasData(
-                    new CMSComponent { Id = 1, Name = "Forms", CType = CMSComponent.ComponentType.Package},
-                    new CMSComponent { Id = 2, Name = "uSync", CType = CMSComponent.ComponentType.Package},
-                    new CMSComponent { Id = 3, Name = "Umbraco UNO", CType = CMSComponent.ComponentType.CMS},
-                    new CMSComponent { Id = 4, Name = "Umbraco Cloud", CType = CMSComponent.ComponentType.CMS},
-                    new CMSComponent { Id = 5, Name = "Umbraco Hearthbreak", CType = CMSComponent.ComponentType.CMS},
-                    new CMSComponent { Id = 6, Name = "Umbraco CMS", CType = CMSComponent.ComponentType.CMS}
+                    new CMSComponent { Id = 1, Name = "Forms", ComponentType = ComponentType.Package},
+                    new CMSComponent { Id = 2, Name = "uSync", ComponentType = ComponentType.Package},
+                    new CMSComponent { Id = 3, Name = "Umbraco UNO", ComponentType = ComponentType.Package},
+                    new CMSComponent { Id = 4, Name = "Umbraco Heartcore", ComponentType = ComponentType.Package},
+                    new CMSComponent { Id = 5, Name = "Umbraco CMS", ComponentType = ComponentType.CMS}
                 );
             modelBuilder.Entity<CMSComponentVersion>()
                 .HasData(
@@ -64,24 +63,21 @@ namespace web_platform.Data
                     new CMSComponentVersion() { Id = 2, CMSComponentId = 3, ComponentVersionId = 3 },
                     new CMSComponentVersion() { Id = 3, CMSComponentId = 3, ComponentVersionId = 5 },
                     new CMSComponentVersion() { Id = 4, CMSComponentId = 3, ComponentVersionId = 8 },
-                    new CMSComponentVersion() { Id = 5, CMSComponentId = 4, ComponentVersionId = 2 },
-                    new CMSComponentVersion() { Id = 6, CMSComponentId = 4, ComponentVersionId = 6 },
-                    new CMSComponentVersion() { Id = 7, CMSComponentId = 4, ComponentVersionId = 10 },
-                    new CMSComponentVersion() { Id = 8, CMSComponentId = 5, ComponentVersionId = 3 },
-                    new CMSComponentVersion() { Id = 9, CMSComponentId = 5, ComponentVersionId = 7 },
-                    new CMSComponentVersion() { Id = 10, CMSComponentId = 5, ComponentVersionId = 11 },
-                    new CMSComponentVersion() { Id = 11, CMSComponentId = 5, ComponentVersionId = 12 },
-                    new CMSComponentVersion() { Id = 12, CMSComponentId = 6, ComponentVersionId = 3 },
-                    new CMSComponentVersion() { Id = 13, CMSComponentId = 6, ComponentVersionId = 7 },
-                    new CMSComponentVersion() { Id = 14, CMSComponentId = 6, ComponentVersionId = 9 },
-                    new CMSComponentVersion() { Id = 15, CMSComponentId = 1, ComponentVersionId = 1 },
-                    new CMSComponentVersion() { Id = 16, CMSComponentId = 1, ComponentVersionId = 2 },
-                    new CMSComponentVersion() { Id = 17, CMSComponentId = 1, ComponentVersionId = 11 },
-                    new CMSComponentVersion() { Id = 18, CMSComponentId = 1, ComponentVersionId = 12 },
-                    new CMSComponentVersion() { Id = 19, CMSComponentId = 2, ComponentVersionId = 1 },
-                    new CMSComponentVersion() { Id = 20, CMSComponentId = 2, ComponentVersionId = 4 },
-                    new CMSComponentVersion() { Id = 21, CMSComponentId = 2, ComponentVersionId = 6 },
-                    new CMSComponentVersion() { Id = 22, CMSComponentId = 2, ComponentVersionId = 11 }
+                    new CMSComponentVersion() { Id = 5, CMSComponentId = 4, ComponentVersionId = 3 },
+                    new CMSComponentVersion() { Id = 6, CMSComponentId = 4, ComponentVersionId = 7 },
+                    new CMSComponentVersion() { Id = 7, CMSComponentId = 4, ComponentVersionId = 11 },
+                    new CMSComponentVersion() { Id = 8, CMSComponentId = 4, ComponentVersionId = 12 },
+                    new CMSComponentVersion() { Id = 9, CMSComponentId = 5, ComponentVersionId = 3 },
+                    new CMSComponentVersion() { Id = 10, CMSComponentId = 5, ComponentVersionId = 7 },
+                    new CMSComponentVersion() { Id = 11, CMSComponentId = 5, ComponentVersionId = 9 },
+                    new CMSComponentVersion() { Id = 12, CMSComponentId = 1, ComponentVersionId = 1 },
+                    new CMSComponentVersion() { Id = 13, CMSComponentId = 1, ComponentVersionId = 2 },
+                    new CMSComponentVersion() { Id = 14, CMSComponentId = 1, ComponentVersionId = 11 },
+                    new CMSComponentVersion() { Id = 15, CMSComponentId = 1, ComponentVersionId = 12 },
+                    new CMSComponentVersion() { Id = 16, CMSComponentId = 2, ComponentVersionId = 1 },
+                    new CMSComponentVersion() { Id = 17, CMSComponentId = 2, ComponentVersionId = 4 },
+                    new CMSComponentVersion() { Id = 18, CMSComponentId = 2, ComponentVersionId = 6 },
+                    new CMSComponentVersion() { Id = 19, CMSComponentId = 2, ComponentVersionId = 11 }
                 );
 
         }

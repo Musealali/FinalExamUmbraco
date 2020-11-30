@@ -15,23 +15,30 @@ namespace web_platform.Controllers
     {
         private readonly UmbracoDbContext _umbracoDbContext;
         private readonly ISecurityIssuePost _ISecurityIssuePostService;
+        private readonly ICMSComponent _ICMSComponentService;
+        private readonly IComponentVersion _IComponentVersionService;
 
-        public SecurityIssuePostController(UmbracoDbContext umbracoDbContext)
+        public SecurityIssuePostController(ISecurityIssuePost securityIssuePostService, ICMSComponent cmsComponentService, IComponentVersion componentVersionService)
         {
-            _umbracoDbContext = umbracoDbContext;
+            _ISecurityIssuePostService = securityIssuePostService;
+            _ICMSComponentService = cmsComponentService;
+            _IComponentVersionService = componentVersionService;
         }
         
         [HttpGet]
-        public IActionResult Index(int id)
+        public async Task<IActionResult> Index(int id)
         {
 
-            var securityIssuePostToFind =  _ISecurityIssuePostService.GetById(id);
+            var securityIssuePostToFind = await _ISecurityIssuePostService.GetById(id);
 
             var model = new SecurityIssuePostViewModel
             {
-                SecurityIssuePost = securityIssuePostToFind
+                Id = securityIssuePostToFind.Id,
+                Title = securityIssuePostToFind.Title,
+                IssueDescription = securityIssuePostToFind.IssueDescription,
+                CMSComponentName = securityIssuePostToFind.CMSComponentVersion.CMSComponent.Name,
+                CMSVersionNumber = securityIssuePostToFind.CMSComponentVersion.Version.VersionNumber
             };
-
 
             if (model == null) { return View(NotFound()); }
             
@@ -42,54 +49,34 @@ namespace web_platform.Controllers
 
         
         [HttpGet]
-        public async Task<IActionResult> Create(SecurityIssuePost securityIssuePost) // Responsible for returning the correct View, whenever a user WANTS to create a securityIssuePost
+        public async Task<IActionResult> Create() // Responsible for returning the correct View, whenever a user WANTS to create a securityIssuePost
         {
-           await using (_umbracoDbContext)
-            {
-                List<CMSComponent> cms = GetCMSComponents(CMSComponent.ComponentType.CMS);
-                ViewBag.CMS = cms;
-                List<CMSComponent> packages = GetCMSComponents(CMSComponent.ComponentType.Package);
-                ViewBag.Packages = packages;
-                List<ComponentVersion> formsVersions = GetVersions("Forms");
-                ViewBag.FormsVersions = formsVersions;
-                List<ComponentVersion> uSyncVersions = GetVersions("uSync");
-                ViewBag.uSyncVersions = uSyncVersions;
-                List<ComponentVersion> umbracoCMSVersions = GetVersions("Umbraco CMS");
-                ViewBag.UmbracoCMSVersions = umbracoCMSVersions;
-                List<ComponentVersion> umbracoUNOVersions = GetVersions("Umbraco UNO");
-                ViewBag.UmbracoUNOVersions = umbracoUNOVersions;
-                List<ComponentVersion> umbracoHearthbreakVersions = GetVersions("Umbraco Hearthbreak");
-                ViewBag.UmbracoHearthbreakVersions = umbracoHearthbreakVersions;
-                List<ComponentVersion> umbracoCloudVersions = GetVersions("Umbraco Cloud");
-                ViewBag.UmbracoCloudVersions = umbracoCloudVersions;
+            var cms =  await _ICMSComponentService.GetCMSComponentsByType(_ICMSComponentService.GetComponentTypeCMS());
+            var packages = await _ICMSComponentService.GetCMSComponentsByType(_ICMSComponentService.GetComponentTypePackage());
+            var formsVersions = await _IComponentVersionService.GetComponentVersionByComponentName("Forms");
+            var uSyncVersions = await _IComponentVersionService.GetComponentVersionByComponentName("uSync");
+            var umbracoCMSVersions = await _IComponentVersionService.GetComponentVersionByComponentName("Umbraco CMS");
+            var umbracoUNOVersions = await _IComponentVersionService.GetComponentVersionByComponentName("Umbraco UNO");
+            var umbracoHeartcoreVersions = await _IComponentVersionService.GetComponentVersionByComponentName("Umbraco Hearthbreak");
 
-                formsVersions.Sort(SortVersions);
-                uSyncVersions.Sort(SortVersions);
-                umbracoCMSVersions.Sort(SortVersions);
-                umbracoUNOVersions.Sort(SortVersions);
-                umbracoHearthbreakVersions.Sort(SortVersions);
-                umbracoCloudVersions.Sort(SortVersions);
-            }
+            ViewBag.MultipleCMS = cms;
+            ViewBag.Packages = packages;
+            ViewBag.FormsVersions = formsVersions;
+            ViewBag.USyncVersions = uSyncVersions;
+            ViewBag.UmbracoCMSVersions = umbracoCMSVersions;
+            ViewBag.UmbracoUNOVersions = umbracoUNOVersions;
+            ViewBag.UmbracoHeartcoreVersions = umbracoHeartcoreVersions;
+
             return View();
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(SecurityIssuePost securityIssuePost, string name, string version, string componentType) // Responsible for getting the user input and storing the securityIssuePost
+        public async Task<ActionResult> Create(SecurityIssuePostViewModel securityIssuePostView, string componentType) // Responsible for getting the user input and storing the securityIssuePost
         {
-            if (!ModelState.IsValid) { return RedirectToAction("Index", securityIssuePost); }
+            if (!ModelState.IsValid) { return RedirectToAction("Index", securityIssuePostView);}
 
 
-            CMSComponentVersion cMSComponentVersion = null;
-            switch (componentType)
-            {
-                case "package":
-                    cMSComponentVersion = await _umbracoDbContext.CMSComponentVersions.Where(c => c.CMSComponent.Name == name && c.Version.VersionNumber == version).FirstOrDefaultAsync();
-                    break;
-
-                case "cms":
-                    cMSComponentVersion = await _umbracoDbContext.CMSComponentVersions.Where(c => c.CMSComponent.Name == name && c.Version.VersionNumber == version).FirstOrDefaultAsync();
-                    break;
-            }
+          
 
             if (cMSComponentVersion == null) { return NotFound(); }
 
@@ -102,23 +89,5 @@ namespace web_platform.Controllers
             return RedirectToAction("Index", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
 
-        public List<ComponentVersion> GetVersions (string ComponentName)
-        {
-            return _umbracoDbContext.ComponentVersions.Where(cv => cv.CMSComponents.Any(c => c.Name == ComponentName)).ToList();
-        }
-        public List<CMSComponent> GetCMSComponents(CMSComponent.ComponentType componentType)
-        {
-            return _umbracoDbContext.CMSComponents.Where(c => c.CType == componentType).ToList();
-        }
-
-        public int SortVersions (ComponentVersion x, ComponentVersion y)
-        {
-            if (x.VersionNumber == null && y.VersionNumber == null) return 0;
-            else if (x.VersionNumber == null) return -1;
-            else if (y.VersionNumber == null) return 1;
-            else return x.VersionNumber.CompareTo(y.VersionNumber);
-        }
-}
-
-    
+    } 
 }

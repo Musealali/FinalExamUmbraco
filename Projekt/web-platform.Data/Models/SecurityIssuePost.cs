@@ -14,22 +14,10 @@ namespace web_platform.Data.Models
         public string Title { get; set; }
         [Required]
         public string IssueDescription { get; set; }
-        [Required]
-        public string IssueReproduction { get; set; }
 
         // Navigation Properties - Used by DBContext when 'GETTING' entities
         public CMSComponentVersion CMSComponentVersion { get; set; }
 
 
-        public SecurityIssuePost()
-        {
-
-        }
-        public SecurityIssuePost(string title, string issueDescription, string issueReproduction)
-        {
-            Title = title;
-            IssueDescription = issueDescription;
-            IssueReproduction = issueReproduction;
-        }
     }
 }

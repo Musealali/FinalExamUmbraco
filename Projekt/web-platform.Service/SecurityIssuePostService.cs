@@ -20,7 +20,17 @@ namespace web_platform.Service
 
         public Task Create(SecurityIssuePost securityIssuePost)
         {
-            throw new NotImplementedException();
+            CMSComponentVersion cMSComponentVersion = null;
+            switch (componentType)
+            {
+                case "package":
+                    cMSComponentVersion = await _umbracoDbContext.CMSComponentVersions.Where(c => c.CMSComponent.Name == name && c.Version.VersionNumber == version).FirstOrDefaultAsync();
+                    break;
+
+                case "cms":
+                    cMSComponentVersion = await _umbracoDbContext.CMSComponentVersions.Where(c => c.CMSComponent.Name == name && c.Version.VersionNumber == version).FirstOrDefaultAsync();
+                    break;
+            }
         }
 
         public IEnumerable<SecurityIssuePost> GetAll()

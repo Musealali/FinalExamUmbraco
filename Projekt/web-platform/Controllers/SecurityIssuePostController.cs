@@ -38,18 +38,7 @@ namespace web_platform.Controllers
             return View(model);
         }
         
-        [HttpGet]
-        public async Task<IActionResult> ViewAllPosts()
-        {
-            var posts = await _umbracoDbContext.SecurityIssuePosts
-                    .Include(s => s.CMSComponentVersion)
-                        .ThenInclude(c => c.CMSComponent)
-                    .Include(s => s.CMSComponentVersion)
-                        .ThenInclude(c => c.Version)
-                    .ToListAsync();
-
-            return View(posts);
-        }
+        
 
         
         [HttpGet]

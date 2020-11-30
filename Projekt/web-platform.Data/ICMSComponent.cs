@@ -8,8 +8,8 @@ namespace web_platform.Data
 {
     public interface ICMSComponent
     {
-        Task<List<CMSComponent>> GetCMSComponentsByType(CMSComponent.ComponentType componentType);
-        CMSComponent.ComponentType GetComponentTypeCMS();
-        CMSComponent.ComponentType GetComponentTypePackage();
+        Task<List<CMSComponent>> GetCMSComponentsByType(ComponentType componentType);
+        ComponentType GetComponentTypeCMS();
+        ComponentType GetComponentTypePackage();
     }
 }

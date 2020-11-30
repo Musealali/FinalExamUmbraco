@@ -18,19 +18,21 @@ namespace web_platform.Service
         }
 
 
-        public Task Create(SecurityIssuePost securityIssuePost)
+        public async Task<SecurityIssuePost> Create(string title, string issueDescription, CMSComponentVersion cmsComponentVersion)
         {
-            CMSComponentVersion cMSComponentVersion = null;
-            switch (componentType)
-            {
-                case "package":
-                    cMSComponentVersion = await _umbracoDbContext.CMSComponentVersions.Where(c => c.CMSComponent.Name == name && c.Version.VersionNumber == version).FirstOrDefaultAsync();
-                    break;
 
-                case "cms":
-                    cMSComponentVersion = await _umbracoDbContext.CMSComponentVersions.Where(c => c.CMSComponent.Name == name && c.Version.VersionNumber == version).FirstOrDefaultAsync();
-                    break;
-            }
+            SecurityIssuePost securityIssuePost = new SecurityIssuePost()
+            {
+                Title = title,
+                IssueDescription = issueDescription,
+                CMSComponentVersion = cmsComponentVersion,
+                State = State.NotVerified
+            };
+
+            await _umbracoDbContext.AddAsync(securityIssuePost);
+            await _umbracoDbContext.SaveChangesAsync();
+            return securityIssuePost;
+
         }
 
         public IEnumerable<SecurityIssuePost> GetAll()

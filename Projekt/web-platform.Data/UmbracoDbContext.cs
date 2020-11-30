@@ -51,12 +51,11 @@ namespace web_platform.Data
             
             modelBuilder.Entity<CMSComponent>()
                 .HasData(
-                    new CMSComponent { Id = 1, Name = "Forms", CType = CMSComponent.ComponentType.Package},
-                    new CMSComponent { Id = 2, Name = "uSync", CType = CMSComponent.ComponentType.Package},
-                    new CMSComponent { Id = 3, Name = "Umbraco UNO", CType = CMSComponent.ComponentType.CMS},
-                    new CMSComponent { Id = 4, Name = "Umbraco Cloud", CType = CMSComponent.ComponentType.CMS},
-                    new CMSComponent { Id = 5, Name = "Umbraco Hearthbreak", CType = CMSComponent.ComponentType.CMS},
-                    new CMSComponent { Id = 6, Name = "Umbraco CMS", CType = CMSComponent.ComponentType.CMS}
+                    new CMSComponent { Id = 1, Name = "Forms", ComponentType = ComponentType.Package},
+                    new CMSComponent { Id = 2, Name = "uSync", ComponentType = ComponentType.Package},
+                    new CMSComponent { Id = 3, Name = "Umbraco UNO", ComponentType = ComponentType.Package},
+                    new CMSComponent { Id = 4, Name = "Umbraco heartCore", ComponentType = ComponentType.Package},
+                    new CMSComponent { Id = 5, Name = "Umbraco CMS", ComponentType = ComponentType.CMS}
                 );
             modelBuilder.Entity<CMSComponentVersion>()
                 .HasData(

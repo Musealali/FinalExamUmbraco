@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace web_platform.Service
 
         public async Task<List<ComponentVersion>> GetComponentVersionByComponentName(string componentName)
         {
-            return _umbracoDbContext.ComponentVersions.Where(cv => cv.CMSComponents.Any(c => c.Name == componentName)).ToList();
+            return await _umbracoDbContext.ComponentVersions.Where(cv => cv.CMSComponents.Any(c => c.Name == componentName)).ToListAsync();
 
         }
     }

@@ -13,6 +13,7 @@ namespace web_platform.Models
         public string IssueDescription { get; set; }
         public string CMSComponentName { get; set; }
         public string CMSVersionNumber { get; set; }
+        public string ComponentType { get; set; }
        
     }
 }

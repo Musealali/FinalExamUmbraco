@@ -6,7 +6,7 @@
 }
 <script>
     function dynamicdropdowncomponent(listindex) {
-        const nameSelect = document.getElementById("name")
+        const nameSelect = document.getElementById("CMSComponentName")
         while (nameSelect.options.length > 0) {
         nameSelect.remove(0);
         }
@@ -31,7 +31,7 @@
         return true;
     }
     function dynamicdropdownversion(listindex) {
-        const nameSelect = document.getElementById("version")
+        const nameSelect = document.getElementById("CMSVersionNumber")
         while (nameSelect.options.length > 0) {
         nameSelect.remove(0);
         }
@@ -97,16 +97,16 @@
         <span asp-validation-for="IssueDescription" class="text-danger"></span>
     </div>
 
-    <select class="form-control mt-2" name="componentType" id="componentType" onchange="dynamicdropdowncomponent(this.options[this.selectedIndex].value);">
+    <select class="form-control mt-2" name="ComponentType" id="ComponentType" onchange="dynamicdropdowncomponent(this.options[this.selectedIndex].value);">
         <option disabled selected>Select your option</option>
         <option value="package">Package</option>
         <option value="cms">CMS</option>
     </select>
     <script type="text/javascript" language="JavaScript">
-        document.write('<select class="form-control mt-2" name="CMSComponentName" id="name" onchange="dynamicdropdownversion(this.options[this.selectedIndex].value);"><option disabled selected>Select status</option></select>')
+        document.write('<select class="form-control mt-2" name="CMSComponentName" id="CMSComponentName" onchange="dynamicdropdownversion(this.options[this.selectedIndex].value);"><option disabled selected>Select status</option></select>')
     </script>
     <script type="text/javascript" language="JavaScript">
-        document.write('<select class="form-control mt-2" name="CMSVersionNumber" id="version"><option disabled selected>Select status</option></select>')
+        document.write('<select class="form-control mt-2" name="CMSVersionNumber" id="CMSVersionNumber"><option disabled selected>Select status</option></select>')
     </script>
 
     <button type="submit" class="btn btn-primary mt-2">Submit</button>

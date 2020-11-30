@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,19 +17,19 @@ namespace web_platform.Service
         {
             _umbracoDbContext = umbracoDbContext;
         }
-        public async Task<List<CMSComponent>> GetCMSComponentsByType(CMSComponent.ComponentType componentType)
+        public async Task<List<CMSComponent>> GetCMSComponentsByType(ComponentType componentType)
         {
-            return _umbracoDbContext.CMSComponents.Where(c => c.CType == componentType).ToList();
+            return await _umbracoDbContext.CMSComponents.Where(c => c.ComponentType == componentType).ToListAsync();
         }
 
-        public CMSComponent.ComponentType GetComponentTypeCMS()
+        public ComponentType GetComponentTypeCMS()
         {
-            return CMSComponent.ComponentType.CMS;
+            return ComponentType.CMS;
         }
 
-        public CMSComponent.ComponentType GetComponentTypePackage()
+        public ComponentType GetComponentTypePackage()
         {
-            return CMSComponent.ComponentType.Package;
+            return ComponentType.Package;
         }
     }
 }

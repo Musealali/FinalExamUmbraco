@@ -13,16 +13,17 @@ namespace web_platform.Controllers
 {
     public class SecurityIssuePostController : Controller
     {
-        private readonly UmbracoDbContext _umbracoDbContext;
         private readonly ISecurityIssuePost _ISecurityIssuePostService;
         private readonly ICMSComponent _ICMSComponentService;
         private readonly IComponentVersion _IComponentVersionService;
+        private readonly ICMSComponentVersion _ICMSComponentVersionService;
 
-        public SecurityIssuePostController(ISecurityIssuePost securityIssuePostService, ICMSComponent cmsComponentService, IComponentVersion componentVersionService)
+        public SecurityIssuePostController(ISecurityIssuePost securityIssuePostService, ICMSComponent cmsComponentService, IComponentVersion componentVersionService, ICMSComponentVersion cmsComponentVersionService)
         {
             _ISecurityIssuePostService = securityIssuePostService;
             _ICMSComponentService = cmsComponentService;
             _IComponentVersionService = componentVersionService;
+            _ICMSComponentVersionService = cmsComponentVersionService;
         }
         
         [HttpGet]
@@ -71,21 +72,15 @@ namespace web_platform.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(SecurityIssuePostViewModel securityIssuePostView, string componentType) // Responsible for getting the user input and storing the securityIssuePost
+        public async Task<ActionResult> Create(SecurityIssuePostViewModel securityIssuePostView) // Responsible for getting the user input and storing the securityIssuePost
         {
             if (!ModelState.IsValid) { return RedirectToAction("Index", securityIssuePostView);}
 
+            var cmsComponentVersion = await _ICMSComponentVersionService.GetCMSComponentVersion(securityIssuePostView.CMSComponentName, securityIssuePostView.CMSVersionNumber, securityIssuePostView.ComponentType);
 
-          
+            if (cmsComponentVersion == null) { return NotFound(); }
 
-            if (cMSComponentVersion == null) { return NotFound(); }
-
-
-            securityIssuePost.CMSComponentVersion = cMSComponentVersion;
-
-            _umbracoDbContext.Add(securityIssuePost);
-            _umbracoDbContext.SaveChanges();
-
+            var securityIssuePost = await _ISecurityIssuePostService.Create(securityIssuePostView.Title, securityIssuePostView.IssueDescription, cmsComponentVersion);
             return RedirectToAction("Index", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
 

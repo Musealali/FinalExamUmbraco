@@ -37,10 +37,21 @@ namespace web_platform.Controllers
             
             return View(model);
         }
-        
-        
 
-        
+        [HttpGet]
+        public IActionResult ShowAllNotVerifiedSecuirtyIssuePosts(int id)
+        {
+
+            var securityIssuePostToFind = _ISecurityIssuePostService.GetSecurityIssuePostByState(SecurityIssuePost.State.NotVerified);
+
+
+            if (securityIssuePostToFind == null) { return View(NotFound()); }
+
+            return View(securityIssuePostToFind);
+        }
+
+
+
         [HttpGet]
         public async Task<IActionResult> Create(SecurityIssuePost securityIssuePost) // Responsible for returning the correct View, whenever a user WANTS to create a securityIssuePost
         {

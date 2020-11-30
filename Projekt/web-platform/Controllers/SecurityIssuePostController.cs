@@ -14,6 +14,7 @@ namespace web_platform.Controllers
     public class SecurityIssuePostController : Controller
     {
         private readonly UmbracoDbContext _umbracoDbContext;
+        private readonly ISecurityIssuePost _ISecurityIssuePostService;
 
         public SecurityIssuePostController(UmbracoDbContext umbracoDbContext)
         {
@@ -21,38 +22,29 @@ namespace web_platform.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> Index(int id)
+        public IActionResult Index(int id)
         {
-            var securityIssuePostToFind = await _umbracoDbContext.SecurityIssuePosts
-                    .Include(s => s.CMSComponentVersion)
-                        .ThenInclude(c => c.CMSComponent)
-                    .Include(s => s.CMSComponentVersion)
-                        .ThenInclude(c => c.Version)
-                    .Where(s => s.Id == id).FirstOrDefaultAsync();
+
+            var securityIssuePostToFind =  _ISecurityIssuePostService.GetById(id);
+
+            var model = new SecurityIssuePostViewModel
+            {
+                securityIssuePost = securityIssuePostToFind
+            };
+
+
+            if (model == null) { return View(NotFound()); }
             
-            if(securityIssuePostToFind == null) { return View(NotFound()); }
-            
-            return View(securityIssuePostToFind);
+            return View(model);
         }
         
-        [HttpGet]
-        public async Task<IActionResult> ViewAllPosts()
-        {
-            var posts = await _umbracoDbContext.SecurityIssuePosts
-                    .Include(s => s.CMSComponentVersion)
-                        .ThenInclude(c => c.CMSComponent)
-                    .Include(s => s.CMSComponentVersion)
-                        .ThenInclude(c => c.Version)
-                    .ToListAsync();
-
-            return View(posts);
-        }
+        
 
         
         [HttpGet]
         public async Task<IActionResult> Create(SecurityIssuePost securityIssuePost) // Responsible for returning the correct View, whenever a user WANTS to create a securityIssuePost
         {
-            using (_umbracoDbContext)
+           await using (_umbracoDbContext)
             {
                 List<CMSComponent> cms = GetCMSComponents(CMSComponent.ComponentType.CMS);
                 ViewBag.CMS = cms;

@@ -10,8 +10,14 @@ namespace web_platform.Data
     public interface ISecurityIssuePost
     {
         Task<SecurityIssuePost> GetById(int id);
-        IEnumerable<SecurityIssuePost> GetAll();
 
         Task<SecurityIssuePost> CreateSecurityIssuePost(string title, string issueDescription, CMSComponentVersion cmsComponentVersion);
+
+        Task<List<SecurityIssuePost>> GetSecurityIssuePostsByState(State state);
+
+        State GetSecurityIssuePostStateVerified();
+
+        State GetSecurityIssuePostStateNotVerified();
+
     }
 }

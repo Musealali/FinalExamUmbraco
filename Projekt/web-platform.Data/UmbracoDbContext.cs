@@ -8,7 +8,7 @@ using web_platform.Data.Models;
 
 namespace web_platform.Data
 {
-    public class UmbracoDbContext : IdentityDbContext<ApplicationUser>
+    public class UmbracoDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         public UmbracoDbContext(DbContextOptions<UmbracoDbContext> options)
             : base(options)

@@ -40,6 +40,9 @@ namespace web_platform
 
             //Add application services.
             services.AddScoped<ISecurityIssuePost, SecurityIssuePostService>();
+            services.AddScoped<ICMSComponent, CMSComponentService>();
+            services.AddScoped<IComponentVersion, ComponentVersionService>();
+            services.AddScoped<ICMSComponentVersion, CMSComponentVersionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -7,10 +7,12 @@ using web_platform.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Net;
+using web_platform.Data.Models;
+using web_platform.Models;
 
 namespace XUnitTestUmbraco
 {
-    public class Umbraco_FinalExam_UniTest : IDisposable
+    /*public class Umbraco_FinalExam_UniTest : IDisposable
     {
         protected readonly UmbracoDbContext _context;
         private SecurityIssuePostController _controller;
@@ -116,5 +118,5 @@ namespace XUnitTestUmbraco
             var objectResult = Assert.IsAssignableFrom<ActionResult>(result);
         }
 
-    }
+    }*/
 }

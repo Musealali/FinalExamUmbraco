@@ -18,9 +18,21 @@ namespace web_platform.Service
         }
 
 
-        public Task Create(SecurityIssuePost securityIssuePost)
+        public async Task<SecurityIssuePost> CreateSecurityIssuePost(string title, string issueDescription, CMSComponentVersion cmsComponentVersion)
         {
-            throw new NotImplementedException();
+
+            SecurityIssuePost securityIssuePost = new SecurityIssuePost()
+            {
+                Title = title,
+                IssueDescription = issueDescription,
+                CMSComponentVersion = cmsComponentVersion,
+                State = State.NotVerified
+            };
+
+            await _umbracoDbContext.AddAsync(securityIssuePost);
+            await _umbracoDbContext.SaveChangesAsync();
+            return securityIssuePost;
+
         }
 
         public IEnumerable<SecurityIssuePost> GetAll()

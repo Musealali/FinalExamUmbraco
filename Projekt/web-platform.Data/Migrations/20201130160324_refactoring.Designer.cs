@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using web_platform.Data;
 
-namespace web_platform.Migrations
+namespace web_platform.Data.Migrations
 {
     [DbContext(typeof(UmbracoDbContext))]
-    partial class UmbracoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201130160324_refactoring")]
+    partial class refactoring
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,7 +152,7 @@ namespace web_platform.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("web_platform.Models.ApplicationUser", b =>
+            modelBuilder.Entity("web_platform.Data.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -215,14 +217,14 @@ namespace web_platform.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("web_platform.Models.CMSComponent", b =>
+            modelBuilder.Entity("web_platform.Data.Models.CMSComponent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("CType")
+                    b.Property<int>("ComponentType")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -236,42 +238,36 @@ namespace web_platform.Migrations
                         new
                         {
                             Id = 1,
-                            CType = 1,
+                            ComponentType = 1,
                             Name = "Forms"
                         },
                         new
                         {
                             Id = 2,
-                            CType = 1,
+                            ComponentType = 1,
                             Name = "uSync"
                         },
                         new
                         {
                             Id = 3,
-                            CType = 0,
+                            ComponentType = 1,
                             Name = "Umbraco UNO"
                         },
                         new
                         {
                             Id = 4,
-                            CType = 0,
-                            Name = "Umbraco Cloud"
+                            ComponentType = 1,
+                            Name = "Umbraco Heartcore"
                         },
                         new
                         {
                             Id = 5,
-                            CType = 0,
-                            Name = "Umbraco Hearthbreak"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CType = 0,
+                            ComponentType = 0,
                             Name = "Umbraco CMS"
                         });
                 });
 
-            modelBuilder.Entity("web_platform.Models.CMSComponentVersion", b =>
+            modelBuilder.Entity("web_platform.Data.Models.CMSComponentVersion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -321,113 +317,95 @@ namespace web_platform.Migrations
                         {
                             Id = 5,
                             CMSComponentId = 4,
-                            ComponentVersionId = 2
+                            ComponentVersionId = 3
                         },
                         new
                         {
                             Id = 6,
                             CMSComponentId = 4,
-                            ComponentVersionId = 6
+                            ComponentVersionId = 7
                         },
                         new
                         {
                             Id = 7,
                             CMSComponentId = 4,
-                            ComponentVersionId = 10
+                            ComponentVersionId = 11
                         },
                         new
                         {
                             Id = 8,
-                            CMSComponentId = 5,
-                            ComponentVersionId = 3
+                            CMSComponentId = 4,
+                            ComponentVersionId = 12
                         },
                         new
                         {
                             Id = 9,
                             CMSComponentId = 5,
-                            ComponentVersionId = 7
+                            ComponentVersionId = 3
                         },
                         new
                         {
                             Id = 10,
                             CMSComponentId = 5,
-                            ComponentVersionId = 11
+                            ComponentVersionId = 7
                         },
                         new
                         {
                             Id = 11,
                             CMSComponentId = 5,
-                            ComponentVersionId = 12
-                        },
-                        new
-                        {
-                            Id = 12,
-                            CMSComponentId = 6,
-                            ComponentVersionId = 3
-                        },
-                        new
-                        {
-                            Id = 13,
-                            CMSComponentId = 6,
-                            ComponentVersionId = 7
-                        },
-                        new
-                        {
-                            Id = 14,
-                            CMSComponentId = 6,
                             ComponentVersionId = 9
                         },
                         new
                         {
-                            Id = 15,
+                            Id = 12,
                             CMSComponentId = 1,
                             ComponentVersionId = 1
                         },
                         new
                         {
-                            Id = 16,
+                            Id = 13,
                             CMSComponentId = 1,
                             ComponentVersionId = 2
                         },
                         new
                         {
-                            Id = 17,
+                            Id = 14,
                             CMSComponentId = 1,
                             ComponentVersionId = 11
                         },
                         new
                         {
-                            Id = 18,
+                            Id = 15,
                             CMSComponentId = 1,
                             ComponentVersionId = 12
                         },
                         new
                         {
-                            Id = 19,
+                            Id = 16,
                             CMSComponentId = 2,
                             ComponentVersionId = 1
                         },
                         new
                         {
-                            Id = 20,
+                            Id = 17,
                             CMSComponentId = 2,
                             ComponentVersionId = 4
                         },
                         new
                         {
-                            Id = 21,
+                            Id = 18,
                             CMSComponentId = 2,
                             ComponentVersionId = 6
                         },
                         new
                         {
-                            Id = 22,
+                            Id = 19,
                             CMSComponentId = 2,
                             ComponentVersionId = 11
                         });
                 });
 
-            modelBuilder.Entity("web_platform.Models.ComponentVersion", b =>
+            modelBuilder.Entity("web_platform.Data.Models.ComponentVersion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -504,7 +482,7 @@ namespace web_platform.Migrations
                         });
                 });
 
-            modelBuilder.Entity("web_platform.Models.SecurityIssuePost", b =>
+            modelBuilder.Entity("web_platform.Data.Models.SecurityIssuePost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -518,9 +496,8 @@ namespace web_platform.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("IssueReproduction")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("State")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -544,7 +521,7 @@ namespace web_platform.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("web_platform.Models.ApplicationUser", null)
+                    b.HasOne("web_platform.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -553,7 +530,7 @@ namespace web_platform.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("web_platform.Models.ApplicationUser", null)
+                    b.HasOne("web_platform.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -568,7 +545,7 @@ namespace web_platform.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("web_platform.Models.ApplicationUser", null)
+                    b.HasOne("web_platform.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -577,22 +554,22 @@ namespace web_platform.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("web_platform.Models.ApplicationUser", null)
+                    b.HasOne("web_platform.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("web_platform.Models.CMSComponentVersion", b =>
+            modelBuilder.Entity("web_platform.Data.Models.CMSComponentVersion", b =>
                 {
-                    b.HasOne("web_platform.Models.CMSComponent", "CMSComponent")
+                    b.HasOne("web_platform.Data.Models.CMSComponent", "CMSComponent")
                         .WithMany("CMSComponentVersions")
                         .HasForeignKey("CMSComponentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("web_platform.Models.ComponentVersion", "Version")
+                    b.HasOne("web_platform.Data.Models.ComponentVersion", "Version")
                         .WithMany("CMSComponentVersions")
                         .HasForeignKey("ComponentVersionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -603,21 +580,21 @@ namespace web_platform.Migrations
                     b.Navigation("Version");
                 });
 
-            modelBuilder.Entity("web_platform.Models.SecurityIssuePost", b =>
+            modelBuilder.Entity("web_platform.Data.Models.SecurityIssuePost", b =>
                 {
-                    b.HasOne("web_platform.Models.CMSComponentVersion", "CMSComponentVersion")
+                    b.HasOne("web_platform.Data.Models.CMSComponentVersion", "CMSComponentVersion")
                         .WithMany()
                         .HasForeignKey("CMSComponentVersionId");
 
                     b.Navigation("CMSComponentVersion");
                 });
 
-            modelBuilder.Entity("web_platform.Models.CMSComponent", b =>
+            modelBuilder.Entity("web_platform.Data.Models.CMSComponent", b =>
                 {
                     b.Navigation("CMSComponentVersions");
                 });
 
-            modelBuilder.Entity("web_platform.Models.ComponentVersion", b =>
+            modelBuilder.Entity("web_platform.Data.Models.ComponentVersion", b =>
                 {
                     b.Navigation("CMSComponentVersions");
                 });

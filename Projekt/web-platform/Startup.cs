@@ -12,11 +12,10 @@ using web_platform.Data;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using web_platform.Service;
-<<<<<<< Updated upstream
-=======
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
->>>>>>> Stashed changes
+using web_platform.Data.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace web_platform
 {
@@ -46,11 +45,19 @@ namespace web_platform
             //Add application services.
             services.AddScoped<ISecurityIssuePost, SecurityIssuePostService>();
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-                {
-                    options.LoginPath = new PathString("/Authentication/LoginView");
-                });
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddEntityFrameworkStores<UmbracoDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, options =>
+            {
+                options.LoginPath = "/Authentication/Login";
+            });
+            
+       
+            services.AddScoped<ICMSComponent, CMSComponentService>();
+            services.AddScoped<IComponentVersion, ComponentVersionService>();
+            services.AddScoped<ICMSComponentVersion, CMSComponentVersionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +77,8 @@ namespace web_platform
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

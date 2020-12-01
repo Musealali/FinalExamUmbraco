@@ -45,10 +45,13 @@ namespace web_platform
             //Add application services.
             services.AddScoped<ISecurityIssuePost, SecurityIssuePostService>();
 
+
+            // Add Identity to the project with the specified custom User & Role
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<UmbracoDbContext>()
                 .AddDefaultTokenProviders();
 
+            // After adding identity, we configure the cookie authentication with a path to the login action
             services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, options =>
             {
                 options.LoginPath = "/Authentication/Login";
@@ -78,6 +81,7 @@ namespace web_platform
 
             app.UseRouting();
 
+            // This allows us to use the [Authorize] data attribute on controllers or actions, to prevent access if a user is not signed in.
             app.UseAuthentication();
 
             app.UseAuthorization();

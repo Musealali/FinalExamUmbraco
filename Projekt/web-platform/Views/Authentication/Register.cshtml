@@ -1,0 +1,29 @@
+﻿@model AuthenticationViewModel
+
+<h2>Sign Up</h2>
+
+<form asp-controller="Authentication" asp-action="Register" method="POST">
+    <div class="input-group mt-2">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Email</span>
+        </div>
+        <input asp-for="Email" type="email" class="form-control" aria-label="Email" name="Email" value="@Model?.Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="input-group mt-2">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Password</span>
+        </div>
+        <input asp-for="Password" type="password" class="form-control" aria-label="Password" name="Password"/>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <input type="submit" class="form-control" value="Sign Up" />
+</form>
+
+<input type="button" class="btn btn-primary" value="Login" onclick="@("window.location.href='" + @Url.Action("Login", "Authentication") + "'");" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

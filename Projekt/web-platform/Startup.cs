@@ -12,6 +12,10 @@ using web_platform.Data;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using web_platform.Service;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using web_platform.Data.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace web_platform
 {
@@ -40,6 +44,20 @@ namespace web_platform
 
             //Add application services.
             services.AddScoped<ISecurityIssuePost, SecurityIssuePostService>();
+
+
+            // Add Identity to the project with the specified custom User & Role
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddEntityFrameworkStores<UmbracoDbContext>()
+                .AddDefaultTokenProviders();
+
+            // After adding identity, we configure the cookie authentication with a path to the login action
+            services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, options =>
+            {
+                options.LoginPath = "/Authentication/Login";
+            });
+            
+       
             services.AddScoped<ICMSComponent, CMSComponentService>();
             services.AddScoped<IComponentVersion, ComponentVersionService>();
             services.AddScoped<ICMSComponentVersion, CMSComponentVersionService>();
@@ -62,6 +80,9 @@ namespace web_platform
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            // This allows us to use the [Authorize] data attribute on controllers or actions, to prevent access if a user is not signed in.
+            app.UseAuthentication();
 
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

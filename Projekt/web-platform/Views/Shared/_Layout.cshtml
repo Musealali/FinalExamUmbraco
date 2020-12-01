@@ -27,6 +27,22 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="SecurityIssuePost" asp-action="Create">Create</a>
                         </li>
+                        @{
+                            if (User.Identity.IsAuthenticated) // Gatekeeping 'a' links for signed in users
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Authentication" asp-action="SignOut">Sign Out</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Authentication" asp-action="Login">Login</a>
+                                </li>
+                            }
+                        }
+
+
                     </ul>
                 </div>
             </div>

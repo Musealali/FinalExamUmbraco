@@ -46,10 +46,64 @@ namespace web_platform.Controllers
             
             return View(model);
         }
-        
-        
 
-        
+        [HttpGet]
+        public async Task<IActionResult> NotVerifiedPosts()
+        {
+
+            var securityIssuePosts = await _ISecurityIssuePostService.GetSecurityIssuePostsByState(_ISecurityIssuePostService.GetSecurityIssuePostStateNotVerified());
+
+            if (securityIssuePosts == null) { return View(NotFound()); }
+
+            List<SecurityIssuePostViewModel> securityIssuePostViewModels = new List<SecurityIssuePostViewModel>();
+
+            foreach (var securityIssuePost in securityIssuePosts)
+            {
+                var model = new SecurityIssuePostViewModel
+                {
+                    Id = securityIssuePost.Id,
+                    Title = securityIssuePost.Title,
+                    IssueDescription = securityIssuePost.IssueDescription,
+                    CMSComponentName = securityIssuePost.CMSComponentVersion.CMSComponent.Name,
+                    CMSVersionNumber = securityIssuePost.CMSComponentVersion.Version.VersionNumber,
+                    State = securityIssuePost.State
+                };
+
+                securityIssuePostViewModels.Add(model);
+            }
+
+            return View(securityIssuePostViewModels);
+        }
+
+        public async Task<IActionResult> VerifiedPosts()
+        {
+
+            var securityIssuePosts = await _ISecurityIssuePostService.GetSecurityIssuePostsByState(_ISecurityIssuePostService.GetSecurityIssuePostStateVerified());
+
+            if (securityIssuePosts == null) { return View(NotFound()); }
+
+            List<SecurityIssuePostViewModel> securityIssuePostViewModels = new List<SecurityIssuePostViewModel>();
+
+            foreach (var securityIssuePost in securityIssuePosts)
+            {
+                var model = new SecurityIssuePostViewModel
+                {
+                    Id = securityIssuePost.Id,
+                    Title = securityIssuePost.Title,
+                    IssueDescription = securityIssuePost.IssueDescription,
+                    CMSComponentName = securityIssuePost.CMSComponentVersion.CMSComponent.Name,
+                    CMSVersionNumber = securityIssuePost.CMSComponentVersion.Version.VersionNumber,
+                    State = securityIssuePost.State
+                };
+
+                securityIssuePostViewModels.Add(model);
+            }
+
+            return View(securityIssuePostViewModels);
+        }
+
+
+
         [HttpGet]
         public async Task<IActionResult> Create() // Responsible for returning the correct View, whenever a user WANTS to create a securityIssuePost
         {

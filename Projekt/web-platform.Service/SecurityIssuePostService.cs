@@ -35,11 +35,6 @@ namespace web_platform.Service
 
         }
 
-        public IEnumerable<SecurityIssuePost> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<SecurityIssuePost> GetById(int id)
         {
             var securityIssuePostToFind = await _umbracoDbContext.SecurityIssuePosts.Where(s => s.Id == id)
@@ -51,6 +46,28 @@ namespace web_platform.Service
 
             return securityIssuePostToFind;
 
+        }
+
+        public async Task<List<SecurityIssuePost>> GetSecurityIssuePostsByState(State state)
+        {
+            var securityIssuePosts = await _umbracoDbContext.SecurityIssuePosts.Where(s => s.State == state)
+                .Include(s => s.CMSComponentVersion)
+                        .ThenInclude(c => c.CMSComponent)
+                    .Include(s => s.CMSComponentVersion)
+                        .ThenInclude(c => c.Version)
+                        .ToListAsync();
+
+            return securityIssuePosts;
+
+        }
+        public State GetSecurityIssuePostStateVerified()
+        {
+            return State.Verified;
+        }
+
+        public State GetSecurityIssuePostStateNotVerified()
+        {
+            return State.NotVerified;
         }
     }
 }

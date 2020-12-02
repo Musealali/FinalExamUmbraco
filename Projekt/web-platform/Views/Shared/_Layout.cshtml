@@ -28,10 +28,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="SecurityIssuePost" asp-action="Create">Create</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="SecurityIssuePost" asp-action="NotVerifiedPosts">Not verified posts</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="SecurityIssuePost" asp-action="GetNonVerifiedSecurityIssuePosts">Not verified posts</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="SecurityIssuePost" asp-action="VerifiedPosts">verified posts</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="SecurityIssuePost" asp-action="GetVerifiedSecurityIssuePosts">verified posts</a>
                         </li>
                         @{
                             if (User.Identity.IsAuthenticated) // Gatekeeping 'a' links for signed in users

@@ -48,10 +48,17 @@ namespace web_platform.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetNonVerifiedSecurityIssuePosts()
+        public async Task<IActionResult> GetNonVerifiedSecurityIssuePosts(string searchString)
         {
+            dynamic nonVerifiedSecurityIssuePosts;
 
-            var nonVerifiedSecurityIssuePosts = await _ISecurityIssuePostService.GetSecurityIssuePostsByState(_ISecurityIssuePostService.GetSecurityIssuePostStateNotVerified());
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                nonVerifiedSecurityIssuePosts = await _ISecurityIssuePostService.GetSecurityIssuePostsBySearchString(searchString, _ISecurityIssuePostService.GetSecurityIssuePostStateNotVerified());
+            } else
+            {
+                nonVerifiedSecurityIssuePosts = await _ISecurityIssuePostService.GetSecurityIssuePostsByState(_ISecurityIssuePostService.GetSecurityIssuePostStateNotVerified());
+            }
 
             List<SecurityIssuePostViewModel> securityIssuePostViewModels = new List<SecurityIssuePostViewModel>();
 
@@ -73,10 +80,19 @@ namespace web_platform.Controllers
             return View(securityIssuePostViewModels);
         }
 
-        public async Task<IActionResult> GetVerifiedSecurityIssuePosts()
+        public async Task<IActionResult> GetVerifiedSecurityIssuePosts(string searchString)
         {
 
-            var verifiedSecurityIssuePosts = await _ISecurityIssuePostService.GetSecurityIssuePostsByState(_ISecurityIssuePostService.GetSecurityIssuePostStateVerified());
+            dynamic verifiedSecurityIssuePosts;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                verifiedSecurityIssuePosts = await _ISecurityIssuePostService.GetSecurityIssuePostsBySearchString(searchString, _ISecurityIssuePostService.GetSecurityIssuePostStateVerified());
+            }
+            else
+            {
+                verifiedSecurityIssuePosts = await _ISecurityIssuePostService.GetSecurityIssuePostsByState(_ISecurityIssuePostService.GetSecurityIssuePostStateVerified());
+            }
 
             List<SecurityIssuePostViewModel> securityIssuePostViewModels = new List<SecurityIssuePostViewModel>();
 

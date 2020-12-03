@@ -36,10 +36,11 @@ namespace web_platform.Service
 
         }
 
-        public async Task<SecurityIssuePostReply> CreateSecurityIssuePostReply(string content, SecurityIssuePost securityIssuePost)
+        public async Task<SecurityIssuePostReply> CreateSecurityIssuePostReply(string content, SecurityIssuePost securityIssuePost, ApplicationUser applicationUser)
         {
             SecurityIssuePostReply securityIssuePostReply = new SecurityIssuePostReply()
             {
+                ApplicationUser = applicationUser,
                 SecurityIssuePost = securityIssuePost,
                 Content = content
             };

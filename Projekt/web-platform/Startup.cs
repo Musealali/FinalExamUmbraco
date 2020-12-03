@@ -51,6 +51,8 @@ namespace web_platform
                 .AddEntityFrameworkStores<UmbracoDbContext>()
                 .AddDefaultTokenProviders();
 
+            
+
             // After adding identity, we configure the cookie authentication with a path to the login action
             services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, options =>
             {
@@ -69,6 +71,9 @@ namespace web_platform
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                // Add a default user and sign it in, if in development environment for testing purposes
+                IdentityInitializer.InitializeDevelopment(app.ApplicationServices);
             }
             else
             {

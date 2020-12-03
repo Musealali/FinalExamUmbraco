@@ -22,6 +22,8 @@ namespace web_platform.Data.Models
 
         public State State { get; set; }
 
+        public ICollection<SecurityIssuePostReply> SecurityIssuePostReplies { get; set; }
+
 
     }
 }

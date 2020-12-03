@@ -35,6 +35,21 @@ namespace web_platform.Controllers
         {
 
             var securityIssuePostToFind = await _ISecurityIssuePostService.GetById(id);
+            var securityIssuePostReplies = await _ISecurityIssuePostService.GetSecurityIssuePostsReplies(id);
+
+            var securityRepliesModels = new List<SecurityIssuePostReplyViewModel>();
+
+            foreach (SecurityIssuePostReply securityIssuePostReply in securityIssuePostReplies)
+            {
+                SecurityIssuePostReplyViewModel securityIssuePostReplyViewModel = new SecurityIssuePostReplyViewModel
+                {
+                    Id = securityIssuePostReply.Id,
+                    Content = securityIssuePostReply.Content,
+                    ApplicationUser = securityIssuePostReply.ApplicationUser
+                };
+
+                securityRepliesModels.Add(securityIssuePostReplyViewModel);
+            }
 
             var model = new SecurityIssuePostViewModel
             {
@@ -43,7 +58,9 @@ namespace web_platform.Controllers
                 IssueDescription = securityIssuePostToFind.IssueDescription,
                 CMSComponentName = securityIssuePostToFind.CMSComponentVersion.CMSComponent.Name,
                 CMSVersionNumber = securityIssuePostToFind.CMSComponentVersion.Version.VersionNumber,
-                State = securityIssuePostToFind.State
+                State = securityIssuePostToFind.State,
+                SecurityIssuePostReplies = securityRepliesModels,
+                ApplicationUser = securityIssuePostToFind.ApplicationUser
             };
 
             if (model == null) { return View(NotFound()); }
@@ -155,6 +172,18 @@ namespace web_platform.Controllers
             var securityIssuePost = await _ISecurityIssuePostService.CreateSecurityIssuePost(securityIssuePostView.Title, securityIssuePostView.IssueDescription, cmsComponentVersion, applicationUser);
             return RedirectToAction("Index", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateSecurityIssueReply(int securityIssuePostId, string content) 
+        {
+            var securityIssuePost = await _ISecurityIssuePostService.GetById(securityIssuePostId);
+            var applicationUser = await _userManager.GetUserAsync(User);
+            var securityIssuePostReply = await _ISecurityIssuePostService.CreateSecurityIssuePostReply(content, securityIssuePost, applicationUser);
+            return RedirectToAction("Index", "SecurityIssuePost", new { id = securityIssuePostId });
+        }
+
+
+
 
     } 
 }

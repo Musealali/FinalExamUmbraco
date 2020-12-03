@@ -20,6 +20,7 @@ namespace web_platform.Data
         public DbSet<CMSComponent> CMSComponents { get; set; }
         public DbSet<ComponentVersion> ComponentVersions { get; set; }
         public DbSet<CMSComponentVersion> CMSComponentVersions { get; set; }
+        public DbSet<SecurityIssuePostReply> SecurityIssuePostReplies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

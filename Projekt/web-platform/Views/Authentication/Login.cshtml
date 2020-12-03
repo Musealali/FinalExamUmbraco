@@ -1,18 +1,20 @@
-﻿<h2>Login</h2>
+﻿@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment hostingEnv
+
+<h2>Login</h2>
 
 <form asp-controller="Authentication" asp-action="Login" method="POST">
     <div class="input-group mt-2">
         <div class="input-group-prepend">
             <span class="input-group-text">Email</span>
         </div>
-        <input type="email" class="form-control" aria-label="Email" name="Email"/>
+        <input type="email" class="form-control" aria-label="Email" name="Email" value="@(hostingEnv.EnvironmentName == "Development" ? "default@default.com" : "")" />
     </div>
 
     <div class="input-group mt-2">
         <div class="input-group-prepend">
             <span class="input-group-text">Password</span>
         </div>
-        <input type="password" class="form-control" aria-label="Password" name="Password"/>
+        <input type="password" class="form-control" aria-label="Password" name="Password" value="@(hostingEnv.EnvironmentName == "Development" ? "Default1!" : "")" />
     </div>
 
     <input type="submit" class="form-control" value="Login" />

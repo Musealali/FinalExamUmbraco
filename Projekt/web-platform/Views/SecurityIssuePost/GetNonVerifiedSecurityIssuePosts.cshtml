@@ -4,6 +4,12 @@
 }
 
 <h1>Posts waiting for verification</h1>
+<form asp-controller="SecurityIssuePost" asp-action="GetNonVerifiedSecurityIssuePosts" method="get">
+    <p>
+        <input type="text" name="searchString" placeholder="Search for Security issue post..." style="width : 80%">
+        <input type="submit" value="Search" style="width : 19%"/>
+    </p>
+</form>
 @if (Model.Count == 0)
 {
     <h1>No Posts found</h1>

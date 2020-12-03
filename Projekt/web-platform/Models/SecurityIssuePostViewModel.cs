@@ -16,7 +16,7 @@ namespace web_platform.Models
         public string ComponentType { get; set; }
         public State State { get; set; }
         
-        public IEnumerable<SecurityIssuePostReplyViewModel> SecurityIssuePostReplies { get; set; }
+        public List<SecurityIssuePostReplyViewModel> SecurityIssuePostReplies { get; set; }
        
     }
 }

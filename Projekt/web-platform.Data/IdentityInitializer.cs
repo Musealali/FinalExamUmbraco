@@ -14,7 +14,6 @@ namespace web_platform.Data
             using (var scope = services.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                SignInManager<ApplicationUser> signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
 
                 var user = new ApplicationUser() { UserName = "default@default.com", Email = "default@default.com" };
                 var createResult = userManager.CreateAsync(user, "Default1!").Result;

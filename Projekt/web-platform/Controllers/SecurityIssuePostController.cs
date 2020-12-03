@@ -8,6 +8,8 @@ using web_platform.Models;
 using System.Dynamic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Identity;
+using web_platform.Data.Models;
 
 namespace web_platform.Controllers
 {
@@ -17,13 +19,15 @@ namespace web_platform.Controllers
         private readonly ICMSComponent _ICMSComponentService;
         private readonly IComponentVersion _IComponentVersionService;
         private readonly ICMSComponentVersion _ICMSComponentVersionService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public SecurityIssuePostController(ISecurityIssuePost securityIssuePostService, ICMSComponent cmsComponentService, IComponentVersion componentVersionService, ICMSComponentVersion cmsComponentVersionService)
+        public SecurityIssuePostController(ISecurityIssuePost securityIssuePostService, ICMSComponent cmsComponentService, IComponentVersion componentVersionService, ICMSComponentVersion cmsComponentVersionService, UserManager<ApplicationUser> userManager)
         {
             _ISecurityIssuePostService = securityIssuePostService;
             _ICMSComponentService = cmsComponentService;
             _IComponentVersionService = componentVersionService;
             _ICMSComponentVersionService = cmsComponentVersionService;
+            _userManager = userManager;
         }
         
         [HttpGet]
@@ -131,7 +135,8 @@ namespace web_platform.Controllers
 
             if (cmsComponentVersion == null) { return NotFound(); }
 
-            var securityIssuePost = await _ISecurityIssuePostService.CreateSecurityIssuePost(securityIssuePostView.Title, securityIssuePostView.IssueDescription, cmsComponentVersion);
+            var applicationUser = await _userManager.GetUserAsync(User);
+            var securityIssuePost = await _ISecurityIssuePostService.CreateSecurityIssuePost(securityIssuePostView.Title, securityIssuePostView.IssueDescription, cmsComponentVersion, applicationUser);
             return RedirectToAction("Index", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
 

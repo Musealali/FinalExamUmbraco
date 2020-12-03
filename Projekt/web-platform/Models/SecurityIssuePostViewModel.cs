@@ -15,6 +15,7 @@ namespace web_platform.Models
         public string CMSVersionNumber { get; set; }
         public string ComponentType { get; set; }
         public State State { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
         
         public List<SecurityIssuePostReplyViewModel> SecurityIssuePostReplies { get; set; }
         public SecurityIssuePostReplyViewModel securityIssuePostReplyViewModel { get; set; }

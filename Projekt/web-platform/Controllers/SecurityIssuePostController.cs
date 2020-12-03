@@ -44,7 +44,8 @@ namespace web_platform.Controllers
                 SecurityIssuePostReplyViewModel securityIssuePostReplyViewModel = new SecurityIssuePostReplyViewModel
                 {
                     Id = securityIssuePostReply.Id,
-                    Content = securityIssuePostReply.Content
+                    Content = securityIssuePostReply.Content,
+                    ApplicationUser = securityIssuePostReply.ApplicationUser
                 };
 
                 securityRepliesModels.Add(securityIssuePostReplyViewModel);
@@ -58,7 +59,8 @@ namespace web_platform.Controllers
                 CMSComponentName = securityIssuePostToFind.CMSComponentVersion.CMSComponent.Name,
                 CMSVersionNumber = securityIssuePostToFind.CMSComponentVersion.Version.VersionNumber,
                 State = securityIssuePostToFind.State,
-                SecurityIssuePostReplies = securityRepliesModels
+                SecurityIssuePostReplies = securityRepliesModels,
+                ApplicationUser = securityIssuePostToFind.ApplicationUser
             };
 
             if (model == null) { return View(NotFound()); }
@@ -159,7 +161,8 @@ namespace web_platform.Controllers
         public async Task<ActionResult> CreateSecurityIssueReply(int securityIssuePostId, string content) 
         {
             var securityIssuePost = await _ISecurityIssuePostService.GetById(securityIssuePostId);
-            var securityIssuePostReply = await _ISecurityIssuePostService.CreateSecurityIssuePostReply(content, securityIssuePost);
+            var applicationUser = await _userManager.GetUserAsync(User);
+            var securityIssuePostReply = await _ISecurityIssuePostService.CreateSecurityIssuePostReply(content, securityIssuePost, applicationUser);
             return RedirectToAction("Index", "SecurityIssuePost", new { id = securityIssuePostId });
         }
 

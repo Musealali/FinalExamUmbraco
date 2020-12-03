@@ -4,6 +4,7 @@
 
 <div class="main">
     <div class="input-group">
+        <p>@Model.ApplicationUser.UserName</p>
         <div class="input-group-prepend">
             <span class="input-group-text">Title</span>
         </div>
@@ -33,6 +34,7 @@
     {
         <div class="main">
             <div class="input-group">
+                <p>@reply.ApplicationUser.UserName</p>
                 <textarea type="text" class="form-control" aria-label="Title" disabled="disabled">@reply.Content</textarea>
             </div>
         </div>

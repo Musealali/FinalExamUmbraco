@@ -2,7 +2,7 @@
 
 namespace web_platform.Data.Migrations
 {
-    public partial class AddSecurityIssuePostReplyImplementation : Migration
+    public partial class AddSecurityIssueReply : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,15 +13,15 @@ namespace web_platform.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     SecurityIssuePostId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SecurityIssuePostReplies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SecurityIssuePostReplies_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_SecurityIssuePostReplies_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -34,14 +34,14 @@ namespace web_platform.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_SecurityIssuePostReplies_ApplicationUserId",
+                table: "SecurityIssuePostReplies",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SecurityIssuePostReplies_SecurityIssuePostId",
                 table: "SecurityIssuePostReplies",
                 column: "SecurityIssuePostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SecurityIssuePostReplies_UserId",
-                table: "SecurityIssuePostReplies",
-                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

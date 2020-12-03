@@ -10,8 +10,8 @@ using web_platform.Data;
 namespace web_platform.Data.Migrations
 {
     [DbContext(typeof(UmbracoDbContext))]
-    [Migration("20201203123120_AddSecurityIssuePostReplyImplementation")]
-    partial class AddSecurityIssuePostReplyImplementation
+    [Migration("20201203125833_Add-Security-Issue-Reply")]
+    partial class AddSecurityIssueReply
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -522,20 +522,20 @@ namespace web_platform.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("SecurityIssuePostId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("SecurityIssuePostId");
+                    b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("SecurityIssuePostId");
 
                     b.ToTable("SecurityIssuePostReplies");
                 });
@@ -627,17 +627,17 @@ namespace web_platform.Data.Migrations
 
             modelBuilder.Entity("web_platform.Data.Models.SecurityIssuePostReply", b =>
                 {
+                    b.HasOne("web_platform.Data.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("web_platform.Data.Models.SecurityIssuePost", "SecurityIssuePost")
                         .WithMany("SecurityIssuePostReplies")
                         .HasForeignKey("SecurityIssuePostId");
 
-                    b.HasOne("web_platform.Data.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("SecurityIssuePost");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("web_platform.Data.Models.CMSComponent", b =>

@@ -21,6 +21,8 @@ namespace web_platform.Data.Models
         public CMSComponentVersion CMSComponentVersion { get; set; }
         public State State { get; set; }
 
+        public virtual IEnumerable<SecurityIssuePostReply> SecurityIssuePostReplies { get; set; }
+
 
     }
 }

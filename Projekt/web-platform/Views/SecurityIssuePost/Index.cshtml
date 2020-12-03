@@ -24,3 +24,18 @@
         <textarea class="form-control" disabled="disabled" rows="4">@Model.IssueDescription</textarea>
     </div>
 </div>
+
+@if (Model.SecurityIssuePostReplies.Any())
+{
+    foreach (var reply in Model.SecurityIssuePostReplies)
+    {
+<div class="main">
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Title</span>
+        </div>
+        <input type="text" class="form-control" aria-label="Title" value="@reply.Content" disabled="disabled" />
+    </div>
+</div>
+    }
+}

@@ -69,5 +69,14 @@ namespace web_platform.Service
         {
             return State.NotVerified;
         }
+
+        public async Task<List<SecurityIssuePostReply>> GetSecurityIssuePostsReplies(int securityIssuePostId)
+        {
+            var securityIssuePostReplies = await _umbracoDbContext.SecurityIssuePostReplies.Where(s => s.Id == securityIssuePostId)
+                .Include(s => s.Content).ToListAsync();
+
+            return securityIssuePostReplies;
+        }
+
     }
 }

@@ -8,6 +8,7 @@ using web_platform.Models;
 using System.Dynamic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using web_platform.Data.Models;
 
 namespace web_platform.Controllers
 {
@@ -31,6 +32,20 @@ namespace web_platform.Controllers
         {
 
             var securityIssuePostToFind = await _ISecurityIssuePostService.GetById(id);
+            var securityIssuePostReplies = await _ISecurityIssuePostService.GetSecurityIssuePostsReplies(id);
+
+            var securityRepliesModels = new List<SecurityIssuePostReplyViewModel>();
+
+            foreach (SecurityIssuePostReply securityIssuePostReply in securityIssuePostReplies)
+            {
+                SecurityIssuePostReplyViewModel securityIssuePostReplyViewModel = new SecurityIssuePostReplyViewModel
+                {
+                    Id = securityIssuePostReply.Id,
+                    Content = securityIssuePostReply.Content
+                };
+
+                securityRepliesModels.Add(securityIssuePostReplyViewModel);
+            }
 
             var model = new SecurityIssuePostViewModel
             {
@@ -39,7 +54,8 @@ namespace web_platform.Controllers
                 IssueDescription = securityIssuePostToFind.IssueDescription,
                 CMSComponentName = securityIssuePostToFind.CMSComponentVersion.CMSComponent.Name,
                 CMSVersionNumber = securityIssuePostToFind.CMSComponentVersion.Version.VersionNumber,
-                State = securityIssuePostToFind.State
+                State = securityIssuePostToFind.State,
+                SecurityIssuePostReplies = securityRepliesModels
             };
 
             if (model == null) { return View(NotFound()); }
@@ -134,6 +150,8 @@ namespace web_platform.Controllers
             var securityIssuePost = await _ISecurityIssuePostService.CreateSecurityIssuePost(securityIssuePostView.Title, securityIssuePostView.IssueDescription, cmsComponentVersion);
             return RedirectToAction("Index", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
+
+        
 
     } 
 }

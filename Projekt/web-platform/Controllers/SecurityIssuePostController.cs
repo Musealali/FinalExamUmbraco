@@ -53,8 +53,6 @@ namespace web_platform.Controllers
 
             var nonVerifiedSecurityIssuePosts = await _ISecurityIssuePostService.GetSecurityIssuePostsByState(_ISecurityIssuePostService.GetSecurityIssuePostStateNotVerified());
 
-            if (nonVerifiedSecurityIssuePosts == null) { return View(NotFound()); }
-
             List<SecurityIssuePostViewModel> securityIssuePostViewModels = new List<SecurityIssuePostViewModel>();
 
             foreach (var nonVerifiedSecurityIssuePost in nonVerifiedSecurityIssuePosts)
@@ -79,8 +77,6 @@ namespace web_platform.Controllers
         {
 
             var verifiedSecurityIssuePosts = await _ISecurityIssuePostService.GetSecurityIssuePostsByState(_ISecurityIssuePostService.GetSecurityIssuePostStateVerified());
-
-            if (verifiedSecurityIssuePosts == null) { return View(NotFound()); }
 
             List<SecurityIssuePostViewModel> securityIssuePostViewModels = new List<SecurityIssuePostViewModel>();
 

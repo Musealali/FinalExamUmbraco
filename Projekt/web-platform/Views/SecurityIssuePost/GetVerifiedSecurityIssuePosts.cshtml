@@ -4,33 +4,14 @@
 }
 
 <h1>VerifiedPosts</h1>
-
+@if (Model.Count == 0)
+{
+    <h1>No Posts found</h1>
+}
 <div class="main">
 
     @foreach (SecurityIssuePostViewModel securityIssuePostViewModel in Model)
     {
-        <div class="input-group mt-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Title</span>
-            </div>
-            <input type="text" class="form-control" aria-label="Title" value="@securityIssuePostViewModel.Title" disabled="disabled" />
-        </div>
-
-        <div class="input-group mt-2">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Component</span>
-            </div>
-            <input type="text" class="form-control" aria-label="Component" value="@securityIssuePostViewModel.CMSVersionNumber - @securityIssuePostViewModel.CMSComponentName" disabled="disabled" />
-        </div>
-
-        <div class="input-group mt-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Description</span>
-            </div>
-            <textarea class="form-control" disabled="disabled" rows="4">@securityIssuePostViewModel.IssueDescription</textarea>
-        </div>
-        <div class="input-group mt-3">
-            <p>=====================================================================================================</p>
-        </div>
+        <a asp-controller="SecurityIssuePost" asp-action="Index" asp-route-id="@securityIssuePostViewModel.Id" class="btn btn-primary mt-3" style="width : 100%; height : 50px">@securityIssuePostViewModel.Title</a>
     }
 </div>

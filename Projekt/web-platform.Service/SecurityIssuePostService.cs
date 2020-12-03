@@ -88,6 +88,7 @@ namespace web_platform.Service
             return State.NotVerified;
         }
 
+
         public async Task<List<SecurityIssuePostReply>> GetSecurityIssuePostsReplies(int securityIssuePostId)
         {
             var securityIssuePostReplies = await _umbracoDbContext.SecurityIssuePostReplies.Where(s => s.SecurityIssuePost.Id == securityIssuePostId).ToListAsync();
@@ -96,5 +97,18 @@ namespace web_platform.Service
         }
 
         
+
+        public async Task<List<SecurityIssuePost>> GetSecurityIssuePostsBySearchString(string searchString, State state)
+        {
+            var securityIssuePosts = await _umbracoDbContext.SecurityIssuePosts.Where(s => s.Title.Contains(searchString) && s.State == state)
+                .Include(s => s.CMSComponentVersion)
+                        .ThenInclude(c => c.CMSComponent)
+                    .Include(s => s.CMSComponentVersion)
+                        .ThenInclude(c => c.Version)
+                        .ToListAsync();
+
+            return securityIssuePosts;
+        }
+
     }
 }

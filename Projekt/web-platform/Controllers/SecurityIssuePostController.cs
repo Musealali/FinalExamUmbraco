@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Identity;
 using web_platform.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace web_platform.Controllers
 {

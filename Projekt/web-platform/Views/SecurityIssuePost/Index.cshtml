@@ -25,17 +25,30 @@
     </div>
 </div>
 
+
+
 @if (Model.SecurityIssuePostReplies.Any())
 {
     foreach (var reply in Model.SecurityIssuePostReplies)
     {
-<div class="main">
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Title</span>
+        <div class="main">
+            <div class="input-group">
+                <textarea type="text" class="form-control" aria-label="Title" disabled="disabled">@reply.Content</textarea>
+            </div>
         </div>
-        <input type="text" class="form-control" aria-label="Title" value="@reply.Content" disabled="disabled" />
-    </div>
-</div>
     }
 }
+
+<h1>Create Comment</h1>
+
+<form asp-controller="SecurityIssuePost" asp-action="CreateSecurityIssueReply" method="POST" asp-route-securityIssuePostId="@Model.Id">
+
+
+    <div class="form-group">
+        <label asp-for="@Model.securityIssuePostReplyViewModel.Content">Content</label>
+        <textarea asp-for="@Model.securityIssuePostReplyViewModel.Content" name="content" class="form-control" id="inputContent"></textarea>
+        <span asp-validation-for="@Model.securityIssuePostReplyViewModel.Content" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Submit</button>
+</form>

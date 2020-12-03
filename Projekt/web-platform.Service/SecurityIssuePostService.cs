@@ -36,6 +36,20 @@ namespace web_platform.Service
 
         }
 
+        public async Task<SecurityIssuePostReply> CreateSecurityIssuePostReply(string content, SecurityIssuePost securityIssuePost)
+        {
+            SecurityIssuePostReply securityIssuePostReply = new SecurityIssuePostReply()
+            {
+                SecurityIssuePost = securityIssuePost,
+                Content = content
+            };
+
+            await _umbracoDbContext.AddAsync(securityIssuePostReply);
+            await _umbracoDbContext.SaveChangesAsync();
+            return securityIssuePostReply;
+
+        }
+
         public async Task<SecurityIssuePost> GetById(int id)
         {
             var securityIssuePostToFind = await _umbracoDbContext.SecurityIssuePosts.Where(s => s.Id == id)
@@ -75,11 +89,11 @@ namespace web_platform.Service
 
         public async Task<List<SecurityIssuePostReply>> GetSecurityIssuePostsReplies(int securityIssuePostId)
         {
-            var securityIssuePostReplies = await _umbracoDbContext.SecurityIssuePostReplies.Where(s => s.SecurityIssuePost.Id == securityIssuePostId)
-                .Include(s => s.Content).ToListAsync();
+            var securityIssuePostReplies = await _umbracoDbContext.SecurityIssuePostReplies.Where(s => s.SecurityIssuePost.Id == securityIssuePostId).ToListAsync();
 
             return securityIssuePostReplies;
         }
 
+        
     }
 }

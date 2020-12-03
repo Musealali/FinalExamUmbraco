@@ -155,7 +155,16 @@ namespace web_platform.Controllers
             return RedirectToAction("Index", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
 
-        
+        [HttpPost]
+        public async Task<ActionResult> CreateSecurityIssueReply(int securityIssuePostId, string content) 
+        {
+            var securityIssuePost = await _ISecurityIssuePostService.GetById(securityIssuePostId);
+            var securityIssuePostReply = await _ISecurityIssuePostService.CreateSecurityIssuePostReply(content, securityIssuePost);
+            return RedirectToAction("Index", "SecurityIssuePost", new { id = securityIssuePostId });
+        }
+
+
+
 
     } 
 }

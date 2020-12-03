@@ -17,6 +17,7 @@ namespace web_platform.Models
         public State State { get; set; }
         
         public List<SecurityIssuePostReplyViewModel> SecurityIssuePostReplies { get; set; }
+        public SecurityIssuePostReplyViewModel securityIssuePostReplyViewModel { get; set; }
        
     }
 }

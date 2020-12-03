@@ -18,7 +18,7 @@ namespace web_platform.Service
         }
 
 
-        public async Task<SecurityIssuePost> CreateSecurityIssuePost(string title, string issueDescription, CMSComponentVersion cmsComponentVersion)
+        public async Task<SecurityIssuePost> CreateSecurityIssuePost(string title, string issueDescription, CMSComponentVersion cmsComponentVersion, ApplicationUser applicationUser)
         {
 
             SecurityIssuePost securityIssuePost = new SecurityIssuePost()
@@ -26,6 +26,7 @@ namespace web_platform.Service
                 Title = title,
                 IssueDescription = issueDescription,
                 CMSComponentVersion = cmsComponentVersion,
+                ApplicationUser = applicationUser,
                 State = State.NotVerified
             };
 
@@ -39,10 +40,11 @@ namespace web_platform.Service
         {
             var securityIssuePostToFind = await _umbracoDbContext.SecurityIssuePosts.Where(s => s.Id == id)
                 .Include(s => s.CMSComponentVersion)
-                        .ThenInclude(c => c.CMSComponent)
-                    .Include(s => s.CMSComponentVersion)
-                        .ThenInclude(c => c.Version)
-                    .Where(s => s.Id == id).FirstOrDefaultAsync();
+                    .ThenInclude(c => c.CMSComponent)
+                .Include(s => s.CMSComponentVersion)
+                    .ThenInclude(c => c.Version)
+                .Include(s => s.ApplicationUser)
+                .Where(s => s.Id == id).FirstOrDefaultAsync();
 
             return securityIssuePostToFind;
 
@@ -52,10 +54,11 @@ namespace web_platform.Service
         {
             var securityIssuePosts = await _umbracoDbContext.SecurityIssuePosts.Where(s => s.State == state)
                 .Include(s => s.CMSComponentVersion)
-                        .ThenInclude(c => c.CMSComponent)
-                    .Include(s => s.CMSComponentVersion)
-                        .ThenInclude(c => c.Version)
-                        .ToListAsync();
+                    .ThenInclude(c => c.CMSComponent)
+                .Include(s => s.CMSComponentVersion)
+                    .ThenInclude(c => c.Version)
+                .Include(s => s.ApplicationUser)
+                .ToListAsync();
 
             return securityIssuePosts;
 

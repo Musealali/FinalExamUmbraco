@@ -10,7 +10,6 @@ namespace web_platform.Data.Models
     public enum State { Verified, NotVerified }
     public class SecurityIssuePost
     {
-        
         public int Id { get; set; }
         [Required]
         public string Title { get; set; }
@@ -19,6 +18,8 @@ namespace web_platform.Data.Models
 
         // Navigation Properties - Used by DBContext when 'GETTING' entities
         public CMSComponentVersion CMSComponentVersion { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+
         public State State { get; set; }
 
         public ICollection<SecurityIssuePostReply> SecurityIssuePostReplies { get; set; }

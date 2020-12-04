@@ -1,14 +1,14 @@
 provider "aws" {
   region    = "eu-central-1"
-  profile   = "dev"
+  profile   = "prod"
 }
 
 terraform {
   backend "s3" {
     region  = "eu-central-1"
-    profile = "dev"
+    profile = "prod"
 
     bucket  = "dmr-umbraco-terraform-state-bucket"
-    key     = "dev.tfstate"
+    key     = "prod.tfstate"
   }
 }

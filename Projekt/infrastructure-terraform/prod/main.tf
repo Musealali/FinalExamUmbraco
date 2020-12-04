@@ -18,10 +18,13 @@ resource "aws_instance" "webserver" {
                       #!/bin/bash
                       sudo su
                       yum -y install git
-                      yum -y install httpd
-                      echo "<p>Webserver test</p>" >> /var/www/html/index.html
-                      sudo systemctl enable httpd
-                      sudo systemctl start httpd
+                      mkdir git
+                      cd git
+                      git clone https://rickifunk:Jeger3dum3@github.com/thejokerd3/FinalExamUmbraco
+                      sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
+                      cd FinalExamUmbraco/Projekt/web-platform
+                      sudo yum install dotnet-sdk-3.1
+                      dotnet run --environment "Production" -p web-platform.csproj
                       EOF 
 }
 

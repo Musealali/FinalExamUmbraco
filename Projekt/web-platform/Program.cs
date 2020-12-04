@@ -24,6 +24,7 @@ namespace web_platform
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseConfiguration(new ConfigurationBuilder().AddCommandLine(args).Build());
                 });
     }
 }

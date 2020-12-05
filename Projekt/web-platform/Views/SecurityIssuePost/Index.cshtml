@@ -2,29 +2,35 @@
 
 
 
-<div class="main">
-    <div class="input-group">
-        <p>@Model.ApplicationUser.UserName</p>
-        <div class="input-group-prepend">
-            <span class="input-group-text">Title</span>
+    <div class="main">
+        @if (User.IsInRole("Administrator") && Model.State == web_platform.Data.Models.State.NotVerified)
+        {
+            <form asp-controller="SecurityIssuePost" asp-action="ChangeSecurityIssuePostStateToVerified" method="POST" asp-route-securityIssuePostId="@Model.Id">
+                <button type="submit" class="btn btn-primary mt-2" style="float : right">Submit</button>
+            </form>
+        }
+        <div class="input-group">
+            <p>@Model.ApplicationUser.UserName</p>
+            <div class="input-group-prepend">
+                <span class="input-group-text">Title</span>
+            </div>
+            <input type="text" class="form-control" aria-label="Title" value="@Model.Title" disabled="disabled" />
         </div>
-        <input type="text" class="form-control" aria-label="Title" value="@Model.Title" disabled="disabled" />
-    </div>
 
-    <div class="input-group mt-2">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Component</span>
+        <div class="input-group mt-2">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Component</span>
+            </div>
+            <input type="text" class="form-control" aria-label="Component" value="@Model.CMSVersionNumber - @Model.CMSComponentName" disabled="disabled" />
         </div>
-        <input type="text" class="form-control" aria-label="Component" value="@Model.CMSVersionNumber - @Model.CMSComponentName" disabled="disabled" />
-    </div>
 
-    <div class="input-group mt-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text">Description</span>
+        <div class="input-group mt-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Description</span>
+            </div>
+            <textarea class="form-control" disabled="disabled" rows="4">@Model.IssueDescription</textarea>
         </div>
-        <textarea class="form-control" disabled="disabled" rows="4">@Model.IssueDescription</textarea>
     </div>
-</div>
 
 
 

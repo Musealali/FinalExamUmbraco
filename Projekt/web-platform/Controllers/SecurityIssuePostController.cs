@@ -183,6 +183,12 @@ namespace web_platform.Controllers
             return RedirectToAction("Index", "SecurityIssuePost", new { id = securityIssuePostId });
         }
 
+        [HttpPost]
+        public async Task<ActionResult> ChangeSecurityIssuePostStateToVerified (int securityIssuePostId)
+        {
+            var securityIssuePost = await _ISecurityIssuePostService.ChangeSecurityIssuePostStateToVerified(securityIssuePostId);
+            return RedirectToAction("Index", "SecurityIssuePost", new { id = securityIssuePostId });
+        }
 
 
 

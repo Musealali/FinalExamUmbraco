@@ -107,6 +107,10 @@ namespace web_platform.Controllers
 
             dynamic verifiedSecurityIssuePosts;
 
+
+            ApiConnecter apiConnecter = new ApiConnecter();
+            await apiConnecter.GetPackages();
+
             if (!string.IsNullOrEmpty(searchString))
             {
                 verifiedSecurityIssuePosts = await _ISecurityIssuePostService.GetSecurityIssuePostsBySearchString(searchString, _ISecurityIssuePostService.GetSecurityIssuePostStateVerified());

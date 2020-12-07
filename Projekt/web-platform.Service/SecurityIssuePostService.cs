@@ -59,7 +59,7 @@ namespace web_platform.Service
                 .Include(s => s.CMSComponentVersion)
                     .ThenInclude(c => c.Version)
                 .Include(s => s.ApplicationUser)
-                .Where(s => s.Id == id).FirstOrDefaultAsync();
+                .FirstOrDefaultAsync();
 
             return securityIssuePostToFind;
 
@@ -108,6 +108,23 @@ namespace web_platform.Service
                         .ToListAsync();
 
             return securityIssuePosts;
+        }
+
+        public async Task<SecurityIssuePost> ChangeSecurityIssuePostStateToVerified (int securityIssuePostId)
+        {
+            var securityIssuePostToFind = await _umbracoDbContext.SecurityIssuePosts.Where(s => s.Id == securityIssuePostId)
+                .Include(s => s.CMSComponentVersion)
+                    .ThenInclude(c => c.CMSComponent)
+                .Include(s => s.CMSComponentVersion)
+                    .ThenInclude(c => c.Version)
+                .Include(s => s.ApplicationUser)
+                .FirstOrDefaultAsync();
+            if (securityIssuePostToFind != null)
+            {
+                securityIssuePostToFind.State = State.Verified;
+                await _umbracoDbContext.SaveChangesAsync();
+            }
+            return securityIssuePostToFind;
         }
 
     }

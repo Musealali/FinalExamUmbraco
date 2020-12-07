@@ -137,7 +137,7 @@ namespace web_platform.Controllers
         }
 
 
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Create() // Responsible for returning the correct View, whenever a user WANTS to create a securityIssuePost
         {
@@ -174,6 +174,7 @@ namespace web_platform.Controllers
             return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> CreateSecurityIssueReply(int securityIssuePostId, string content) 
         {

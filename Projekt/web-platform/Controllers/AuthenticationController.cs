@@ -44,7 +44,7 @@ namespace web_platform.Controllers
 
             var referer = Request.Path;
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "SecurityIssuePost");
         }
 
 
@@ -70,7 +70,7 @@ namespace web_platform.Controllers
                 if (createResult.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, true);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "SecurityIssuePost");
                 }
             }
 
@@ -87,7 +87,7 @@ namespace web_platform.Controllers
         {
             await _signInManager.SignOutAsync();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "SecurityIssuePost");
         }
     }
 }

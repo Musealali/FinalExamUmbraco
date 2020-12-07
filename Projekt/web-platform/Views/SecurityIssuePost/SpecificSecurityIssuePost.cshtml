@@ -1,0 +1,62 @@
+﻿@model SecurityIssuePostViewModel
+
+
+
+    <div class="main">
+        @if (User.IsInRole("Administrator") && Model.State == web_platform.Data.Models.State.NotVerified)
+        {
+            <form asp-controller="SecurityIssuePost" asp-action="ChangeSecurityIssuePostStateToVerified" method="POST" asp-route-securityIssuePostId="@Model.Id">
+                <button type="submit" class="btn btn-primary mt-2" style="float : right">Verify</button>
+            </form>
+        }
+        <div class="input-group">
+            <p>@Model.ApplicationUser.UserName</p>
+            <div class="input-group-prepend">
+                <span class="input-group-text">Title</span>
+            </div>
+            <input type="text" class="form-control" aria-label="Title" value="@Model.Title" disabled="disabled" />
+        </div>
+
+        <div class="input-group mt-2">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Component</span>
+            </div>
+            <input type="text" class="form-control" aria-label="Component" value="@Model.CMSVersionNumber - @Model.CMSComponentName" disabled="disabled" />
+        </div>
+
+        <div class="input-group mt-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Description</span>
+            </div>
+            <textarea class="form-control" disabled="disabled" rows="4">@Model.IssueDescription</textarea>
+        </div>
+    </div>
+
+
+
+@if (Model.SecurityIssuePostReplies.Any())
+{
+    foreach (var reply in Model.SecurityIssuePostReplies)
+    {
+        <div class="main">
+            <div class="input-group">
+                <p>@reply.ApplicationUser.UserName</p>
+                <textarea type="text" class="form-control" aria-label="Title" disabled="disabled">@reply.Content</textarea>
+            </div>
+        </div>
+    }
+}
+
+<h1>Create Comment</h1>
+
+<form asp-controller="SecurityIssuePost" asp-action="CreateSecurityIssueReply" method="POST" asp-route-securityIssuePostId="@Model.Id">
+
+
+    <div class="form-group">
+        <label asp-for="@Model.securityIssuePostReplyViewModel.Content">Content</label>
+        <textarea asp-for="@Model.securityIssuePostReplyViewModel.Content" name="content" class="form-control" id="inputContent"></textarea>
+        <span asp-validation-for="@Model.securityIssuePostReplyViewModel.Content" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Submit</button>
+</form>

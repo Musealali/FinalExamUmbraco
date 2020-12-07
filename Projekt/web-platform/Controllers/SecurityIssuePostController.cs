@@ -32,7 +32,7 @@ namespace web_platform.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> Index(int id)
+        public async Task<IActionResult> SpecificSecurityIssuePost(int id)
         {
 
             var securityIssuePostToFind = await _ISecurityIssuePostService.GetById(id);
@@ -102,7 +102,7 @@ namespace web_platform.Controllers
             return View(securityIssuePostViewModels);
         }
 
-        public async Task<IActionResult> GetVerifiedSecurityIssuePosts(string searchString)
+        public async Task<IActionResult> Index(string searchString)
         {
 
             dynamic verifiedSecurityIssuePosts;
@@ -171,7 +171,7 @@ namespace web_platform.Controllers
 
             var applicationUser = await _userManager.GetUserAsync(User);
             var securityIssuePost = await _ISecurityIssuePostService.CreateSecurityIssuePost(securityIssuePostView.Title, securityIssuePostView.IssueDescription, cmsComponentVersion, applicationUser);
-            return RedirectToAction("Index", "SecurityIssuePost", new { id=securityIssuePost.Id });
+            return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
 
         [HttpPost]
@@ -180,14 +180,14 @@ namespace web_platform.Controllers
             var securityIssuePost = await _ISecurityIssuePostService.GetById(securityIssuePostId);
             var applicationUser = await _userManager.GetUserAsync(User);
             var securityIssuePostReply = await _ISecurityIssuePostService.CreateSecurityIssuePostReply(content, securityIssuePost, applicationUser);
-            return RedirectToAction("Index", "SecurityIssuePost", new { id = securityIssuePostId });
+            return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePostId });
         }
 
         [HttpPost]
         public async Task<ActionResult> ChangeSecurityIssuePostStateToVerified (int securityIssuePostId)
         {
             var securityIssuePost = await _ISecurityIssuePostService.ChangeSecurityIssuePostStateToVerified(securityIssuePostId);
-            return RedirectToAction("Index", "SecurityIssuePost", new { id = securityIssuePostId });
+            return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePostId });
         }
 
 

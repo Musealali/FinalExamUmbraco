@@ -6,7 +6,6 @@ namespace web_platform.Data.Models
 {
     public class OwnerInfo
     {
-        public string Contributors { get; set; }
         public int Karma { get; set; }
         public string Owner { get; set; }
         public string OwnerAvatar { get; set; }

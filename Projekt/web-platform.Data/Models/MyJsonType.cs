@@ -4,8 +4,8 @@ using System.Text;
 
 namespace web_platform.Data.Models
 {
-    public class PagedPackages
+    public class MyJsonType
     {
-        public Packages Packages { get; set; }
+        public PagedPackages PagedPackages { get; set; }
     }
 }

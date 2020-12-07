@@ -4,8 +4,8 @@ using System.Text;
 
 namespace web_platform.Data.Models
 {
-    public class PagedPackages
+    public class Packages
     {
-        public Packages Packages { get; set; }
+        public List<Package> Package { get; set; }
     }
 }

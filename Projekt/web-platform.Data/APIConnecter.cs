@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,12 +21,10 @@ namespace web_platform.Data
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(result);
             var json = JsonConvert.SerializeXmlNode(doc);
-            var data = JsonConvert.DeserializeObject<PagedPackages>(json);
-            List<string> packageNames = new List<string>();
-            foreach (Package packages in data.Packages)
-            {
-                packageNames.Add(packages.Name);
-            }
+            var data = JsonConvert.DeserializeObject<MyJsonType>(json);
+            //var myJObject = JObject.Parse(json);
+            //var myList = myJObject.SelectTokens("$.PagedPackages.Packages.Package").Value<JObject>().ToList();
+            Console.WriteLine("test");
             return json;
         }
     }

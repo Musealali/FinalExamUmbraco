@@ -11,40 +11,18 @@ resource "aws_key_pair" "deployer" {
 // The production web server
 //
 resource "aws_instance" "webserver" {
-    ami             = "ami-0bd39c806c2335b95"
+    ami             = "ami-0502e817a62226e03"
     instance_type   = "t2.micro"
-    key_name        = aws_key_pair.deployer.id
+    key_name        = "desktop-pc"
     user_data       = <<-EOF
                       #!/bin/bash
-                      sudo su
-                      yum update -y
-                      yum -y install git
-                      rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
-                      yum -y install dotnet-sdk-3.1
+                      sudo apt update
+                      sudo apt install docker.io
+                      sudo docker login -u muslimalali -p 59e41b78-3d9f-4fa7-92ae-a2425ec4bd1d
+                      sudo docker pull muslimalali/finaleexameumbraco
+                      sudo docker logout
 
-                      yum -y install httpd mod_ssl
-                      cd /etc/httpd/conf.d/
-                      touch webserver.conf
-                      
-                      echo -e "<VirtualHost *:80>" >> webserver.conf
-                      echo -e "    ProxyPreserveHost On" >> webserver.conf
-                      echo -e "    ProxyPass / http://127.0.0.1:5000/" >> webserver.conf
-                      echo -e "    ProxyPassReverse / http://127.0.0.1:5000/" >> webserver.conf
-                      echo -e "    ErrorLog /var/log/httpd/webserver-error.log" >> webserver.conf
-                      echo -e "    CustomLog /var/log/httpd/webserver-access.log common" >> webserver.conf
-                      echo -e "</VirtualHost>" >> webserver.conf
-
-                      systemctl restart httpd
-                      systemctl enable httpd
-
-                      cd /
-                      mkdir git
-                      cd git
-                      git clone https://rickifunk:Jeger3dum3@github.com/thejokerd3/FinalExamUmbraco
-                      cd FinalExamUmbraco/Projekt/web-platform
-                      sudo dotnet publish -c Release web-platform.csproj
-                      cd bin/Release/netcoreapp3.1/
-                      dotnet web-platform.dll
+                      sudo docker run --rm -p 80:80 -p 443:443 muslimalali/finaleexameumbraco
                       EOF 
 }
 

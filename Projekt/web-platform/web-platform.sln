@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "web-platform", "web-platfor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTestUmbraco", "..\XUnitTestUmbraco\XUnitTestUmbraco.csproj", "{9B72A3B8-F4D8-42D0-A4F9-5391E03198AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web-platform.Data", "..\web-platform.Data\web-platform.Data.csproj", "{B96BA1D2-A869-4E7E-9D03-DEC38804427A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "web-platform.Data", "..\web-platform.Data\web-platform.Data.csproj", "{B96BA1D2-A869-4E7E-9D03-DEC38804427A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web-platform.Service", "..\web-platform.Service\web-platform.Service.csproj", "{C1E0173E-0618-4CBD-82C5-4458591C9D80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "web-platform.Service", "..\web-platform.Service\web-platform.Service.csproj", "{C1E0173E-0618-4CBD-82C5-4458591C9D80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

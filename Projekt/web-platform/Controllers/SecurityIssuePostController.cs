@@ -143,20 +143,12 @@ namespace web_platform.Controllers
         public async Task<IActionResult> Create() // Responsible for returning the correct View, whenever a user WANTS to create a securityIssuePost
         {
             var cms =  await _ICMSComponentService.GetCMSComponentsByType(_ICMSComponentService.GetComponentTypeCMS());
-            var packages = await _ICMSComponentService.GetCMSComponentsByType(_ICMSComponentService.GetComponentTypePackage());
-            var formsVersions = await _IComponentVersionService.GetComponentVersionByComponentName("Forms");
-            var uSyncVersions = await _IComponentVersionService.GetComponentVersionByComponentName("uSync");
             var umbracoCMSVersions = await _IComponentVersionService.GetComponentVersionByComponentName("Umbraco CMS");
-            var umbracoUNOVersions = await _IComponentVersionService.GetComponentVersionByComponentName("Umbraco UNO");
-            var umbracoHeartcoreVersions = await _IComponentVersionService.GetComponentVersionByComponentName("Umbraco Heartcore");
+
 
             ViewBag.MultipleCMS = cms;
-            ViewBag.Packages = packages;
-            ViewBag.FormsVersions = formsVersions;
-            ViewBag.USyncVersions = uSyncVersions;
             ViewBag.UmbracoCMSVersions = umbracoCMSVersions;
-            ViewBag.UmbracoUNOVersions = umbracoUNOVersions;
-            ViewBag.UmbracoHeartcoreVersions = umbracoHeartcoreVersions;
+
 
             return View();
         }

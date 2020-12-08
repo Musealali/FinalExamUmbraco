@@ -29,6 +29,7 @@ namespace web_platform.Controllers
             _IComponentVersionService = componentVersionService;
             _ICMSComponentVersionService = cmsComponentVersionService;
             _userManager = userManager;
+
         }
         
         [HttpGet]

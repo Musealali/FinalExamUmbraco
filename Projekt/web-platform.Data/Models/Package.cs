@@ -9,7 +9,6 @@ namespace web_platform.Data.Models
         public string Category { get; set; }
         public string Created { get; set; }
         public int Downloads { get; set; }
-        public string Excerpt { get; set; }
         public string Icon { get; set; }
         public string Id { get; set; }
         public string Image { get; set; }

@@ -5,52 +5,8 @@
 
 }
 <script>
-    function dynamicdropdowncomponent(listindex) {
-        const nameSelect = document.getElementById("cms")
-        while (nameSelect.options.length > 0) {
-            nameSelect.remove(0);
-        }
-        switch (listindex) {
-            case "cms":
-                nameSelect.options[0] = new Option("Select CMS", "");
-                nameSelect.options[0].disabled = true;
-                $('#cms').removeClass("d-none")
-                $('#package').addClass("d-none");
-                $('#PackageVersionNumber').addClass("d-none")
-                @foreach (web_platform.Data.Models.CMSComponent cms in ViewBag.MultipleCMS)
-                {
-                    <text>nameSelect.add(new Option("@cms.Name", "@cms.Name"));</text>
-                }
-                break;
-            case "package":
-                $('#cms').addClass("d-none")
-                $('#package').removeClass("d-none")
-                $('#CMSVersionNumber').addClass("d-none")
-                $('#PackageVersionNumber').removeClass("d-none")
-                break;
-        }
-        return true;
-    }
-    function dynamicdropdownversion(listindex) {
-        const nameSelect = document.getElementById("CMSVersionNumber")
-        while (nameSelect.options.length > 0) {
-        nameSelect.remove(0);
-        }
-        switch (listindex) {
-            case "Umbraco CMS":
-                nameSelect.options[0] = new Option("Select Version", "");
-                nameSelect.options[0].disabled = true;
-                $('#CMSVersionNumber').removeClass("d-none")
-                @foreach (web_platform.Data.Models.ComponentVersion umbracoCMSVersion in ViewBag.UmbracoCMSVersions)
-                {
-                    <text>nameSelect.add(new Option("@umbracoCMSVersion.VersionNumber", "@umbracoCMSVersion.VersionNumber"));</text>
-                }
-                break;
-        }
-        return true;
-    }
     $(function () {
-            $("#package").autocomplete({
+            $("#ComponentName").autocomplete({
                 source: function (request, response) {
                     $.ajax({
                         url: "https://our.umbraco.com/webapi/packages/v1",
@@ -60,7 +16,7 @@
                             pageSize: 20,
                             category: "",
                             query: request.term,
-                            order: "Default"
+                            order: "Popular"
                         },
                         success: function (data) { 
                             var arrayout = [];
@@ -98,10 +54,10 @@
         <option value="package">Package</option>
         <option value="cms">CMS</option>
     </select>
-    <select class="form-control mt-2 d-none" name="cms" id="cms" onchange="dynamicdropdownversion(this.options[this.selectedIndex].value);"><option disabled selected>Select status</option></select>
-    <select class="form-control mt-2 d-none" name="CMSVersionNumber" id="CMSVersionNumber"><option disabled selected>Select status</option></select>
-    <input class="form-control mt-2 d-none" id="package" type="text" name="package" placeholder="Packages">
-    <input class="form-control mt-2 d-none" id="PackageVersionNumber" type="text" name="PackageVersionNumber" placeholder="Version">
+    <select class="form-control mt-2 d-none" name="ComponentName" id="cms" onchange="dynamicdropdownversion(this.options[this.selectedIndex].value);"><option disabled selected>Select status</option></select>
+    <select class="form-control mt-2 d-none" name="ComponentVersion" id="CMSVersionNumber"><option disabled selected>Select status</option></select>
+    <input class="form-control mt-2 d-none" id="ComponentName" type="text" name="ComponentName" placeholder="Packages">
+    <input class="form-control mt-2 d-none" id="PackageVersionNumber" type="text" name="ComponentVersion" placeholder="Version">
     <button type="submit" class="btn btn-primary mt-2">Submit</button>
 </form>
 

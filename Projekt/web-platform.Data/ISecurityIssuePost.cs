@@ -11,7 +11,7 @@ namespace web_platform.Data
     {
         Task<SecurityIssuePost> GetById(int id);
 
-        Task<SecurityIssuePost> CreateSecurityIssuePost(string title, string issueDescription, CMSComponentVersion cmsComponentVersion, ApplicationUser applicationUser);
+        Task<SecurityIssuePost> CreateSecurityIssuePost(string title, string issueDescription, string componentName, string componentVersion, ApplicationUser applicationUser);
         Task<SecurityIssuePostReply> CreateSecurityIssuePostReply(string content, SecurityIssuePost securityIssuePost, ApplicationUser applicationUser);
 
         Task<List<SecurityIssuePost>> GetSecurityIssuePostsByState(State state);

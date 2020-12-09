@@ -17,17 +17,11 @@ namespace web_platform.Controllers
     public class SecurityIssuePostController : Controller
     {
         private readonly ISecurityIssuePost _ISecurityIssuePostService;
-        private readonly ICMSComponent _ICMSComponentService;
-        private readonly IComponentVersion _IComponentVersionService;
-        private readonly ICMSComponentVersion _ICMSComponentVersionService;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public SecurityIssuePostController(ISecurityIssuePost securityIssuePostService, ICMSComponent cmsComponentService, IComponentVersion componentVersionService, ICMSComponentVersion cmsComponentVersionService, UserManager<ApplicationUser> userManager)
+        public SecurityIssuePostController(ISecurityIssuePost securityIssuePostService, UserManager<ApplicationUser> userManager)
         {
             _ISecurityIssuePostService = securityIssuePostService;
-            _ICMSComponentService = cmsComponentService;
-            _IComponentVersionService = componentVersionService;
-            _ICMSComponentVersionService = cmsComponentVersionService;
             _userManager = userManager;
 
         }
@@ -58,8 +52,8 @@ namespace web_platform.Controllers
                 Id = securityIssuePostToFind.Id,
                 Title = securityIssuePostToFind.Title,
                 IssueDescription = securityIssuePostToFind.IssueDescription,
-                CMSComponentName = securityIssuePostToFind.CMSComponentVersion.CMSComponent.Name,
-                CMSVersionNumber = securityIssuePostToFind.CMSComponentVersion.Version.VersionNumber,
+                ComponentName = securityIssuePostToFind.ComponentName,
+                ComponentVersion = securityIssuePostToFind.ComponentVersion,
                 State = securityIssuePostToFind.State,
                 SecurityIssuePostReplies = securityRepliesModels,
                 ApplicationUser = securityIssuePostToFind.ApplicationUser
@@ -92,8 +86,8 @@ namespace web_platform.Controllers
                     Id = nonVerifiedSecurityIssuePost.Id,
                     Title = nonVerifiedSecurityIssuePost.Title,
                     IssueDescription = nonVerifiedSecurityIssuePost.IssueDescription,
-                    CMSComponentName = nonVerifiedSecurityIssuePost.CMSComponentVersion.CMSComponent.Name,
-                    CMSVersionNumber = nonVerifiedSecurityIssuePost.CMSComponentVersion.Version.VersionNumber,
+                    ComponentName = nonVerifiedSecurityIssuePost.ComponentName,
+                    ComponentVersion = nonVerifiedSecurityIssuePost.ComponentVersion,
                     State = nonVerifiedSecurityIssuePost.State
                 };
 
@@ -126,8 +120,8 @@ namespace web_platform.Controllers
                     Id = verifiedSecurityIssuePost.Id,
                     Title = verifiedSecurityIssuePost.Title,
                     IssueDescription = verifiedSecurityIssuePost.IssueDescription,
-                    CMSComponentName = verifiedSecurityIssuePost.CMSComponentVersion.CMSComponent.Name,
-                    CMSVersionNumber = verifiedSecurityIssuePost.CMSComponentVersion.Version.VersionNumber,
+                    ComponentName = verifiedSecurityIssuePost.ComponentName,
+                    ComponentVersion = verifiedSecurityIssuePost.ComponentVersion,
                     State = verifiedSecurityIssuePost.State
                 };
 
@@ -142,14 +136,6 @@ namespace web_platform.Controllers
         [HttpGet]
         public async Task<IActionResult> Create() // Responsible for returning the correct View, whenever a user WANTS to create a securityIssuePost
         {
-            var cms =  await _ICMSComponentService.GetCMSComponentsByType(_ICMSComponentService.GetComponentTypeCMS());
-            var umbracoCMSVersions = await _IComponentVersionService.GetComponentVersionByComponentName("Umbraco CMS");
-
-
-            ViewBag.MultipleCMS = cms;
-            ViewBag.UmbracoCMSVersions = umbracoCMSVersions;
-
-
             return View();
         }
 
@@ -158,12 +144,8 @@ namespace web_platform.Controllers
         {
             if (!ModelState.IsValid) { return RedirectToAction("Index", securityIssuePostView);}
 
-            var cmsComponentVersion = await _ICMSComponentVersionService.GetCMSComponentVersion(securityIssuePostView.CMSComponentName, securityIssuePostView.CMSVersionNumber, securityIssuePostView.ComponentType);
-
-            if (cmsComponentVersion == null) { return NotFound(); }
-
             var applicationUser = await _userManager.GetUserAsync(User);
-            var securityIssuePost = await _ISecurityIssuePostService.CreateSecurityIssuePost(securityIssuePostView.Title, securityIssuePostView.IssueDescription, cmsComponentVersion, applicationUser);
+            var securityIssuePost = await _ISecurityIssuePostService.CreateSecurityIssuePost(securityIssuePostView.Title, securityIssuePostView.IssueDescription, securityIssuePostView.ComponentName, securityIssuePostView.ComponentVersion, applicationUser);
             return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
 
@@ -174,14 +156,14 @@ namespace web_platform.Controllers
             var securityIssuePost = await _ISecurityIssuePostService.GetById(securityIssuePostId);
             var applicationUser = await _userManager.GetUserAsync(User);
             var securityIssuePostReply = await _ISecurityIssuePostService.CreateSecurityIssuePostReply(content, securityIssuePost, applicationUser);
-            return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePostId });
+            return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePostReply.Id });
         }
 
         [HttpPost]
         public async Task<ActionResult> ChangeSecurityIssuePostStateToVerified (int securityIssuePostId)
         {
             var securityIssuePost = await _ISecurityIssuePostService.ChangeSecurityIssuePostStateToVerified(securityIssuePostId);
-            return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePostId });
+            return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePost.Id });
         }
 
 

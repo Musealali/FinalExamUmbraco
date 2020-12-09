@@ -131,3 +131,46 @@ function xmlToJson(xml) {
     }
     return obj;
 };
+function dynamicdropdowncomponent(listindex) {
+    const nameSelect = document.getElementById("cms")
+    while (nameSelect.options.length > 0) {
+        nameSelect.remove(0);
+    }
+    switch (listindex) {
+        case "cms":
+            nameSelect.options[0] = new Option("Select CMS", "");
+            nameSelect.options[0].disabled = true;
+            $('#cms').removeClass("d-none")
+            $('#ComponentName').addClass("d-none");
+            $('#PackageVersionNumber').addClass("d-none")
+            nameSelect.options[1] = new Option("Umbraco CMS", "Umbraco CMS")
+            break;
+        case "package":
+            $('#cms').addClass("d-none")
+            $('#ComponentName').removeClass("d-none")
+            $('#CMSVersionNumber').addClass("d-none")
+            $('#PackageVersionNumber').removeClass("d-none")
+            break;
+    }
+    return true;
+}
+function dynamicdropdownversion(listindex) {
+    const nameSelect = document.getElementById("CMSVersionNumber")
+    while (nameSelect.options.length > 0) {
+        nameSelect.remove(0);
+    }
+    switch (listindex) {
+        case "Umbraco CMS":
+            nameSelect.options[0] = new Option("Select Version", "");
+            nameSelect.options[0].disabled = true;
+            $('#CMSVersionNumber').removeClass("d-none")
+            nameSelect.options[1] = new Option("1.0.1")
+            nameSelect.options[2] = new Option("2.1.1")
+            nameSelect.options[3] = new Option("3.2.1")
+            nameSelect.options[4] = new Option("4.3.2")
+            nameSelect.options[5] = new Option("5.6.7")
+            nameSelect.options[6] = new Option("8.2.1")
+            break;
+    }
+    return true;
+}

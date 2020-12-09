@@ -1,90 +1,44 @@
 ﻿@model SecurityIssuePostViewModel
-
+@using web_platform.Controllers
 @{
     ViewData["Title"] = "Create";
 
 }
 <script>
-    function dynamicdropdowncomponent(listindex) {
-        const nameSelect = document.getElementById("CMSComponentName")
-        while (nameSelect.options.length > 0) {
-        nameSelect.remove(0);
-        }
-        switch (listindex) {
-            case "cms":
-                nameSelect.options[0] = new Option("Select CMS", "");
-                nameSelect.options[0].disabled = true;
-                @foreach (web_platform.Data.Models.CMSComponent cms in ViewBag.MultipleCMS)
-                {
-                    <text>nameSelect.add(new Option("@cms.Name", "@cms.Name"));</text>
-                }
-                break;
-            case "package":
-                nameSelect.options[0] = new Option("Select Package", "");
-                nameSelect.options[0].disabled = true;
-                @foreach (web_platform.Data.Models.CMSComponent package in ViewBag.Packages)
-                {
-                    <text>nameSelect.add(new Option("@package.Name", "@package.Name"));</text>
-                }
-                break;
-        }
-        return true;
-    }
-    function dynamicdropdownversion(listindex) {
-        const nameSelect = document.getElementById("CMSVersionNumber")
-        while (nameSelect.options.length > 0) {
-        nameSelect.remove(0);
-        }
-        switch (listindex) {
-            case "Forms":
-                nameSelect.options[0] = new Option("Select Version", "");
-                nameSelect.options[0].disabled = true;
-                @foreach (web_platform.Data.Models.ComponentVersion formsVersion in ViewBag.FormsVersions)
-                {
-                    <text>nameSelect.add(new Option("@formsVersion.VersionNumber", "@formsVersion.VersionNumber"));</text>
-                }
-                break;
-            case "uSync":
-                nameSelect.options[0] = new Option("Select Version", "");
-                nameSelect.options[0].disabled = true;
-                @foreach (web_platform.Data.Models.ComponentVersion uSyncVersion in ViewBag.USyncVersions)
-                {
-                    <text>nameSelect.add(new Option("@uSyncVersion.VersionNumber", "@uSyncVersion.VersionNumber"));</text>
-                }
-                break;
-            case "Umbraco CMS":
-                nameSelect.options[0] = new Option("Select Version", "");
-                nameSelect.options[0].disabled = true;
-                @foreach (web_platform.Data.Models.ComponentVersion umbracoCMSVersion in ViewBag.UmbracoCMSVersions)
-                {
-                    <text>nameSelect.add(new Option("@umbracoCMSVersion.VersionNumber", "@umbracoCMSVersion.VersionNumber"));</text>
-                }
-                break;
-            case "Umbraco Heartcore":
-                nameSelect.options[0] = new Option("Select Version", "");
-                nameSelect.options[0].disabled = true;
-                @foreach (web_platform.Data.Models.ComponentVersion umbracoHeartcoreVersion in ViewBag.UmbracoHeartcoreVersions)
-                {
-                    <text>nameSelect.add(new Option("@umbracoHeartcoreVersion.VersionNumber", "@umbracoHeartcoreVersion.VersionNumber"));</text>
-                }
-                break;
-            case "Umbraco UNO":
-                nameSelect.options[0] = new Option("Select Version", "");
-                nameSelect.options[0].disabled = true;
-                @foreach (web_platform.Data.Models.ComponentVersion umbracoUNOVersion in ViewBag.UmbracoUNOVersions)
-                {
-                    <text>nameSelect.add(new Option("@umbracoUNOVersion.VersionNumber", "@umbracoUNOVersion.VersionNumber"));</text>
-                }
-                break;
-        }
-        return true;
-    }
+    $(function () {
+            $("#ComponentName").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "https://our.umbraco.com/webapi/packages/v1",
+                        dataType: "xml",
+                        data: {
+                            pageIndex: 0,
+                            pageSize: 200,
+                            category: "",
+                            query: request.term,
+                            order: "default"
+                        },
+                        success: function (data) { 
+                            var arrayout = [];
+                            var jsonText = JSON.stringify(xmlToJson($(data)[0]));
+                            var jsonData = JSON.parse(jsonText);
+                            for (var i = 0; i < jsonData.PagedPackages.Packages.Package.length; i++) {
+                                if (jsonData.PagedPackages.Packages.Package[i].Name["#text"].toLowerCase().indexOf(request.term) >= 0) {
+                                    console.log(request.term)
+                                    arrayout.push(jsonData.PagedPackages.Packages.Package[i].Name["#text"])
+                                }
+                            }
+                            response(arrayout);
+                        }
+                    });
+                },
+                minLength: 1,
+            });
+        });
 </script>
-
 <h1>Create Security issue post</h1>
 
 <form asp-controller="SecurityIssuePost" asp-action="Create" method="POST">
-
 
     <div class="form-group">
         <label asp-for="Title">Title</label>
@@ -94,7 +48,7 @@
 
     <div class="form-group">
         <label asp-for="IssueDescription">Description</label>
-        <textarea  asp-for="IssueDescription" name="IssueDescription" class="form-control" id="InputIssueDescription" placeholder="Insert a description of the issue" rows="4"></textarea>
+        <textarea asp-for="IssueDescription" name="IssueDescription" class="form-control" id="InputIssueDescription" placeholder="Insert a description of the issue" rows="4"></textarea>
         <span asp-validation-for="IssueDescription" class="text-danger"></span>
     </div>
 
@@ -103,17 +57,13 @@
         <option value="package">Package</option>
         <option value="cms">CMS</option>
     </select>
-    <script type="text/javascript" language="JavaScript">
-        document.write('<select class="form-control mt-2" name="CMSComponentName" id="CMSComponentName" onchange="dynamicdropdownversion(this.options[this.selectedIndex].value);"><option disabled selected>Select status</option></select>')
-    </script>
-    <script type="text/javascript" language="JavaScript">
-        document.write('<select class="form-control mt-2" name="CMSVersionNumber" id="CMSVersionNumber"><option disabled selected>Select status</option></select>')
-    </script>
-
+    <select class="form-control mt-2 d-none" name="ComponentName" id="cms" onchange="dynamicdropdownversion(this.options[this.selectedIndex].value);"><option disabled selected>Select status</option></select>
+    <select class="form-control mt-2 d-none" name="ComponentVersion" id="CMSVersionNumber"><option disabled selected>Select status</option></select>
+    <input class="form-control mt-2 d-none" id="ComponentName" type="text" name="ComponentName" placeholder="Packages">
+    <input class="form-control mt-2 d-none" id="PackageVersionNumber" type="text" name="ComponentVersion" placeholder="Version">
     <button type="submit" class="btn btn-primary mt-2">Submit</button>
 </form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-

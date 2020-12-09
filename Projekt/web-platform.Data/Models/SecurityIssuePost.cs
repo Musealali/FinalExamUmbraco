@@ -15,9 +15,8 @@ namespace web_platform.Data.Models
         public string Title { get; set; }
         [Required]
         public string IssueDescription { get; set; }
-
-        // Navigation Properties - Used by DBContext when 'GETTING' entities
-        public CMSComponentVersion CMSComponentVersion { get; set; }
+        public string ComponentName { get; set; }
+        public string ComponentVersion { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
 
         public State State { get; set; }

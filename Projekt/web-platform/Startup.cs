@@ -58,11 +58,6 @@ namespace web_platform
             {
                 options.LoginPath = "/Authentication/Login";
             });
-            
-       
-            services.AddScoped<ICMSComponent, CMSComponentService>();
-            services.AddScoped<IComponentVersion, ComponentVersionService>();
-            services.AddScoped<ICMSComponentVersion, CMSComponentVersionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,7 +72,7 @@ namespace web_platform
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/SecurityIssuePost/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -94,7 +89,7 @@ namespace web_platform
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=SecurityIssuePost}/{action=Index}/{id?}");
             });
         }
     }

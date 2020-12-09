@@ -18,14 +18,15 @@ namespace web_platform.Service
         }
 
 
-        public async Task<SecurityIssuePost> CreateSecurityIssuePost(string title, string issueDescription, CMSComponentVersion cmsComponentVersion, ApplicationUser applicationUser)
+        public async Task<SecurityIssuePost> CreateSecurityIssuePost(string title, string issueDescription, string componentName, string componentVersion, ApplicationUser applicationUser)
         {
 
             SecurityIssuePost securityIssuePost = new SecurityIssuePost()
             {
                 Title = title,
                 IssueDescription = issueDescription,
-                CMSComponentVersion = cmsComponentVersion,
+                ComponentName = componentName,
+                ComponentVersion = componentVersion,
                 ApplicationUser = applicationUser,
                 State = State.NotVerified
             };
@@ -54,10 +55,6 @@ namespace web_platform.Service
         public async Task<SecurityIssuePost> GetById(int id)
         {
             var securityIssuePostToFind = await _umbracoDbContext.SecurityIssuePosts.Where(s => s.Id == id)
-                .Include(s => s.CMSComponentVersion)
-                    .ThenInclude(c => c.CMSComponent)
-                .Include(s => s.CMSComponentVersion)
-                    .ThenInclude(c => c.Version)
                 .Include(s => s.ApplicationUser)
                 .FirstOrDefaultAsync();
 
@@ -68,10 +65,6 @@ namespace web_platform.Service
         public async Task<List<SecurityIssuePost>> GetSecurityIssuePostsByState(State state)
         {
             var securityIssuePosts = await _umbracoDbContext.SecurityIssuePosts.Where(s => s.State == state)
-                .Include(s => s.CMSComponentVersion)
-                    .ThenInclude(c => c.CMSComponent)
-                .Include(s => s.CMSComponentVersion)
-                    .ThenInclude(c => c.Version)
                 .Include(s => s.ApplicationUser)
                 .ToListAsync();
 
@@ -101,10 +94,6 @@ namespace web_platform.Service
         public async Task<List<SecurityIssuePost>> GetSecurityIssuePostsBySearchString(string searchString, State state)
         {
             var securityIssuePosts = await _umbracoDbContext.SecurityIssuePosts.Where(s => s.Title.Contains(searchString) && s.State == state)
-                .Include(s => s.CMSComponentVersion)
-                        .ThenInclude(c => c.CMSComponent)
-                    .Include(s => s.CMSComponentVersion)
-                        .ThenInclude(c => c.Version)
                         .ToListAsync();
 
             return securityIssuePosts;
@@ -113,10 +102,6 @@ namespace web_platform.Service
         public async Task<SecurityIssuePost> ChangeSecurityIssuePostStateToVerified (int securityIssuePostId)
         {
             var securityIssuePostToFind = await _umbracoDbContext.SecurityIssuePosts.Where(s => s.Id == securityIssuePostId)
-                .Include(s => s.CMSComponentVersion)
-                    .ThenInclude(c => c.CMSComponent)
-                .Include(s => s.CMSComponentVersion)
-                    .ThenInclude(c => c.Version)
                 .Include(s => s.ApplicationUser)
                 .FirstOrDefaultAsync();
             if (securityIssuePostToFind != null)

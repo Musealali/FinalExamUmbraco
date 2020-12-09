@@ -14,10 +14,17 @@ resource "aws_instance" "webserver" {
     ami             = "ami-0502e817a62226e03"
     instance_type   = "t2.micro"
     key_name        = "desktop-pc"
+
+    tags = {
+      "Name"        = "web-platform-production"
+      "managed_by"  = "terraform"
+      "environment" = "production"
+    }
+
     user_data       = <<-EOF
                       #!/bin/bash
                       sudo apt update
-                      sudo apt install docker.io
+                      sudo apt install docker.io -y
                       sudo docker login -u muslimalali -p 59e41b78-3d9f-4fa7-92ae-a2425ec4bd1d
                       sudo docker pull muslimalali/finaleexameumbraco
                       sudo docker logout

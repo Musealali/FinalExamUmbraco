@@ -23,10 +23,10 @@
                             var jsonText = JSON.stringify(xmlToJson($(data)[0]));
                             var jsonData = JSON.parse(jsonText);
                             for (var i = 0; i < jsonData.PagedPackages.Packages.Package.length; i++) {
-                                if (jsonData.PagedPackages.Packages.Package[i].Name["#text"].toLowerCase().indexOf(request.term) >= 0) {
+                                 
                                     console.log(request.term)
                                     arrayout.push(jsonData.PagedPackages.Packages.Package[i].Name["#text"])
-                                }
+                                
                             }
                             response(arrayout);
                         }

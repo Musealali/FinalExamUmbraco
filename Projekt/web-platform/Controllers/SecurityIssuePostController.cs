@@ -156,7 +156,7 @@ namespace web_platform.Controllers
             var securityIssuePost = await _ISecurityIssuePostService.GetById(securityIssuePostId);
             var applicationUser = await _userManager.GetUserAsync(User);
             var securityIssuePostReply = await _ISecurityIssuePostService.CreateSecurityIssuePostReply(content, securityIssuePost, applicationUser);
-            return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePostReply.Id });
+            return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePostId });
         }
 
         [HttpPost]

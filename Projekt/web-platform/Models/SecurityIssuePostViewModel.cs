@@ -15,6 +15,7 @@ namespace web_platform.Models
         public State State { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
         public List<IFormFile> Files { get; set; }
+        public List<UserFile> Attachments { get; set; }
 
         public List<SecurityIssuePostReplyViewModel> SecurityIssuePostReplies { get; set; }
         public SecurityIssuePostReplyViewModel securityIssuePostReplyViewModel { get; set; }

@@ -2,43 +2,57 @@
 
 
 
-    <div class="main">
-        @if (User.IsInRole("Administrator") && Model.State == web_platform.Data.Models.State.NotVerified)
-        {
-            <form asp-controller="SecurityIssuePost" asp-action="ChangeSecurityIssuePostStateToVerified" method="POST" asp-route-securityIssuePostId="@Model.Id">
-                <button type="submit" class="btn btn-primary mt-2" style="float : right">Verify</button>
-            </form>
-        }
-        <div class="input-group">
-            <p>@Model.ApplicationUser.UserName</p>
-            <div class="input-group-prepend">
-                <span class="input-group-text">Title</span>
-            </div>
-            <input type="text" class="form-control" aria-label="Title" value="@Model.Title" disabled="disabled" />
+<div class="main">
+    @if (User.IsInRole("Administrator") && Model.State == web_platform.Data.Models.State.NotVerified)
+    {
+        <form asp-controller="SecurityIssuePost" asp-action="ChangeSecurityIssuePostStateToVerified" method="POST" asp-route-securityIssuePostId="@Model.Id">
+            <button type="submit" class="btn btn-primary mt-2" style="float : right">Verify</button>
+        </form>
+    }
+    <div class="input-group">
+        <p>@Model.ApplicationUser.UserName</p>
+        <div class="input-group-prepend">
+            <span class="input-group-text">Title</span>
         </div>
-
-        <div class="input-group mt-2">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Component</span>
-            </div>
-            <input type="text" class="form-control" aria-label="Component" value="@Model.ComponentName - @Model.ComponentVersion" disabled="disabled" />
-        </div>
-
-        <div class="input-group mt-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Description</span>
-            </div>
-            <textarea class="form-control" disabled="disabled" rows="4">@Model.IssueDescription</textarea>
-        </div>
+        <input type="text" class="form-control" aria-label="Title" value="@Model.Title" disabled="disabled" />
     </div>
+
+    <div class="input-group mt-2">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Component</span>
+        </div>
+        <input type="text" class="form-control" aria-label="Component" value="@Model.ComponentName - @Model.ComponentVersion" disabled="disabled" />
+    </div>
+
+    <div class="input-group mt-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Description</span>
+        </div>
+        <textarea class="form-control" disabled="disabled" rows="4">@Model.IssueDescription</textarea>
+    </div>
+
+    <div class="mt-3">
+        <h3>Attachments</h3>
+        @if(Model.Attachments.Any())
+        {
+            <ul>
+            @foreach (var attachment in Model.Attachments)
+            {
+                <li>@attachment.FilePath</li>
+            }
+            </ul>
+        }
+    </div>
+</div>
 
 
 
 @if (Model.SecurityIssuePostReplies.Any())
 {
-    foreach (var reply in Model.SecurityIssuePostReplies)
+    <h3 class="mt-3">Comments</h3>
+    @foreach (var reply in Model.SecurityIssuePostReplies)
     {
-        <div class="main">
+        <div class="main mt-2">
             <div class="input-group">
                 <p>@reply.ApplicationUser.UserName</p>
                 <textarea type="text" class="form-control" aria-label="Title" disabled="disabled">@reply.Content</textarea>
@@ -47,7 +61,7 @@
     }
 }
 
-<h1>Create Comment</h1>
+<h3 class="mt-5">Create Comment</h3>
 
 <form asp-controller="SecurityIssuePost" asp-action="CreateSecurityIssueReply" method="POST" asp-route-securityIssuePostId="@Model.Id">
 

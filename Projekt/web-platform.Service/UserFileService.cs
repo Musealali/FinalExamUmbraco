@@ -25,6 +25,11 @@ namespace web_platform.Service
             return await _umbracoDbContext.UserFiles.Where(u => u.Id == id).FirstOrDefaultAsync();
         }
 
+        public async Task<List<UserFile>> GetBySecurityIssuePostId(int securityIssuePostId)
+        {
+            return await _umbracoDbContext.UserFiles.Where(u => u.SecurityIssuePost.Id == securityIssuePostId).ToListAsync();
+        }
+
         public async Task Create(List<IFormFile> files, SecurityIssuePost securityIssuePost)
         {
             var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "userfiles");

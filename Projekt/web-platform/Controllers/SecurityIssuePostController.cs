@@ -34,7 +34,7 @@ namespace web_platform.Controllers
 
             var securityIssuePostToFind = await _ISecurityIssuePostService.GetById(id);
             var securityIssuePostReplies = await _ISecurityIssuePostService.GetSecurityIssuePostsReplies(id);
-
+            var attachments = await _userFileService.GetBySecurityIssuePostId(securityIssuePostToFind.Id);
             var securityRepliesModels = new List<SecurityIssuePostReplyViewModel>();
 
             foreach (SecurityIssuePostReply securityIssuePostReply in securityIssuePostReplies)
@@ -58,7 +58,8 @@ namespace web_platform.Controllers
                 ComponentVersion = securityIssuePostToFind.ComponentVersion,
                 State = securityIssuePostToFind.State,
                 SecurityIssuePostReplies = securityRepliesModels,
-                ApplicationUser = securityIssuePostToFind.ApplicationUser
+                ApplicationUser = securityIssuePostToFind.ApplicationUser,
+                Attachments = attachments
             };
 
             if (model == null) { return View(NotFound()); }

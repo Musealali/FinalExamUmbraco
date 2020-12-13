@@ -10,6 +10,7 @@ namespace web_platform.Data
     public interface IUserFile
     {
         Task<UserFile> GetById(int id);
+        Task<List<UserFile>> GetBySecurityIssuePostId(int securityIssuePostId);
         Task Create(List<IFormFile> files, SecurityIssuePost securityIssuePost);
     }
 }

@@ -42,8 +42,10 @@ namespace web_platform
             if (WebHostEnvironment.IsProduction())
                 services.AddDbContext<UmbracoDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("prod")));
 
+
             //Add application services.
             services.AddScoped<ISecurityIssuePost, SecurityIssuePostService>();
+            services.AddScoped<IUserFile, UserFileService>();
 
 
             // Add Identity to the project with the specified custom User & Role

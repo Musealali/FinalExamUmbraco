@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using web_platform.Data.Models;
 
 namespace web_platform.Models
@@ -13,7 +14,8 @@ namespace web_platform.Models
         public string ComponentType { get; set; }
         public State State { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
-        
+        public List<IFormFile> Files { get; set; }
+
         public List<SecurityIssuePostReplyViewModel> SecurityIssuePostReplies { get; set; }
         public SecurityIssuePostReplyViewModel securityIssuePostReplyViewModel { get; set; }
        

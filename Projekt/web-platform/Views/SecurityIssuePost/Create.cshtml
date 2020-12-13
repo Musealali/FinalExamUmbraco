@@ -38,7 +38,7 @@
 </script>
 <h1>Create Security issue post</h1>
 
-<form asp-controller="SecurityIssuePost" asp-action="Create" method="POST">
+<form asp-controller="SecurityIssuePost" asp-action="Create" method="POST" enctype="multipart/form-data">
 
     <div class="form-group">
         <label asp-for="Title">Title</label>
@@ -61,6 +61,10 @@
     <select class="form-control mt-2 d-none" name="ComponentVersion" id="CMSVersionNumber"><option disabled selected>Select status</option></select>
     <input class="form-control mt-2 d-none" id="ComponentName" type="text" name="ComponentName" placeholder="Packages">
     <input class="form-control mt-2 d-none" id="PackageVersionNumber" type="text" name="ComponentVersion" placeholder="Version">
+    <div class="custom-file mt-2">
+        <input class="custom-file-input" type="file" id="customFile" name="Files" multiple>
+        <label class="custom-file-label">Choose file(s)</label>
+    </div>
     <button type="submit" class="btn btn-primary mt-2">Submit</button>
 </form>
 

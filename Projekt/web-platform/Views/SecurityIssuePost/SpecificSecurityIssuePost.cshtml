@@ -2,7 +2,6 @@
 
 <form asp-controller="SecurityIssuePost" asp-action="DeleteSecurityIssuePost" method="POST" asp-route-securityIssuePostId="@Model.Id">
     <input type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete?')" value="Delete"/>
-    <button asp-page-handler="Delete" type="submit" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-danger btn-sm">Delete</button>
 </form>
 
     <div class="main">

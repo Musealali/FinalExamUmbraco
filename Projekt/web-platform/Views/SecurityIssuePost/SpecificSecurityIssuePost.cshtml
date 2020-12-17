@@ -1,6 +1,8 @@
 ﻿@model SecurityIssuePostViewModel
 
-
+<form asp-controller="SecurityIssuePost" asp-action="DeleteSecurityIssuePost" method="POST" asp-route-securityIssuePostId="@Model.Id">
+    <button asp-page-handler="Delete"  onclick="return confirm('Are you sure you want to delete?')" class="btn btn-danger btn-sm">Delete</button>
+</form>
 
     <div class="main">
         @if (User.IsInRole("Administrator") && Model.State == web_platform.Data.Models.State.NotVerified)

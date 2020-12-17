@@ -22,6 +22,7 @@ namespace web_platform.Data
         State GetSecurityIssuePostStateNotVerified();
         Task<List<SecurityIssuePost>> GetSecurityIssuePostsBySearchString(string searchString, State state);
         Task<SecurityIssuePost> ChangeSecurityIssuePostStateToVerified(int securityIssuePostId);
+        Task DeleteSecurityIssuePost(int securityIssuePostId);
 
     }
 }

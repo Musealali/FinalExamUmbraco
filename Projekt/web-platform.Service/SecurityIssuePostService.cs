@@ -115,8 +115,11 @@ namespace web_platform.Service
         public async Task DeleteSecurityIssuePost(int securityIssuePostId)
         {
             var securityIssuePost = await _umbracoDbContext.SecurityIssuePosts.FindAsync(securityIssuePostId);
-            _umbracoDbContext.Remove(securityIssuePost);
-            await _umbracoDbContext.SaveChangesAsync();
+            if(securityIssuePost != null)
+            {
+                _umbracoDbContext.Remove(securityIssuePost);
+                await _umbracoDbContext.SaveChangesAsync();
+            }
         }
     }
 }

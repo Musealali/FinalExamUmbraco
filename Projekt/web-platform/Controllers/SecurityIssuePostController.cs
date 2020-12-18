@@ -171,6 +171,13 @@ namespace web_platform.Controllers
             return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePost.Id });
         }
 
+        [HttpPost]
+        public async Task<ActionResult> DeleteSecurityIssuePost(int securityIssuePostId)
+        {
+            await _ISecurityIssuePostService.DeleteSecurityIssuePost(securityIssuePostId);
+            return RedirectToAction("Index");
+        }
+
 
 
     } 

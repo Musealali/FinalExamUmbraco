@@ -82,6 +82,13 @@ namespace web_platform.Service
         }
 
 
+        public async Task<SecurityIssuePostReply> GetSecurityIssuePostReply(int securityIssuePostReplyId)
+        {
+            return await _umbracoDbContext.SecurityIssuePostReplies.Where(s => s.Id == securityIssuePostReplyId)
+                .Include(s => s.ApplicationUser)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<List<SecurityIssuePostReply>> GetSecurityIssuePostsReplies(int securityIssuePostId)
         {
             var securityIssuePostReplies = await _umbracoDbContext.SecurityIssuePostReplies.Where(s => s.SecurityIssuePost.Id == securityIssuePostId).ToListAsync();
@@ -117,6 +124,16 @@ namespace web_platform.Service
             var securityIssuePost = await _umbracoDbContext.SecurityIssuePosts.FindAsync(securityIssuePostId);
             _umbracoDbContext.Remove(securityIssuePost);
             await _umbracoDbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteSecurityIssuePostReply(int securityIssuePostReplyId)
+        {
+            var securityIssuePostReplyToFind = await _umbracoDbContext.SecurityIssuePostReplies.Where((s) => s.Id == securityIssuePostReplyId).FirstOrDefaultAsync();
+            if(securityIssuePostReplyToFind != null)
+            {
+                _umbracoDbContext.SecurityIssuePostReplies.Remove(securityIssuePostReplyToFind);
+                await _umbracoDbContext.SaveChangesAsync();
+            }
         }
     }
 }

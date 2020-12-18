@@ -1,38 +1,41 @@
-﻿@model SecurityIssuePostViewModel
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<web_platform.Data.Models.ApplicationUser> userManager
+
+@model SecurityIssuePostViewModel
 
 <form asp-controller="SecurityIssuePost" asp-action="DeleteSecurityIssuePost" method="POST" asp-route-securityIssuePostId="@Model.Id">
-    <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete?')" value="Delete"/>
+    <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete?')" value="Delete" />
 </form>
 
-    <div class="main">
-        @if (User.IsInRole("Administrator") && Model.State == web_platform.Data.Models.State.NotVerified)
-        {
-            <form asp-controller="SecurityIssuePost" asp-action="ChangeSecurityIssuePostStateToVerified" method="POST" asp-route-securityIssuePostId="@Model.Id">
-                <button type="submit" class="btn btn-primary mt-2" style="float : right">Verify</button>
-            </form>
-        }
-        <div class="input-group">
-            <p>@Model.ApplicationUser.UserName</p>
-            <div class="input-group-prepend">
-                <span class="input-group-text">Title</span>
-            </div>
-            <input type="text" class="form-control" aria-label="Title" value="@Model.Title" disabled="disabled" />
+<div class="main">
+    @if (User.IsInRole("Administrator") && Model.State == web_platform.Data.Models.State.NotVerified)
+    {
+        <form asp-controller="SecurityIssuePost" asp-action="ChangeSecurityIssuePostStateToVerified" method="POST" asp-route-securityIssuePostId="@Model.Id">
+            <button type="submit" class="btn btn-primary mt-2" style="float : right">Verify</button>
+        </form>
+    }
+    <div class="input-group">
+        <p>@Model.ApplicationUser.UserName</p>
+        <div class="input-group-prepend">
+            <span class="input-group-text">Title</span>
         </div>
-
-        <div class="input-group mt-2">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Component</span>
-            </div>
-            <input type="text" class="form-control" aria-label="Component" value="@Model.ComponentName - @Model.ComponentVersion" disabled="disabled" />
-        </div>
-
-        <div class="input-group mt-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Description</span>
-            </div>
-            <textarea class="form-control" disabled="disabled" rows="4">@Model.IssueDescription</textarea>
-        </div>
+        <input type="text" class="form-control" aria-label="Title" value="@Model.Title" disabled="disabled" />
     </div>
+
+    <div class="input-group mt-2">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Component</span>
+        </div>
+        <input type="text" class="form-control" aria-label="Component" value="@Model.ComponentName - @Model.ComponentVersion" disabled="disabled" />
+    </div>
+
+    <div class="input-group mt-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Description</span>
+        </div>
+        <textarea class="form-control" disabled="disabled" rows="4">@Model.IssueDescription</textarea>
+    </div>
+</div>
 
 
 
@@ -44,6 +47,12 @@
             <div class="input-group">
                 <p>@reply.ApplicationUser.UserName</p>
                 <textarea type="text" class="form-control" aria-label="Title" disabled="disabled">@reply.Content</textarea>
+                @if (userManager.GetUserId(User) == reply.ApplicationUser.Id)
+                {
+                    <form asp-controller="SecurityIssuePost" asp-action="DeleteSecurityIssuePostReply" method="POST" asp-route-securityIssuePostId="@Model.Id" asp-route-securityIssuePostReplyId="@reply.Id">
+                        <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this comment?')" value="Delete" />
+                    </form>
+                }
             </div>
         </div>
     }

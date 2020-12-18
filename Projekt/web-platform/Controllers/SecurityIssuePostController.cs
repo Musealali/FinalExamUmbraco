@@ -159,6 +159,18 @@ namespace web_platform.Controllers
             return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePostId });
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteSecurityIssuePostReply(int securityIssuePostId, int securityIssuePostReplyId)
+        {
+            var securityIssuePostReplyToFind = await _ISecurityIssuePostService.GetSecurityIssuePostReply(securityIssuePostReplyId);
+
+            if(securityIssuePostReplyToFind.ApplicationUser.Id != _userManager.GetUserId(User)) { return Unauthorized(); }
+
+            await _ISecurityIssuePostService.DeleteSecurityIssuePostReply(securityIssuePostReplyId);
+            return RedirectToAction("SpecificSecurityIssuePost", new { id = securityIssuePostId });
+        }
+
         [HttpPost]
         public async Task<ActionResult> ChangeSecurityIssuePostStateToVerified (int securityIssuePostId)
         {

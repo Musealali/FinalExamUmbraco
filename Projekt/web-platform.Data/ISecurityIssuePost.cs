@@ -13,9 +13,11 @@ namespace web_platform.Data
 
         Task<SecurityIssuePost> CreateSecurityIssuePost(string title, string issueDescription, string componentName, string componentVersion, ApplicationUser applicationUser);
         Task<SecurityIssuePostReply> CreateSecurityIssuePostReply(string content, SecurityIssuePost securityIssuePost, ApplicationUser applicationUser);
+        Task<SecurityIssuePostReply> GetSecurityIssuePostReply(int securityIssuePostReplyId);
 
         Task<List<SecurityIssuePost>> GetSecurityIssuePostsByState(State state);
         Task<List<SecurityIssuePostReply>> GetSecurityIssuePostsReplies(int securityIssuePostId);
+        Task DeleteSecurityIssuePostReply(int securityIssuePostReplyId);
 
         State GetSecurityIssuePostStateVerified();
 

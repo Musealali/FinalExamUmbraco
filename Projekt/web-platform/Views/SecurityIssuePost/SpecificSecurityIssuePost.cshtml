@@ -3,9 +3,12 @@
 
 @model SecurityIssuePostViewModel
 
-<form asp-controller="SecurityIssuePost" asp-action="DeleteSecurityIssuePost" method="POST" asp-route-securityIssuePostId="@Model.Id">
-    <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete?')" value="Delete" />
-</form>
+@if (userManager.GetUserId(User) == Model.ApplicationUser.Id || User.IsInRole("Administrator"))
+{
+    <form asp-controller="SecurityIssuePost" asp-action="DeleteSecurityIssuePost" method="POST" asp-route-securityIssuePostId="@Model.Id">
+        <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete?')" value="Delete" />
+    </form>
+}
 
 <div class="main">
     @if (User.IsInRole("Administrator") && Model.State == web_platform.Data.Models.State.NotVerified)

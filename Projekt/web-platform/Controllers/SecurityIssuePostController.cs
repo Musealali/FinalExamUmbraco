@@ -164,6 +164,18 @@ namespace web_platform.Controllers
             return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePostId });
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteSecurityIssuePostReply(int securityIssuePostId, int securityIssuePostReplyId)
+        {
+            var securityIssuePostReplyToFind = await _ISecurityIssuePostService.GetSecurityIssuePostReply(securityIssuePostReplyId);
+
+            if(securityIssuePostReplyToFind.ApplicationUser.Id != _userManager.GetUserId(User)) { return Unauthorized(); }
+
+            await _ISecurityIssuePostService.DeleteSecurityIssuePostReply(securityIssuePostReplyId);
+            return RedirectToAction("SpecificSecurityIssuePost", new { id = securityIssuePostId });
+        }
+
         [HttpPost]
         public async Task<ActionResult> ChangeSecurityIssuePostStateToVerified (int securityIssuePostId)
         {
@@ -174,6 +186,11 @@ namespace web_platform.Controllers
         [HttpPost]
         public async Task<ActionResult> DeleteSecurityIssuePost(int securityIssuePostId)
         {
+            var securityIssuePostToFind = await _ISecurityIssuePostService.GetById(securityIssuePostId);
+
+            // We need to ensure that any manual requests to this endpoint are still validated against the current user in case the UI gets bypassed
+            if (_userManager.GetUserId(User) != securityIssuePostToFind.ApplicationUser.Id || !User.IsInRole("Administrator")) { return Unauthorized(); }
+
             await _ISecurityIssuePostService.DeleteSecurityIssuePost(securityIssuePostId);
             return RedirectToAction("Index");
         }

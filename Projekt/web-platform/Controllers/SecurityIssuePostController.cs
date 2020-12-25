@@ -218,8 +218,8 @@ namespace web_platform.Controllers
         [HttpPost]
         public async Task<ActionResult> Update(SecurityIssuePostViewModel securityIssuePostView)
         {
-            var securityIssuePost = _ISecurityIssuePostService.UpdateSecurityIssuePost(securityIssuePostView.Id, securityIssuePostView.Title, securityIssuePostView.IssueDescription, securityIssuePostView.ComponentName, securityIssuePostView.ComponentVersion);
-            return RedirectToAction("SpecificSecurityIssuePost", securityIssuePostView.Id);
+            var securityIssuePost = await _ISecurityIssuePostService.UpdateSecurityIssuePost(securityIssuePostView.Id, securityIssuePostView.Title, securityIssuePostView.IssueDescription, securityIssuePostView.ComponentName, securityIssuePostView.ComponentVersion);
+            return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePost.Id });
 ;        }
 
     } 

@@ -3,13 +3,6 @@
 
 @model SecurityIssuePostViewModel
 
-@if (userManager.GetUserId(User) == Model.ApplicationUser.Id || User.IsInRole("Administrator"))
-{
-    <form asp-controller="SecurityIssuePost" asp-action="DeleteSecurityIssuePost" method="POST" asp-route-securityIssuePostId="@Model.Id">
-        <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete?')" value="Delete" />
-    </form>
-}
-
 <div class="main">
     @if (User.IsInRole("Administrator") && Model.State == web_platform.Data.Models.State.NotVerified)
     {
@@ -51,9 +44,18 @@
             </ul>
         }
     </div>
-    <form asp-controller="SecurityIssuePost" asp-action="Update" method="GET" asp-route-id="@Model.Id">
-        <button type="submit" class="btn btn-primary mt-2" style="float : right">Update</button>
-    </form>
+    @if (userManager.GetUserId(User) == Model.ApplicationUser.Id || User.IsInRole("Administrator"))
+    {
+        <form asp-controller="SecurityIssuePost" asp-action="DeleteSecurityIssuePost" method="POST" asp-route-securityIssuePostId="@Model.Id">
+            <input type="submit" class="btn btn-danger mt-2" onclick="return confirm('Are you sure you want to delete?')" value="Delete" />
+        </form>
+    }
+    @if (userManager.GetUserId(User) == Model.ApplicationUser.Id || User.IsInRole("Administrator"))
+    {
+        <form asp-controller="SecurityIssuePost" asp-action="Update" method="GET" asp-route-id="@Model.Id">
+            <button type="submit" class="btn btn-primary mt-2">Update</button>
+        </form>
+    }
 </div>
 
 
@@ -67,10 +69,16 @@
             <div class="input-group">
                 <p>@reply.ApplicationUser.UserName</p>
                 <textarea type="text" class="form-control" aria-label="Title" disabled="disabled">@reply.Content</textarea>
-                @if (userManager.GetUserId(User) == reply.ApplicationUser.Id)
+                @if (userManager.GetUserId(User) == reply.ApplicationUser.Id || User.IsInRole("Administrator"))
                 {
                     <form asp-controller="SecurityIssuePost" asp-action="DeleteSecurityIssuePostReply" method="POST" asp-route-securityIssuePostId="@Model.Id" asp-route-securityIssuePostReplyId="@reply.Id">
                         <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this comment?')" value="Delete" />
+                    </form>
+                }
+                @if (userManager.GetUserId(User) == Model.ApplicationUser.Id || User.IsInRole("Administrator"))
+                {
+                    <form asp-controller="SecurityIssuePost" asp-action="UpdateSecuirtyIssuePostReply" method="GET" asp-route-id="@Model.Id">
+                        <button type="submit" class="btn btn-primary btn-sm" style="float : right">Update</button>
                     </form>
                 }
             </div>

@@ -35,21 +35,24 @@ namespace web_platform.Service
             var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "userfiles");
             Directory.CreateDirectory(directoryPath);
 
-            foreach (var file in files)
+            if(files != null)
             {
-                var filePath = Path.Combine(directoryPath, Path.GetRandomFileName());
-                using (var stream = File.Create(filePath))
+                foreach (var file in files)
                 {
-                    await file.CopyToAsync(stream);
+                    var filePath = Path.Combine(directoryPath, Path.GetRandomFileName());
+                    using (var stream = File.Create(filePath))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    var userFile = new UserFile()
+                    {
+                        FilePath = filePath,
+                        SecurityIssuePost = securityIssuePost
+                    };
+
+                    await _umbracoDbContext.AddAsync(userFile);
                 }
-
-                var userFile = new UserFile()
-                {
-                    FilePath = filePath,
-                    SecurityIssuePost = securityIssuePost
-                };
-
-                await _umbracoDbContext.AddAsync(userFile);
             }
 
             await _umbracoDbContext.SaveChangesAsync();

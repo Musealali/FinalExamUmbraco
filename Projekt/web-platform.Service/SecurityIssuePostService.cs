@@ -141,16 +141,16 @@ namespace web_platform.Service
 
         public async Task<SecurityIssuePost> UpdateSecurityIssuePost(int securityIssuePostId, string title, string issueDescription, string componentName, string componentVersion)
         {
-            var securityIssuePostReplyToFind = await _umbracoDbContext.SecurityIssuePosts.Where((s) => s.Id == securityIssuePostId).FirstOrDefaultAsync();
-            if (securityIssuePostReplyToFind != null)
+            var securityIssuePostToFind = await _umbracoDbContext.SecurityIssuePosts.Where((s) => s.Id == securityIssuePostId).FirstOrDefaultAsync();
+            if (securityIssuePostToFind != null)
             {
-                securityIssuePostReplyToFind.Title = title;
-                securityIssuePostReplyToFind.IssueDescription = issueDescription;
-                securityIssuePostReplyToFind.ComponentName = componentName;
-                securityIssuePostReplyToFind.ComponentVersion = componentVersion;
+                securityIssuePostToFind.Title = title;
+                securityIssuePostToFind.IssueDescription = issueDescription;
+                securityIssuePostToFind.ComponentName = componentName;
+                securityIssuePostToFind.ComponentVersion = componentVersion;
                 await _umbracoDbContext.SaveChangesAsync();
             }
-            return securityIssuePostReplyToFind;
+            return securityIssuePostToFind;
         }
     }
 }

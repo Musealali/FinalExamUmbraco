@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Identity;
 using web_platform.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace web_platform.Controllers
 {
@@ -18,12 +19,13 @@ namespace web_platform.Controllers
     {
         private readonly ISecurityIssuePost _ISecurityIssuePostService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserFile _userFileService;
 
-        public SecurityIssuePostController(ISecurityIssuePost securityIssuePostService, UserManager<ApplicationUser> userManager)
+        public SecurityIssuePostController(ISecurityIssuePost securityIssuePostService, UserManager<ApplicationUser> userManager, IUserFile userFileService)
         {
             _ISecurityIssuePostService = securityIssuePostService;
             _userManager = userManager;
-
+            _userFileService = userFileService;
         }
         
         [HttpGet]
@@ -32,7 +34,7 @@ namespace web_platform.Controllers
 
             var securityIssuePostToFind = await _ISecurityIssuePostService.GetById(id);
             var securityIssuePostReplies = await _ISecurityIssuePostService.GetSecurityIssuePostsReplies(id);
-
+            var attachments = await _userFileService.GetBySecurityIssuePostId(securityIssuePostToFind.Id);
             var securityRepliesModels = new List<SecurityIssuePostReplyViewModel>();
 
             foreach (SecurityIssuePostReply securityIssuePostReply in securityIssuePostReplies)
@@ -56,7 +58,8 @@ namespace web_platform.Controllers
                 ComponentVersion = securityIssuePostToFind.ComponentVersion,
                 State = securityIssuePostToFind.State,
                 SecurityIssuePostReplies = securityRepliesModels,
-                ApplicationUser = securityIssuePostToFind.ApplicationUser
+                ApplicationUser = securityIssuePostToFind.ApplicationUser,
+                Attachments = attachments
             };
 
             if (model == null) { return View(NotFound()); }
@@ -146,6 +149,8 @@ namespace web_platform.Controllers
 
             var applicationUser = await _userManager.GetUserAsync(User);
             var securityIssuePost = await _ISecurityIssuePostService.CreateSecurityIssuePost(securityIssuePostView.Title, securityIssuePostView.IssueDescription, securityIssuePostView.ComponentName, securityIssuePostView.ComponentVersion, applicationUser);
+            await _userFileService.Create(securityIssuePostView.Files, securityIssuePost);
+
             return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
 

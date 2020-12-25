@@ -18,6 +18,7 @@ namespace web_platform.Data
 
         public DbSet<SecurityIssuePost> SecurityIssuePosts {get; set;}
         public DbSet<SecurityIssuePostReply> SecurityIssuePostReplies { get; set; }
+        public DbSet<UserFile> UserFiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -17,12 +17,11 @@ namespace web_platform.Data.Models
         public string IssueDescription { get; set; }
         public string ComponentName { get; set; }
         public string ComponentVersion { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
-
         public State State { get; set; }
 
+
+        public ApplicationUser ApplicationUser { get; set; }
         public ICollection<SecurityIssuePostReply> SecurityIssuePostReplies { get; set; }
-
-
+        public ICollection<UserFile> UserFiles { get; set; }
     }
 }

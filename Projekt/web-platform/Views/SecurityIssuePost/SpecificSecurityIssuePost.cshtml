@@ -99,18 +99,37 @@
                     </form>
 
                     <!-- Update comment button -->
-                    <form class="ml-1" asp-controller="SecurityIssuePost" asp-action="UpdateSecuirtyIssuePostReply" method="GET" asp-route-id="@Model.Id">
-                        <button type="submit" class="btn btn-primary btn-sm" style="float : right">Update</button>
-                    </form>
+                    <button class="ml-1 btn btn-primary btn-sm" style="float : right" onclick="updateComment(this.parentElement.parentElement)">Update</button>
                 }
             </div>
         </div>
     }
 }
 
+<script>
+    function updateComment(divUserComment) {
+        var updateButton = divUserComment.querySelector(".row button");
+        var textArea = divUserComment.querySelector("textarea");
+
+        switch (updateButton.innerHTML) {
+            case "Update":
+                textArea.disabled = false;
+                updateButton.innerHTML = "Submit";
+                break;
+
+            case "Submit":
+                // Use JQuery here, send the updated 'textArea' value to the update action.
+                    // ......
+                // Disable the text area when done
+                textArea.disabled = true;
+                updateButton.innerHTML = "Update"
+                break;
+        }
+    }
+</script>
+
 <h3 class="mt-5">Create Comment</h3>
 <form asp-controller="SecurityIssuePost" asp-action="CreateSecurityIssueReply" method="POST" asp-route-securityIssuePostId="@Model.Id">
-
 
     <div class="form-group">
         <label asp-for="@Model.securityIssuePostReplyViewModel.Content">Content</label>

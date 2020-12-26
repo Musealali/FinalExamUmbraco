@@ -1,0 +1,70 @@
+﻿@model SecurityIssuePostViewModel
+@using web_platform.Controllers
+@{
+    ViewData["Title"] = "UpdateSecuirtyIssuePost";
+
+}
+<h1>Update Secuirty issue Post</h1>
+
+<script>
+    $(function () {
+        $("#ComponentName").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "https://our.umbraco.com/webapi/packages/v1",
+                    dataType: "xml",
+                    data: {
+                        pageIndex: 0,
+                        pageSize: 200,
+                        category: "",
+                        query: request.term,
+                        order: "default"
+                    },
+                    success: function (data) {
+                        var arrayout = [];
+                        var jsonText = JSON.stringify(xmlToJson($(data)[0]));
+                        var jsonData = JSON.parse(jsonText);
+                        for (var i = 0; i < jsonData.PagedPackages.Packages.Package.length; i++) {
+
+                            console.log(request.term)
+                            arrayout.push(jsonData.PagedPackages.Packages.Package[i].Name["#text"])
+
+                        }
+                        response(arrayout);
+                    }
+                });
+            },
+            minLength: 1,
+        });
+    });
+</script>
+
+<form asp-controller="SecurityIssuePost" asp-action="Update" method="POST" enctype="multipart/form-data">
+
+    <div class="form-group">
+        <label asp-for="Title">Title</label>
+        <input asp-for="Title" name="Title" value="@Model.Title" class="form-control" id="InputTitle" placeholder="Enter a descriptive title">
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="IssueDescription">Description</label>
+        <textarea asp-for="IssueDescription" name="IssueDescription" value="@Model.IssueDescription" class="form-control" id="InputIssueDescription" placeholder="Insert a description of the issue" rows="4"></textarea>
+        <span asp-validation-for="IssueDescription" class="text-danger"></span>
+    </div>
+
+    <select class="form-control mt-2" name="ComponentType" id="ComponentType" onchange="dynamicdropdowncomponent(this.options[this.selectedIndex].value);">
+        <option disabled selected>Select your option</option>
+        <option selected value="package">Package</option>
+        <option value="cms">CMS</option>
+    </select>
+    <select class="form-control mt-2 d-none" name="ComponentName" id="cms" onchange="dynamicdropdownversion(this.options[this.selectedIndex].value);"><option disabled selected>Select status</option></select>
+    <select class="form-control mt-2 d-none" name="ComponentVersion" id="CMSVersionNumber"><option disabled selected>Select status</option></select>
+    <input class="form-control mt-2" id="ComponentName" type="text" name="ComponentName" placeholder="Packages" value="@Model.ComponentName">
+    <input class="form-control mt-2" id="PackageVersionNumber" type="text" name="ComponentVersion" placeholder="Version" value="@Model.ComponentVersion">
+    <button type="submit" class="btn btn-primary mt-2">Submit</button>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

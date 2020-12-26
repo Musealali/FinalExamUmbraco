@@ -195,7 +195,32 @@ namespace web_platform.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public async Task<ActionResult> Update(int id)
+        {
+            var securityIssuePostToFind = await _ISecurityIssuePostService.GetById(id);
+            var model = new SecurityIssuePostViewModel
+            {
+                Id = securityIssuePostToFind.Id,
+                Title = securityIssuePostToFind.Title,
+                IssueDescription = securityIssuePostToFind.IssueDescription,
+                ComponentName = securityIssuePostToFind.ComponentName,
+                ComponentVersion = securityIssuePostToFind.ComponentVersion,
+                State = securityIssuePostToFind.State,
+                ApplicationUser = securityIssuePostToFind.ApplicationUser,
+            };
 
+            if (model == null) { return View(NotFound()); }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Update(SecurityIssuePostViewModel securityIssuePostView)
+        {
+            var securityIssuePost = await _ISecurityIssuePostService.UpdateSecurityIssuePost(securityIssuePostView.Id, securityIssuePostView.Title, securityIssuePostView.IssueDescription, securityIssuePostView.ComponentName, securityIssuePostView.ComponentVersion);
+            return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePost.Id });
+;        }
 
     } 
 }

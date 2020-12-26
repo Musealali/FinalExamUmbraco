@@ -138,5 +138,19 @@ namespace web_platform.Service
                 await _umbracoDbContext.SaveChangesAsync();
             }
         }
+
+        public async Task<SecurityIssuePost> UpdateSecurityIssuePost(int securityIssuePostId, string title, string issueDescription, string componentName, string componentVersion)
+        {
+            var securityIssuePostToFind = await _umbracoDbContext.SecurityIssuePosts.Where((s) => s.Id == securityIssuePostId).FirstOrDefaultAsync();
+            if (securityIssuePostToFind != null)
+            {
+                securityIssuePostToFind.Title = title;
+                securityIssuePostToFind.IssueDescription = issueDescription;
+                securityIssuePostToFind.ComponentName = componentName;
+                securityIssuePostToFind.ComponentVersion = componentVersion;
+                await _umbracoDbContext.SaveChangesAsync();
+            }
+            return securityIssuePostToFind;
+        }
     }
 }

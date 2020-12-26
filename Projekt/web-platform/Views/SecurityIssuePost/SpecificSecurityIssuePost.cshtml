@@ -34,6 +34,28 @@
         <textarea class="form-control" disabled="disabled" rows="4">@Model.IssueDescription</textarea>
     </div>
 
+
+    <div class="row">
+        @if (userManager.GetUserId(User) == Model.ApplicationUser.Id || User.IsInRole("Administrator"))
+        {
+            <form class="ml-3" asp-controller="SecurityIssuePost" asp-action="DeleteSecurityIssuePost" method="POST" asp-route-securityIssuePostId="@Model.Id">
+                <input type="submit" class="btn btn-danger btn-sm mt-2" onclick="return confirm('Are you sure you want to delete?')" value="Delete" />
+            </form>
+
+            <form class="ml-1" asp-controller="SecurityIssuePost" asp-action="Update" method="GET" asp-route-id="@Model.Id">
+                <button type="submit" class="btn btn-primary btn-sm mt-2">Update</button>
+            </form>
+        }
+
+        @if (User.IsInRole("Administrator") && Model.State == web_platform.Data.Models.State.NotVerified)
+        {
+            <form class="ml-1" asp-controller="SecurityIssuePost" asp-action="ChangeSecurityIssuePostStateToVerified" method="POST" asp-route-securityIssuePostId="@Model.Id">
+                <button type="submit" class="btn btn-primary btn-sm mt-2" style="float : right">Verify</button>
+            </form>
+        }
+    </div>
+
+
     <div class="mt-3">
         <h3>Attachments</h3>
         @if (Model.Attachments.Any())
@@ -44,26 +66,6 @@
                     <li>@attachment.FilePath</li>
                 }
             </ul>
-        }
-    </div>
-
-    <div class="row">
-        @if (userManager.GetUserId(User) == Model.ApplicationUser.Id || User.IsInRole("Administrator"))
-        {
-            <form class="ml-3" asp-controller="SecurityIssuePost" asp-action="DeleteSecurityIssuePost" method="POST" asp-route-securityIssuePostId="@Model.Id">
-                <input type="submit" class="btn btn-danger mt-2" onclick="return confirm('Are you sure you want to delete?')" value="Delete" />
-            </form>
-
-            <form class="ml-1" asp-controller="SecurityIssuePost" asp-action="Update" method="GET" asp-route-id="@Model.Id">
-                <button type="submit" class="btn btn-primary mt-2">Update</button>
-            </form>
-        }
-
-        @if (User.IsInRole("Administrator") && Model.State == web_platform.Data.Models.State.NotVerified)
-        {
-            <form class="ml-1" asp-controller="SecurityIssuePost" asp-action="ChangeSecurityIssuePostStateToVerified" method="POST" asp-route-securityIssuePostId="@Model.Id">
-                <button type="submit" class="btn btn-primary mt-2" style="float : right">Verify</button>
-            </form>
         }
     </div>
 </div>

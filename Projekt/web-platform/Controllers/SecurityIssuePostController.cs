@@ -220,7 +220,17 @@ namespace web_platform.Controllers
         {
             var securityIssuePost = await _ISecurityIssuePostService.UpdateSecurityIssuePost(securityIssuePostView.Id, securityIssuePostView.Title, securityIssuePostView.IssueDescription, securityIssuePostView.ComponentName, securityIssuePostView.ComponentVersion);
             return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePost.Id });
-;        }
+;       }
 
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateSecurityIssuePostReply(int securityIssuePostReplyId, string content)
+        {
+            var newReply = await _ISecurityIssuePostService.Update(securityIssuePostReplyId, content);
+            if (newReply.Content == content)
+                return Ok(newReply);
+            else
+                return BadRequest();
+        }
     } 
 }

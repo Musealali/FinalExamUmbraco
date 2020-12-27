@@ -101,7 +101,7 @@
                     </form>
 
                     <!-- Update comment button -->
-                    <button class="ml-1 btn btn-primary btn-sm" style="float : right" onclick="updateComment(this.parentElement.parentElement)">Update</button>
+                    <button class="ml-1 btn btn-primary btn-sm" style="float : right" onclick="updateComment(@reply.Id, this.parentElement.parentElement)">Update</button>
                 }
             </div>
         </div>
@@ -109,7 +109,7 @@
 }
 
 <script>
-    function updateComment(divUserComment) {
+    function updateComment(securityIssuePostReplyId, divUserComment) {
         var updateButton = divUserComment.querySelector(".row button");
         var textArea = divUserComment.querySelector("textarea");
 
@@ -123,6 +123,17 @@
                 // Use JQuery here, send the updated 'textArea' value to the update action.
                     // ......
                 // Disable the text area when done
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("UpdateSecurityIssuePostReply", "SecurityIssuePost")',
+                    data: { securityIssuePostReplyId: securityIssuePostReplyId, content: textArea.value },
+                    success: () => {
+                        console.log("success");
+                    },
+                    error: () => {
+                        console.log("error");
+                    }
+                });
                 textArea.disabled = true;
                 updateButton.innerHTML = "Update"
                 break;

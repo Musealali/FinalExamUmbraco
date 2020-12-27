@@ -191,6 +191,7 @@ namespace web_platform.Controllers
             // We need to ensure that any manual requests to this endpoint are still validated against the current user in case the UI gets bypassed
             if (_userManager.GetUserId(User) != securityIssuePostToFind.ApplicationUser.Id || !User.IsInRole("Administrator")) { return Unauthorized(); }
 
+            await _userFileService.DeleteAll(securityIssuePostToFind);
             await _ISecurityIssuePostService.DeleteSecurityIssuePost(securityIssuePostId);
             return RedirectToAction("Index");
         }

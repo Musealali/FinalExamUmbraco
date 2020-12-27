@@ -57,5 +57,17 @@ namespace web_platform.Service
 
             await _umbracoDbContext.SaveChangesAsync();
         }
+
+        public async Task DeleteAll(SecurityIssuePost securityIssuePost)
+        {
+            var userFilesToFind = await _umbracoDbContext.UserFiles.Where((u) => u.SecurityIssuePost.Id == securityIssuePost.Id).ToListAsync();
+            foreach (var userFile in userFilesToFind)
+            {
+                File.Delete(userFile.FilePath);
+                _umbracoDbContext.UserFiles.Remove(userFile);
+            }
+
+            await _umbracoDbContext.SaveChangesAsync();
+        }
     }
 }

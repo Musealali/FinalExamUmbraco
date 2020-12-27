@@ -24,5 +24,6 @@ namespace web_platform.Data
         Task<List<SecurityIssuePostReply>> GetSecurityIssuePostsReplies(int securityIssuePostId);
         Task<SecurityIssuePostReply> CreateSecurityIssuePostReply(string content, SecurityIssuePost securityIssuePost, ApplicationUser applicationUser);
         Task DeleteSecurityIssuePostReply(int securityIssuePostReplyId);
+        Task<SecurityIssuePostReply> Update(int securityIssuePostReplyId, string content);
     }
 }

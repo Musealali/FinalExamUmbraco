@@ -148,7 +148,7 @@ namespace web_platform.Controllers
 
             var applicationUser = await _userManager.GetUserAsync(User);
             var securityIssuePost = await _ISecurityIssuePostService.CreateSecurityIssuePost(securityIssuePostView.Title, securityIssuePostView.IssueDescription, securityIssuePostView.ComponentName, securityIssuePostView.ComponentVersion, applicationUser);
-            await _userFileService.Create(securityIssuePostView.Files, securityIssuePost);
+            await _userFileService.Add(securityIssuePostView.Files, securityIssuePost);
 
             return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
@@ -255,10 +255,10 @@ namespace web_platform.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddSingleAttachment(IFormFile file, int securityIssuePostId)
+        public async Task<IActionResult> AddAttachments(List<IFormFile> files, int securityIssuePostId)
         {
             var securityIssuePostToFind = await _ISecurityIssuePostService.GetById(securityIssuePostId);
-            await _userFileService.AddSingleAttachment(file, securityIssuePostToFind);
+            await _userFileService.Add(files, securityIssuePostToFind);
             return RedirectToAction("SpecificSecurityIssuePost", new { id = securityIssuePostId });
         }
     } 

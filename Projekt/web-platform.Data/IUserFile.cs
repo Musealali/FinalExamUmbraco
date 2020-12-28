@@ -11,8 +11,7 @@ namespace web_platform.Data
     {
         Task<UserFile> GetById(int id);
         Task<List<UserFile>> GetBySecurityIssuePostId(int securityIssuePostId);
-        Task Create(List<IFormFile> files, SecurityIssuePost securityIssuePost);
-        Task<UserFile> AddSingleAttachment(IFormFile file, SecurityIssuePost securityIssuePost);
+        Task Add(List<IFormFile> files, SecurityIssuePost securityIssuePost);
         Task DeleteAll(SecurityIssuePost securityIssuePost);
         Task Delete(int userFileId);
     }

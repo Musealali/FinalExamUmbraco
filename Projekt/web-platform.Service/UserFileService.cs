@@ -30,7 +30,7 @@ namespace web_platform.Service
             return await _umbracoDbContext.UserFiles.Where(u => u.SecurityIssuePost.Id == securityIssuePostId).ToListAsync();
         }
 
-        public async Task Create(List<IFormFile> files, SecurityIssuePost securityIssuePost)
+        public async Task Add(List<IFormFile> files, SecurityIssuePost securityIssuePost)
         {
             var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "userfiles");
             Directory.CreateDirectory(directoryPath);
@@ -59,34 +59,6 @@ namespace web_platform.Service
             }
         }
 
-        public async Task<UserFile> AddSingleAttachment(IFormFile file, SecurityIssuePost securityIssuePost)
-        {
-            var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "userfiles");
-            Directory.CreateDirectory(directoryPath);
-
-            if(file != null)
-            {
-                var filePath = Path.Combine(directoryPath, Path.GetRandomFileName());
-                using(var stream = File.Create(filePath))
-                {
-                    await file.CopyToAsync(stream);
-                }
-
-                var userFile = new UserFile()
-                {
-                    FileName = file.FileName,
-                    FilePath = filePath,
-                    SecurityIssuePost = securityIssuePost
-                };
-
-                await _umbracoDbContext.AddAsync(userFile);
-                await _umbracoDbContext.SaveChangesAsync();
-
-                return userFile;
-            }
-
-            return null;
-        }
 
         public async Task DeleteAll(SecurityIssuePost securityIssuePost)
         {

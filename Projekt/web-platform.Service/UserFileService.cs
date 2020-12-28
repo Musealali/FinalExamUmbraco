@@ -47,15 +47,45 @@ namespace web_platform.Service
 
                     var userFile = new UserFile()
                     {
+                        FileName = file.FileName,
                         FilePath = filePath,
                         SecurityIssuePost = securityIssuePost
                     };
 
                     await _umbracoDbContext.AddAsync(userFile);
                 }
+         
+                await _umbracoDbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task<UserFile> AddSingleAttachment(IFormFile file, SecurityIssuePost securityIssuePost)
+        {
+            var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "userfiles");
+            Directory.CreateDirectory(directoryPath);
+
+            if(file != null)
+            {
+                var filePath = Path.Combine(directoryPath, Path.GetRandomFileName());
+                using(var stream = File.Create(filePath))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                var userFile = new UserFile()
+                {
+                    FileName = file.FileName,
+                    FilePath = filePath,
+                    SecurityIssuePost = securityIssuePost
+                };
+
+                await _umbracoDbContext.AddAsync(userFile);
+                await _umbracoDbContext.SaveChangesAsync();
+
+                return userFile;
             }
 
-            await _umbracoDbContext.SaveChangesAsync();
+            return null;
         }
 
         public async Task DeleteAll(SecurityIssuePost securityIssuePost)
@@ -68,6 +98,17 @@ namespace web_platform.Service
             }
 
             await _umbracoDbContext.SaveChangesAsync();
+        }
+
+        public async Task Delete(int userFileId)
+        {
+            var userFileToFind = await _umbracoDbContext.UserFiles.Where((u) => u.Id == userFileId).FirstOrDefaultAsync();
+            if(userFileToFind != null)
+            {
+                File.Delete(userFileToFind.FilePath);
+                _umbracoDbContext.UserFiles.Remove(userFileToFind);
+                await _umbracoDbContext.SaveChangesAsync();
+            }
         }
     }
 }

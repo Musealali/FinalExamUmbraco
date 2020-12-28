@@ -50,23 +50,46 @@
         @if (User.IsInRole("Administrator") && Model.State == web_platform.Data.Models.State.NotVerified)
         {
             <form class="ml-1" asp-controller="SecurityIssuePost" asp-action="ChangeSecurityIssuePostStateToVerified" method="POST" asp-route-securityIssuePostId="@Model.Id">
-                <button type="submit" class="btn btn-primary btn-sm mt-2" style="float : right">Verify</button>
+                <button type="submit" class="btn btn-info btn-sm mt-2" style="float : right">Verify</button>
             </form>
         }
     </div>
 
-
+<!-- ATTACHMENTS SECTION -->
     <div class="mt-3">
         <h3>Attachments</h3>
         @if (Model.Attachments.Any())
         {
-            <ul>
-                @foreach (var attachment in Model.Attachments)
-                {
-                    <li>@attachment.FilePath</li>
-                }
-            </ul>
+            @foreach (var attachment in Model.Attachments)
+            {
+                <div class="mb-2">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">FileName</span>
+                        </div>
+                        <input type="text" class="form-control" disabled="disabled" value="@attachment.FileName"/>
+                    </div>
+                
+                    <div class="row mt-2">
+                        <a class="ml-3 btn btn-primary btn-sm" asp-action="GetUserFile" asp-controller="SecurityIssuePost" asp-route-userFileId="@attachment.Id">Download</a>
+                        <form class="ml-1" asp-action="DeleteUserFile" asp-controller="SecurityIssuePost" asp-route-userFileId="@attachment.Id" asp-route-securityIssuePostId="@Model.Id" method="POST">
+                            <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete?')" value="Delete"/>
+                        </form>
+                    </div>
+                </div>
+            }
         }
+        <form id="form_addSingleAttachment" asp-action="AddSingleAttachment" asp-controller="SecurityIssuePost" asp-route-securityIssuePostId="@Model.Id" method="POST" enctype="multipart/form-data">
+            <div class="input-group mt-2 w-25">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Upload</span>
+                </div>
+                <div class="custom-file">
+                    <input class="custom-file-input" type="file" id="customFile" name="file" oninput="document.getElementById('form_addSingleAttachment').submit();" multiple>
+                    <label class="custom-file-label">Choose file</label>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 

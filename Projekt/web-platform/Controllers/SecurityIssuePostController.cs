@@ -31,7 +31,6 @@ namespace web_platform.Controllers
         [HttpGet]
         public async Task<IActionResult> SpecificSecurityIssuePost(int id)
         {
-
             var securityIssuePostToFind = await _ISecurityIssuePostService.GetById(id);
             var securityIssuePostReplies = await _ISecurityIssuePostService.GetSecurityIssuePostsReplies(id);
             var attachments = await _userFileService.GetBySecurityIssuePostId(securityIssuePostToFind.Id);
@@ -232,6 +231,35 @@ namespace web_platform.Controllers
                 return Ok(newReply);
             else
                 return BadRequest();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserFile(int userFileId)
+        {
+            var userFileToFind = await _userFileService.GetById(userFileId);
+            if(userFileToFind != null)
+            {
+                return PhysicalFile(userFileToFind.FilePath, "text/plain", userFileToFind.FileName);
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteUserFile(int userFileId, int securityIssuePostId)
+        {
+            //TODO: Server validation - Current User / Administrator?
+            //TODO: If it fails to delete from database, we need to return error?
+            await _userFileService.Delete(userFileId);
+            return RedirectToAction("SpecificSecurityIssuePost", new { id = securityIssuePostId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddSingleAttachment(IFormFile file, int securityIssuePostId)
+        {
+            var securityIssuePostToFind = await _ISecurityIssuePostService.GetById(securityIssuePostId);
+            await _userFileService.AddSingleAttachment(file, securityIssuePostToFind);
+            return RedirectToAction("SpecificSecurityIssuePost", new { id = securityIssuePostId });
         }
     } 
 }

@@ -8,7 +8,7 @@ using web_platform.Data.Models;
 
 namespace web_platform.Service
 {
-    public class SecurityIssuePostService : ISecurityIssuePost
+    public class SecurityIssuePostService : ISecurityIssuePost, IDisposable
     {
         private readonly UmbracoDbContext _umbracoDbContext;
 
@@ -150,6 +150,11 @@ namespace web_platform.Service
             }
 
             return replyToFind;
+        }
+
+        public void Dispose()
+        {
+            _umbracoDbContext.Dispose();
         }
     }
 }

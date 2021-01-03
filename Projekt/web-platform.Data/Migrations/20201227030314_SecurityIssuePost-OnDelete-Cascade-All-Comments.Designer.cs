@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using web_platform.Data;
 
 namespace web_platform.Data.Migrations
 {
     [DbContext(typeof(UmbracoDbContext))]
-    partial class UmbracoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201227030314_SecurityIssuePost-OnDelete-Cascade-All-Comments")]
+    partial class SecurityIssuePostOnDeleteCascadeAllComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -280,9 +282,6 @@ namespace web_platform.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
-
-                    b.Property<string>("FileName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FilePath")
                         .IsRequired()

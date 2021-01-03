@@ -4,14 +4,16 @@
 @model SecurityIssuePostViewModel
 
 <div class="main">
-    @if (User.IsInRole("Administrator") && Model.State == web_platform.Data.Models.State.NotVerified)
-    {
-        <form asp-controller="SecurityIssuePost" asp-action="ChangeSecurityIssuePostStateToVerified" method="POST" asp-route-securityIssuePostId="@Model.Id">
-            <button type="submit" class="btn btn-primary mt-2" style="float : right">Verify</button>
-        </form>
-    }
+
+    <!-- POST DATA SECTION -->
     <div class="input-group">
-        <p>@Model.ApplicationUser.UserName</p>
+        <div class="input-group-prepend">
+            <span class="input-group-text">User</span>
+        </div>
+        <input type="text" class="form-control" aria-label="User" value="@Model.ApplicationUser.UserName" disabled="disabled" />
+    </div>
+
+    <div class="input-group mt-2">
         <div class="input-group-prepend">
             <span class="input-group-text">Title</span>
         </div>
@@ -25,71 +27,145 @@
         <input type="text" class="form-control" aria-label="Component" value="@Model.ComponentName - @Model.ComponentVersion" disabled="disabled" />
     </div>
 
-    <div class="input-group mt-3">
+    <div class="input-group mt-2">
         <div class="input-group-prepend">
             <span class="input-group-text">Description</span>
         </div>
         <textarea class="form-control" disabled="disabled" rows="4">@Model.IssueDescription</textarea>
     </div>
 
+
+    <div class="row">
+        @if (userManager.GetUserId(User) == Model.ApplicationUser.Id || User.IsInRole("Administrator"))
+        {
+            <form class="ml-3" asp-controller="SecurityIssuePost" asp-action="DeleteSecurityIssuePost" method="POST" asp-route-securityIssuePostId="@Model.Id">
+                <input type="submit" class="btn btn-danger btn-sm mt-2" onclick="return confirm('Are you sure you want to delete?')" value="Delete" />
+            </form>
+
+            <form class="ml-1" asp-controller="SecurityIssuePost" asp-action="Update" method="GET" asp-route-id="@Model.Id">
+                <button type="submit" class="btn btn-primary btn-sm mt-2">Update</button>
+            </form>
+        }
+
+        @if (User.IsInRole("Administrator") && Model.State == web_platform.Data.Models.State.NotVerified)
+        {
+            <form class="ml-1" asp-controller="SecurityIssuePost" asp-action="ChangeSecurityIssuePostStateToVerified" method="POST" asp-route-securityIssuePostId="@Model.Id">
+                <button type="submit" class="btn btn-info btn-sm mt-2" style="float : right">Verify</button>
+            </form>
+        }
+    </div>
+
+<!-- ATTACHMENTS SECTION -->
     <div class="mt-3">
         <h3>Attachments</h3>
         @if (Model.Attachments.Any())
         {
-            <ul>
-                @foreach (var attachment in Model.Attachments)
-                {
-                    <li>@attachment.FilePath</li>
-                }
-            </ul>
+            @foreach (var attachment in Model.Attachments)
+            {
+                <div class="mb-2">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">FileName</span>
+                        </div>
+                        <input type="text" class="form-control" disabled="disabled" value="@attachment.FileName"/>
+                    </div>
+                
+                    <div class="row mt-2">
+                        <a class="ml-3 btn btn-primary btn-sm" asp-action="GetUserFile" asp-controller="SecurityIssuePost" asp-route-userFileId="@attachment.Id">Download</a>
+                        <form class="ml-1" asp-action="DeleteUserFile" asp-controller="SecurityIssuePost" asp-route-userFileId="@attachment.Id" asp-route-securityIssuePostId="@Model.Id" method="POST">
+                            <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete?')" value="Delete"/>
+                        </form>
+                    </div>
+                </div>
+            }
         }
+        <form id="form_addAttachments" asp-action="AddAttachments" asp-controller="SecurityIssuePost" asp-route-securityIssuePostId="@Model.Id" method="POST" enctype="multipart/form-data">
+            <div class="input-group mt-2 w-25">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Upload</span>
+                </div>
+                <div class="custom-file">
+                    <input class="custom-file-input" type="file" id="customFile" name="files" oninput="document.getElementById('form_addAttachments').submit();" multiple>
+                    <label class="custom-file-label">Choose file(s)</label>
+                </div>
+            </div>
+        </form>
     </div>
-    @if (userManager.GetUserId(User) == Model.ApplicationUser.Id || User.IsInRole("Administrator"))
-    {
-        <form asp-controller="SecurityIssuePost" asp-action="DeleteSecurityIssuePost" method="POST" asp-route-securityIssuePostId="@Model.Id">
-            <input type="submit" class="btn btn-danger mt-2" onclick="return confirm('Are you sure you want to delete?')" value="Delete" />
-        </form>
-    }
-    @if (userManager.GetUserId(User) == Model.ApplicationUser.Id || User.IsInRole("Administrator"))
-    {
-        <form asp-controller="SecurityIssuePost" asp-action="Update" method="GET" asp-route-id="@Model.Id">
-            <button type="submit" class="btn btn-primary mt-2">Update</button>
-        </form>
-    }
 </div>
 
 
-
+<!-- COMMENT SECTION -->
 @if (Model.SecurityIssuePostReplies.Any())
 {
     <h3 class="mt-3">Comments</h3>
     @foreach (var reply in Model.SecurityIssuePostReplies)
     {
-        <div class="main mt-2">
+        <div class="user-comment mb-3">
             <div class="input-group">
-                <p>@reply.ApplicationUser.UserName</p>
-                <textarea type="text" class="form-control" aria-label="Title" disabled="disabled">@reply.Content</textarea>
+                <div class="input-group-prepend">
+                    <span class="input-group-text">User</span>
+                </div>
+                <input type="text" class="form-control" aria-label="User" value="@reply.ApplicationUser.UserName" disabled="disabled"/>
+            </div>
+
+            <div class="input-group mt-1">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Comment</span>
+                </div>
+                <textarea class="form-control" disabled="disabled">@reply.Content</textarea>
+            </div>
+
+            <div class="row mt-1">
                 @if (userManager.GetUserId(User) == reply.ApplicationUser.Id || User.IsInRole("Administrator"))
                 {
-                    <form asp-controller="SecurityIssuePost" asp-action="DeleteSecurityIssuePostReply" method="POST" asp-route-securityIssuePostId="@Model.Id" asp-route-securityIssuePostReplyId="@reply.Id">
+                    <!-- Delete comment button -->
+                    <form class="ml-3" asp-controller="SecurityIssuePost" asp-action="DeleteSecurityIssuePostReply" method="POST" asp-route-securityIssuePostId="@Model.Id" asp-route-securityIssuePostReplyId="@reply.Id">
                         <input type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this comment?')" value="Delete" />
                     </form>
-                }
-                @if (userManager.GetUserId(User) == Model.ApplicationUser.Id || User.IsInRole("Administrator"))
-                {
-                    <form asp-controller="SecurityIssuePost" asp-action="UpdateSecuirtyIssuePostReply" method="GET" asp-route-id="@Model.Id">
-                        <button type="submit" class="btn btn-primary btn-sm" style="float : right">Update</button>
-                    </form>
+
+                    <!-- Update comment button -->
+                    <button class="ml-1 btn btn-primary btn-sm" style="float : right" onclick="updateComment(@reply.Id, this.parentElement.parentElement)">Update</button>
                 }
             </div>
         </div>
     }
 }
 
+<script>
+    function updateComment(securityIssuePostReplyId, divUserComment) {
+        var updateButton = divUserComment.querySelector(".row button");
+        var textArea = divUserComment.querySelector("textarea");
+
+        switch (updateButton.innerHTML) {
+            case "Update":
+                textArea.disabled = false;
+                updateButton.innerHTML = "Submit";
+                break;
+
+            case "Submit":
+                // Use JQuery here, send the updated 'textArea' value to the update action.
+                    // ......
+                // Disable the text area when done
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("UpdateSecurityIssuePostReply", "SecurityIssuePost")',
+                    data: { securityIssuePostReplyId: securityIssuePostReplyId, content: textArea.value },
+                    success: () => {
+                        console.log("success");
+                    },
+                    error: () => {
+                        console.log("error");
+                    }
+                });
+                textArea.disabled = true;
+                updateButton.innerHTML = "Update"
+                break;
+        }
+    }
+</script>
+
 <h3 class="mt-5">Create Comment</h3>
-
 <form asp-controller="SecurityIssuePost" asp-action="CreateSecurityIssueReply" method="POST" asp-route-securityIssuePostId="@Model.Id">
-
 
     <div class="form-group">
         <label asp-for="@Model.securityIssuePostReplyViewModel.Content">Content</label>

@@ -8,6 +8,7 @@ namespace web_platform.Data.Models
     public class UserFile
     {
         public int Id { get; set; }
+        public string FileName { get; set; }
         [Required]
         public string FilePath { get; set; }
 

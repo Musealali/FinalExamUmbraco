@@ -23,6 +23,15 @@ namespace web_platform.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<SecurityIssuePost>(entity =>
+            {
+                // When we delete a post, we want all the replies to be deleted automatically aswell
+                entity
+                    .HasMany(s => s.SecurityIssuePostReplies)
+                    .WithOne(sreply => sreply.SecurityIssuePost)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
     }
 }

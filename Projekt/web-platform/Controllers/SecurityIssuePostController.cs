@@ -31,7 +31,6 @@ namespace web_platform.Controllers
         [HttpGet]
         public async Task<IActionResult> SpecificSecurityIssuePost(int id)
         {
-
             var securityIssuePostToFind = await _ISecurityIssuePostService.GetById(id);
             var securityIssuePostReplies = await _ISecurityIssuePostService.GetSecurityIssuePostsReplies(id);
             var attachments = await _userFileService.GetBySecurityIssuePostId(securityIssuePostToFind.Id);
@@ -149,7 +148,7 @@ namespace web_platform.Controllers
 
             var applicationUser = await _userManager.GetUserAsync(User);
             var securityIssuePost = await _ISecurityIssuePostService.CreateSecurityIssuePost(securityIssuePostView.Title, securityIssuePostView.IssueDescription, securityIssuePostView.ComponentName, securityIssuePostView.ComponentVersion, applicationUser);
-            await _userFileService.Create(securityIssuePostView.Files, securityIssuePost);
+            await _userFileService.Add(securityIssuePostView.Files, securityIssuePost);
 
             return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id=securityIssuePost.Id });
         }
@@ -191,6 +190,7 @@ namespace web_platform.Controllers
             // We need to ensure that any manual requests to this endpoint are still validated against the current user in case the UI gets bypassed
             if (_userManager.GetUserId(User) != securityIssuePostToFind.ApplicationUser.Id || !User.IsInRole("Administrator")) { return Unauthorized(); }
 
+            await _userFileService.DeleteAll(securityIssuePostToFind);
             await _ISecurityIssuePostService.DeleteSecurityIssuePost(securityIssuePostId);
             return RedirectToAction("Index");
         }
@@ -220,7 +220,46 @@ namespace web_platform.Controllers
         {
             var securityIssuePost = await _ISecurityIssuePostService.UpdateSecurityIssuePost(securityIssuePostView.Id, securityIssuePostView.Title, securityIssuePostView.IssueDescription, securityIssuePostView.ComponentName, securityIssuePostView.ComponentVersion);
             return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePost.Id });
-;        }
+;       }
 
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateSecurityIssuePostReply(int securityIssuePostReplyId, string content)
+        {
+            var newReply = await _ISecurityIssuePostService.Update(securityIssuePostReplyId, content);
+            if (newReply.Content == content)
+                return Ok(newReply);
+            else
+                return BadRequest();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserFile(int userFileId)
+        {
+            var userFileToFind = await _userFileService.GetById(userFileId);
+            if(userFileToFind != null)
+            {
+                return PhysicalFile(userFileToFind.FilePath, "text/plain", userFileToFind.FileName);
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteUserFile(int userFileId, int securityIssuePostId)
+        {
+            //TODO: Server validation - Current User / Administrator?
+            //TODO: If it fails to delete from database, we need to return error?
+            await _userFileService.Delete(userFileId);
+            return RedirectToAction("SpecificSecurityIssuePost", new { id = securityIssuePostId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddAttachments(List<IFormFile> files, int securityIssuePostId)
+        {
+            var securityIssuePostToFind = await _ISecurityIssuePostService.GetById(securityIssuePostId);
+            await _userFileService.Add(files, securityIssuePostToFind);
+            return RedirectToAction("SpecificSecurityIssuePost", new { id = securityIssuePostId });
+        }
     } 
 }

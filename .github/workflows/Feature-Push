@@ -11,3 +11,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Setup dotnet
+        with: 
+          dotnet-version: '3.1.x'
+      - run: dotnet build web-platform
+      - run: dotnet test XUnitTestUmbraco
+

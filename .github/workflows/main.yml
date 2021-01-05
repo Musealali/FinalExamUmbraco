@@ -1,0 +1,19 @@
+name: feature-push
+
+on:
+  push:
+    branches: [ feature/*, features/* ]
+ 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2 
+      
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with: 
+          dotnet-version: '3.1.x'
+      - run: dotnet build Projekt/web-platform/web-platform.sln
+      - run: dotnet test Projekt/XUnitTestUmbraco

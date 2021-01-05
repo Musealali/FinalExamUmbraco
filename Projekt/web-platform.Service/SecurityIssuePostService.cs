@@ -113,7 +113,9 @@ namespace web_platform.Service
         }
         public async Task<List<SecurityIssuePostReply>> GetSecurityIssuePostsReplies(int securityIssuePostId)
         {
-            var securityIssuePostReplies = await _umbracoDbContext.SecurityIssuePostReplies.Where(s => s.SecurityIssuePost.Id == securityIssuePostId).ToListAsync();
+            var securityIssuePostReplies = await _umbracoDbContext.SecurityIssuePostReplies.Where(s => s.SecurityIssuePost.Id == securityIssuePostId)
+                .Include(s => s.ApplicationUser)
+                .ToListAsync();
 
             return securityIssuePostReplies;
         }

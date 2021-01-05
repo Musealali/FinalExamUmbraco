@@ -12,14 +12,32 @@ using web_platform.Service;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using System.Threading;
+using System.Security.Claims;
+using System.Security.Principal;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 
 namespace XUnitTestUmbraco
 {
     public class Umbraco_FinalExam_UniTest : IDisposable
     {
         protected readonly SecurityIssuePostService _securityIssuePostService;
-        protected readonly UserManager<ApplicationUser> _userManager;
+        protected readonly UserFileService _userFileService;
         protected readonly SecurityIssuePostController _securityIssuePostController;
+
+        protected readonly ApplicationUser _defaultUser = new ApplicationUser()
+        {
+            Email = "default@default.com",
+            UserName = "default@default.com",
+            Id = "1"
+        };
+        protected readonly ClaimsIdentity _defaultUserClaims = new ClaimsIdentity(new[]
+        {
+            new Claim(ClaimTypes.Name, "default@default.com"),
+            new Claim(ClaimTypes.NameIdentifier, "1"),
+        });
+
 
         public Umbraco_FinalExam_UniTest()
         {
@@ -31,21 +49,24 @@ namespace XUnitTestUmbraco
             UmbracoDbContext context = new UmbracoDbContext(options);
             context.Database.EnsureCreated();
 
+
+            // Setting up custom services
             _securityIssuePostService = new SecurityIssuePostService(context);
+            _userFileService = new UserFileService(context);
 
-            // Mocking identity
-            var mockStore = new Mock<IUserStore<ApplicationUser>>();
-            mockStore.Setup(x => x.FindByIdAsync("1", CancellationToken.None))
-                .ReturnsAsync(new ApplicationUser()
+            Mock<IUserStore<ApplicationUser>> mockUserStore = new Mock<IUserStore<ApplicationUser>>();
+            UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(mockUserStore.Object, null, null, null, null, null, null, null, null);
+
+
+            // Setting up the securityIssuePostController
+            _securityIssuePostController = new SecurityIssuePostController(_securityIssuePostService, userManager, _userFileService);
+            _securityIssuePostController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext()
                 {
-                    Email = "default@default.com",
-                    UserName = "default@default.com",
-                    Id = "1"
-                });
-
-            _userManager = new UserManager<ApplicationUser>(mockStore.Object, null, null, null, null, null, null, null, null);
-
-            _securityIssuePostController = new SecurityIssuePostController(_securityIssuePostService, _userManager, null);
+                    User = new ClaimsPrincipal(_defaultUserClaims)
+                }
+            };
         }
 
         public void Dispose()
@@ -54,20 +75,19 @@ namespace XUnitTestUmbraco
         }
 
 
+        #region CUSTOM SERVICE TESTS
         [Fact]
-        public async Task CreateSecurityIssuePost_Service()
+        public async Task Service_CreateSecurityIssuePost()
         {
-            var user = await _userManager.FindByIdAsync("1");
-            var securityIssuePost = await _securityIssuePostService.CreateSecurityIssuePost("test", "description", "Testcomponent", "1.1.1", user);
+            var securityIssuePost = await _securityIssuePostService.CreateSecurityIssuePost("test", "description", "Testcomponent", "1.1.1", _defaultUser);
             Assert.True(securityIssuePost.Id != 0);
             Assert.True(securityIssuePost.State == State.NotVerified);
         }
 
         [Fact]
-        public async Task UpdateSecurityIssuePost_Service()
+        public async Task Service_UpdateSecurityIssuePost()
         {
-            var user = await _userManager.FindByIdAsync("1");
-            var securityIssuePost = await _securityIssuePostService.CreateSecurityIssuePost("test", "description", "Testcomponent", "1.1.1", user);
+            var securityIssuePost = await _securityIssuePostService.CreateSecurityIssuePost("test", "description", "Testcomponent", "1.1.1", _defaultUser);
 
             var updatedSecurityIssuePost = await _securityIssuePostService.UpdateSecurityIssuePost(securityIssuePost.Id, "updated", "updated description", "updated component", "2.0.0");
 
@@ -81,10 +101,9 @@ namespace XUnitTestUmbraco
         }
 
         [Fact]
-        public async Task DeleteSecurityIssuePost_Service()
+        public async Task Service_DeleteSecurityIssuePost()
         {
-            var user = await _userManager.FindByIdAsync("1");
-            var securityIssuePost = await _securityIssuePostService.CreateSecurityIssuePost("test", "description", "Testcomponent", "1.1.1", user);
+            var securityIssuePost = await _securityIssuePostService.CreateSecurityIssuePost("test", "description", "Testcomponent", "1.1.1", _defaultUser);
             Assert.True(securityIssuePost.Id != 0);
 
             await _securityIssuePostService.DeleteSecurityIssuePost(securityIssuePost.Id);
@@ -94,23 +113,21 @@ namespace XUnitTestUmbraco
         }
 
         [Fact]
-        public async Task CreateSecurityIssuePostReply_Service()
+        public async Task Service_CreateSecurityIssuePostReply()
         {
-            var user = await _userManager.FindByIdAsync("1");
-            var securityIssuePost = await _securityIssuePostService.CreateSecurityIssuePost("test", "description", "Testcomponent", "1.1.1", user);
+            var securityIssuePost = await _securityIssuePostService.CreateSecurityIssuePost("test", "description", "Testcomponent", "1.1.1", _defaultUser);
 
-            var securityIssuePostReply = await _securityIssuePostService.CreateSecurityIssuePostReply("comment", securityIssuePost, user);
+            var securityIssuePostReply = await _securityIssuePostService.CreateSecurityIssuePostReply("comment", securityIssuePost, _defaultUser);
             Assert.True(securityIssuePostReply.Id != 0);
         }
 
 
         [Fact]
-        public async Task UpdateSecurityIssuePostReply_Service()
+        public async Task Service_UpdateSecurityIssuePostReply()
         {
-            var user = await _userManager.FindByIdAsync("1");
-            var securityIssuePost = await _securityIssuePostService.CreateSecurityIssuePost("test", "description", "Testcomponent", "1.1.1", user);
+            var securityIssuePost = await _securityIssuePostService.CreateSecurityIssuePost("test", "description", "Testcomponent", "1.1.1", _defaultUser);
 
-            var securityIssuePostReply = await _securityIssuePostService.CreateSecurityIssuePostReply("comment", securityIssuePost, user);
+            var securityIssuePostReply = await _securityIssuePostService.CreateSecurityIssuePostReply("comment", securityIssuePost, _defaultUser);
             Assert.True(securityIssuePostReply.Id != 0);
 
             var updatedSecurityIssuePostReply = await _securityIssuePostService.Update(securityIssuePostReply.Id, "updated comment");
@@ -121,12 +138,11 @@ namespace XUnitTestUmbraco
         }
 
         [Fact]
-        public async Task DeleteSecurityIssuePostReply_Service()
+        public async Task Service_DeleteSecurityIssuePostReply()
         {
-            var user = await _userManager.FindByIdAsync("1");
-            var securityIssuePost = await _securityIssuePostService.CreateSecurityIssuePost("test", "description", "Testcomponent", "1.1.1", user);
+            var securityIssuePost = await _securityIssuePostService.CreateSecurityIssuePost("test", "description", "Testcomponent", "1.1.1", _defaultUser);
 
-            var securityIssuePostReply = await _securityIssuePostService.CreateSecurityIssuePostReply("comment", securityIssuePost, user);
+            var securityIssuePostReply = await _securityIssuePostService.CreateSecurityIssuePostReply("comment", securityIssuePost, _defaultUser);
             Assert.True(securityIssuePostReply.Id != 0);
 
             await _securityIssuePostService.DeleteSecurityIssuePostReply(securityIssuePostReply.Id);
@@ -134,9 +150,35 @@ namespace XUnitTestUmbraco
             var securityIssuePostReplyToFind = await _securityIssuePostService.GetSecurityIssuePostReply(securityIssuePostReply.Id);
             Assert.Null(securityIssuePostReplyToFind);
         }
+        #endregion
+
+        #region AUTHORIZE ATTRIBUTE TESTS
+        [Fact]
+        public async Task AuthorizeAttribute_CreateSecurityIssuePostController_Create()
+        {
+            var createMethods = _securityIssuePostController.GetType().GetMethods().Where(x => x.Name == "Create");
+            foreach (var method in createMethods)
+            {
+                var attributes = method.GetCustomAttributes(typeof(AuthorizeAttribute), true);
+                Assert.Equal(typeof(AuthorizeAttribute), attributes[0].GetType());
+            }
+        }
 
         [Fact]
-        public async Task CreateSecurityIssuePost_Controller()
+        public async Task AuthorizeAttribute_CreateSecurityIssuePostController_CreateSecurityIssueReply()
+        {
+            var createMethods = _securityIssuePostController.GetType().GetMethods().Where(x => x.Name == "CreateSecurityIssueReply");
+            foreach (var method in createMethods)
+            {
+                var attributes = method.GetCustomAttributes(typeof(AuthorizeAttribute), true);
+                Assert.Equal(typeof(AuthorizeAttribute), attributes[0].GetType());
+            }
+        }
+        #endregion
+
+        #region ACTION RESULT TESTS
+        [Fact]
+        public async Task Controller_CreateSecurityIssuePost()
         {
             SecurityIssuePostViewModel svm = new SecurityIssuePostViewModel()
             {
@@ -153,91 +195,6 @@ namespace XUnitTestUmbraco
 
             // Mocked user doesnt work in the controller
         }
-
-        //[Fact]
-        //public async Task TestReturnIndex()
-        //{
-        //    //Arrange
-        //    SecurityIssuePost securityIssuePost = new SecurityIssuePost("UnitTest-Test", "Testing from unit", "Rerun this test to reproduce, xd");
-
-
-        //    //Act
-        //    var result = await _controller.Create(securityIssuePost, "Umbraco UNO", "1.1", "cms");
-
-        //    ViewResult viewResult = await _controller.Index(securityIssuePost.Id) as ViewResult;
-
-        //    //Assert
-        //    Assert.NotNull(viewResult);
-        //    Assert.NotEqual("Microsoft.AspNetCore.Mvc.NotFoundResult", viewResult.Model.ToString());
-        //}
-
-        //[Fact]
-        //public async Task TestReturnIndexNotFound()
-        //{
-        //    //Arrange
-        //    int id = 5000;
-
-        //    //Act
-
-
-        //    ViewResult viewResult = await _controller.Index(id) as ViewResult;
-        //    string response = viewResult.Model.ToString();
-
-
-        //    //Assert
-        //    Assert.Equal("Microsoft.AspNetCore.Mvc.NotFoundResult", response);
-
-        //}
-
-        //[Fact]
-        //public async Task TestReturnCreateView()
-        //{
-        //    //Arrange
-        //    SecurityIssuePost securityIssuePost = new SecurityIssuePost();
-
-        //    //Act
-        //    ViewResult result = await _controller.Create(securityIssuePost) as ViewResult;
-
-        //    //Assert
-        //    Assert.NotNull(result);
-        //}
-
-        //[Fact]
-        //public async Task ControllerActionMethodCanCreateSecurityIssuePostWithCMS()
-        //{
-        //    //Arrange
-        //    string Title = "This is a security issue";
-        //    string IssueDescription = "This is a description of the issue";
-        //    string IssueReproduction = "This is how to reproduce the issue";
-        //    string componentType = "cms";
-        //    string name = "Umbraco CMS";
-        //    string version = "1.1";
-        //    SecurityIssuePost securityIssuePost = new SecurityIssuePost(Title, IssueDescription, IssueReproduction);
-
-        //    //Act
-        //    var result = await _controller.Create(securityIssuePost, name, version, componentType);
-
-        //    //Assert
-        //    var objectResult = Assert.IsAssignableFrom<ActionResult>(result);
-        //}
-
-        //[Fact]
-        //public async Task ControllerActionMethodCanCreateSecurityIssuePostWithPackage()
-        //{
-        //    //Arrange
-        //    string Title = "This is a security issue";
-        //    string IssueDescription = "This is a description of the issue";
-        //    string IssueReproduction = "This is how to reproduce the issue";
-        //    string componentType = "package";
-        //    string name = "Forms";
-        //    string version = "1.2";
-        //    SecurityIssuePost securityIssuePost = new SecurityIssuePost(Title, IssueDescription, IssueReproduction);
-
-        //    //Act
-        //    var result = await _controller.Create(securityIssuePost, name, version, componentType);
-
-        //    //Assert
-        //    var objectResult = Assert.IsAssignableFrom<ActionResult>(result);
-        //}
+        #endregion
     }
 }

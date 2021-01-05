@@ -141,11 +141,11 @@ namespace web_platform.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Create(SecurityIssuePostViewModel securityIssuePostView) // Responsible for getting the user input and storing the securityIssuePost
         {
             if (!ModelState.IsValid) { return RedirectToAction("Index", securityIssuePostView);}
-
             var applicationUser = await _userManager.GetUserAsync(User);
             var securityIssuePost = await _ISecurityIssuePostService.CreateSecurityIssuePost(securityIssuePostView.Title, securityIssuePostView.IssueDescription, securityIssuePostView.ComponentName, securityIssuePostView.ComponentVersion, applicationUser);
             await _userFileService.Add(securityIssuePostView.Files, securityIssuePost);
@@ -163,7 +163,7 @@ namespace web_platform.Controllers
             return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePostId });
         }
 
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> DeleteSecurityIssuePostReply(int securityIssuePostId, int securityIssuePostReplyId)
         {
@@ -175,6 +175,7 @@ namespace web_platform.Controllers
             return RedirectToAction("SpecificSecurityIssuePost", new { id = securityIssuePostId });
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> ChangeSecurityIssuePostStateToVerified (int securityIssuePostId)
         {
@@ -182,6 +183,7 @@ namespace web_platform.Controllers
             return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePost.Id });
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> DeleteSecurityIssuePost(int securityIssuePostId)
         {
@@ -195,6 +197,7 @@ namespace web_platform.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult> Update(int id)
         {
@@ -215,14 +218,15 @@ namespace web_platform.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Update(SecurityIssuePostViewModel securityIssuePostView)
         {
             var securityIssuePost = await _ISecurityIssuePostService.UpdateSecurityIssuePost(securityIssuePostView.Id, securityIssuePostView.Title, securityIssuePostView.IssueDescription, securityIssuePostView.ComponentName, securityIssuePostView.ComponentVersion);
             return RedirectToAction("SpecificSecurityIssuePost", "SecurityIssuePost", new { id = securityIssuePost.Id });
-;       }
+        }
 
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> UpdateSecurityIssuePostReply(int securityIssuePostReplyId, string content)
         {
@@ -233,6 +237,7 @@ namespace web_platform.Controllers
                 return BadRequest();
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetUserFile(int userFileId)
         {
@@ -245,6 +250,7 @@ namespace web_platform.Controllers
             return BadRequest();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> DeleteUserFile(int userFileId, int securityIssuePostId)
         {
@@ -254,6 +260,7 @@ namespace web_platform.Controllers
             return RedirectToAction("SpecificSecurityIssuePost", new { id = securityIssuePostId });
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddAttachments(List<IFormFile> files, int securityIssuePostId)
         {

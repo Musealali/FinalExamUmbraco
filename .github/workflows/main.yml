@@ -15,6 +15,5 @@ jobs:
         uses: actions/setup-dotnet@v1
         with: 
           dotnet-version: '3.1.x'
-      - run: ls
-      - run: dotnet build web-platform
-      - run: dotnet test XUnitTestUmbraco
+      - run: dotnet build Projekt/web-platform/web-platform.sln
+      - run: dotnet test Projekt/XUnitTestUmbraco
